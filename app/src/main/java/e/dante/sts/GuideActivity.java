@@ -5,17 +5,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+public class GuideActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_guide);
 
         findViewById(R.id.keywords_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CardsActivity.class);
+                Intent intent = new Intent(GuideActivity.this, ExpandableActivity.class);
+                intent.putExtra("type", "keywords");
                 startActivity(intent);
             }
         });
@@ -23,24 +24,18 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.potions_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RelicsActivity.class);
+                Intent intent = new Intent(GuideActivity.this, ExpandableActivity.class);
+                intent.putExtra("type", "potions");
                 startActivity(intent);
             }
         });
 
-        findViewById(R.id.guide_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.events_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, GuideActivity.class);
+                Intent intent = new Intent(GuideActivity.this, ExpandableActivity.class);
+                intent.putExtra("type", "events");
                 startActivity(intent);
-            }
-        });
-
-        findViewById(R.id.database_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatabaseHelper database = new DatabaseHelper();
-                database.init_database();
             }
         });
     }

@@ -16,6 +16,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".CardsActivity" />
+        <activity android:name=".RelicsActivity" />
+        <activity android:name=".CardDetailActivity" />
+        <activity android:name=".RelicDetailActivity" />
+        <activity android:name=".ExpandableActivity" />
+        <activity android:name=".GuideActivity"></activity>
     </application>
 
 </manifest>
