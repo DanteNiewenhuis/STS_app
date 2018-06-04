@@ -7,7 +7,7 @@ The game Slay the Spire doesn't have a place where one can easely take notes and
 ## Solution
 
 ### Summery
-Make an app where all the info is easely stored and where someone can make notes.
+Make an app where all the info is easely stored and where someone can make notes, give scores to cards/relics and get the opinions of other players. An extension to this app would be an option that helps while playing the game.
 
 ### visual sketch
 
@@ -24,7 +24,7 @@ The guide page is a simple listview.
 The keyword page is a listview with all the keywords. When an item is clicked the item will extend with the explenation beneath it.
 
 ### main features
-*all info off the game easely avalible.
+*all info off the game easely available.
 *the possibilty of taking notes and giving scores to cards/relics
 
 ### MVP
@@ -42,6 +42,7 @@ The above mentioned features well implemented and a possibility.
 ### external components
 *firebase for the database
 *SQLite for the possibility of a personelised database next to the global firebase database
+*Picasso to easely show pictures
 
 ### similar apps
 A sort of similar app to this one is BuidDota2 for Dota 2.
@@ -49,5 +50,10 @@ This is an app made for players of the game Dota 2.
 The creator of this app tries to create a place where all the information of the is easy to get.
 On top off this the creator also added the possibilty of making your own skill builds.
 
+This app makes mostly use of gridviews with a searchbar to easely find things you want to select.
+![first photo off dota app](doc/dota_app_1.png)
+![second photo off dota app](doc/dota_app_2.png)
+
 ### the hardest parts
-making a system that can filter and sort the list views efficiently and dynamicly. 
+I expext that making a system that can filter and sort the list views efficiently and dynamicly will be technically the hardest part. 
+Another problem that can occur is that many features of this app will be based on user input which will be hard to test.
