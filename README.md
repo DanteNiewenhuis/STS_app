@@ -47,7 +47,7 @@ The above mentioned features well implemented and a possibility.
 ### similar apps
 A sort of similar app to this one is BuidDota2 for Dota 2.
 This is an app made for players of the game Dota 2.
-The creator of this app tries to create a place where all the information of the is easy to get.
+The creator of this app tries to create a place where all the information of the is easy to get.<br>
 On top off this the creator also added the possibilty of making your own skill builds.
 
 This app makes mostly use of gridviews with a searchbar to easely find things you want to select.
