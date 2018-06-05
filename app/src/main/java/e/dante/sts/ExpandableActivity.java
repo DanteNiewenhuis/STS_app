@@ -25,7 +25,7 @@ public class ExpandableActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String type = (String) intent.getSerializableExtra("type");
 
-        dataChild = new DatabaseHelper().get_expendable_data(type);
+        dataChild = new DatabaseHelper(this).get_expendable_data(type);
         dataHeaders = getHeaders(dataChild);
 
         expListView = findViewById(R.id.exp_list_view);

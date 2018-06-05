@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="100dp">
+
+    <ImageView
+        android:id="@+id/relic_img"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/relic_name"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="CardName"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/relic_img"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/relic_description"
+        android:layout_width="150dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:text="Description"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/relic_img"
+        app:layout_constraintTop_toBottomOf="@+id/relic_name"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/card_sign"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toEndOf="@+id/relic_name"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/card_cost"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="0"
+        android:textAlignment="center"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/relic_description"
+        app:layout_constraintTop_toBottomOf="@+id/card_sign" />
+
+    <RatingBar
+        android:id="@+id/your_relic_rating"
+        style="@style/foodRatingBar"
+        android:layout_width="112dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:numStars="5"
+        android:rating="3.5"
+        android:scaleX="0.5"
+        android:stepSize="0.1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/card_sign"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RatingBar
+        android:id="@+id/avg_card_rating"
+        style="@style/foodRatingBar"
+        android:layout_width="112dp"
+        android:layout_height="37dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:numStars="5"
+        android:rating="3.5"
+        android:scaleX="0.5"
+        android:stepSize="0.1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/card_sign"
+        app:layout_constraintTop_toBottomOf="@+id/your_relic_rating" />
+
+</android.support.constraint.ConstraintLayout>

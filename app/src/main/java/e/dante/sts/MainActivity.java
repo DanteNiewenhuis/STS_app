@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -39,8 +41,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.database_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseHelper database = new DatabaseHelper();
-                database.init_database();
+                new DataScraper().execute();
             }
         });
     }
