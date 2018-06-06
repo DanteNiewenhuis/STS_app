@@ -16,14 +16,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class DatabaseHelper {
-    private Context context;
+public class CardHelper {
     private Callback activity;
     private DatabaseReference mDatabase;
 
-    public DatabaseHelper(Context context) {
-        this.context = context;
-
+    public CardHelper() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 

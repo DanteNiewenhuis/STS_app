@@ -25,8 +25,8 @@ public class ExpandableActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String type = (String) intent.getSerializableExtra("type");
 
-        dataChild = new DatabaseHelper(this).get_expendable_data(type);
-        dataHeaders = getHeaders(dataChild);
+        dataChild = new CardHelper().get_expendable_data(type);
+        dataHeaders = new ArrayList<>(dataChild.keySet());
 
         expListView = findViewById(R.id.exp_list_view);
 
@@ -36,12 +36,4 @@ public class ExpandableActivity extends AppCompatActivity {
         expListView.setAdapter(listAdapter);
     }
 
-    private List<String> getHeaders(HashMap<String, String> dataChild) {
-        List <String> result = new ArrayList<>();
-        for (String key : dataChild.keySet()) {
-            result.add(key);
-        }
-
-        return result;
-    }
 }

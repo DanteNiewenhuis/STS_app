@@ -21,13 +21,13 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class CardsActivity extends AppCompatActivity implements DatabaseHelper.Callback{
+public class CardsActivity extends AppCompatActivity implements CardHelper.Callback{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cards);
 
-        new DatabaseHelper(this).getCards(this);
+        new CardHelper().getCards(this);
     }
 
     @Override
@@ -41,13 +41,6 @@ public class CardsActivity extends AppCompatActivity implements DatabaseHelper.C
     public void gotCardsError(String message) {
         Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
         toast.show();
-    }
-
-    private class CardsItemClickListener implements AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-        }
     }
 
     private class CardsAdapter extends ArrayAdapter<Card> {
@@ -97,6 +90,13 @@ public class CardsActivity extends AppCompatActivity implements DatabaseHelper.C
                 convertView.setBackgroundColor(convertView.getResources().getColor(android.R.color.darker_gray, getDropDownViewTheme()));
             }
             return convertView;
+        }
+    }
+
+    private class CardsItemClickListener implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            //TODO make items clickable
         }
     }
 }
