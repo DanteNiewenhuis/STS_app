@@ -1,1 +1,11 @@
-# here comes a summary of the design choices made
+# Design
+
+## Images
+
+## class diagrams
+
+## API's and Frameworks
+
+## Data sources
+
+## Database tables and fields
