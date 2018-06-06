@@ -2,6 +2,8 @@
 
 ## Images
 
+![images of the app](doc/app_design_images.png)
+
 ## Class diagrams
 
 ![app design 1](doc/app_design_1.jpeg)
