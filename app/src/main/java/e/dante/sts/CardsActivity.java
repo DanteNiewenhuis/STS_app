@@ -1,6 +1,7 @@
 package e.dante.sts;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -32,9 +33,10 @@ public class CardsActivity extends AppCompatActivity implements CardHelper.Callb
 
     @Override
     public void gotCards(ArrayList<Card> cards) {
-        ListView list_view = findViewById(R.id.card_list_view);
-        list_view.setAdapter(new CardsAdapter(this, R.layout.card_item, cards));
-        list_view.setOnItemClickListener(new CardsItemClickListener());
+        ListView listView = findViewById(R.id.card_list_view);
+        listView.setAdapter(new CardsAdapter(this, R.layout.card_item, cards));
+
+        listView.setOnItemClickListener(new CardsItemClickListener());
     }
 
     @Override
@@ -66,6 +68,8 @@ public class CardsActivity extends AppCompatActivity implements CardHelper.Callb
             String description = item.getDescription();
             String color = item.getColor();
             String imgUrl = item.getImgUrl();
+
+            //TODO implement type
             String type = item.getType();
             String cost = item.getCost();
 
@@ -77,7 +81,6 @@ public class CardsActivity extends AppCompatActivity implements CardHelper.Callb
             nameView.setText(name);
             descriptionView.setText(description);
             costView.setText(cost);
-            Log.d("gotCards", "img url: " + imgUrl);
             Picasso.get().load(imgUrl).into(card_img_view);
 
             if (color .equals("Red")) {
@@ -95,8 +98,15 @@ public class CardsActivity extends AppCompatActivity implements CardHelper.Callb
 
     private class CardsItemClickListener implements AdapterView.OnItemClickListener {
         @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             //TODO make items clickable
+            Log.d("cards listener", "init");
+
+            Intent intent = new Intent(CardsActivity.this, CardDetailActivity.class);
+            intent.putExtra("card", (Card) parent.getItemAtPosition(position));
+
+            Log.d("cards listener", "start intent");
+            startActivity(intent);
         }
     }
 }

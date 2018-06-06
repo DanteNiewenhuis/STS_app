@@ -12,7 +12,9 @@ public class Card implements Serializable {
     private String rarity;
     private String cost;
 
-    public Card() {}
+    public Card() {
+        this.notes = "";
+    }
 
     public Card(String name, String color, String description, String notes, String imgUrl, String type, String rarity, String cost) {
         this.name = name;
