@@ -18,10 +18,5 @@ I tried used the Mediawiki API but it didn't work as well as i had hoped because
 
 ## Database tables and fields
 
-<dl>
-  <dt>Definition list</dt>
-  <dd>Is something people use sometimes.</dd>
-
-  <dt>Markdown in HTML</dt>
-  <dd>Does *not* work **very** well. Use HTML <em>tags</em>.</dd>
-</dl>
+Cards <br>
+\t name
