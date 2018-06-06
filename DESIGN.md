@@ -18,5 +18,5 @@ I tried used the Mediawiki API but it didn't work as well as i had hoped because
 
 ## Database tables and fields
 
-Cards <br>
-<t> name
+*Cards
+  *name
