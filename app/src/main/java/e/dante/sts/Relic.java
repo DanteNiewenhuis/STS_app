@@ -6,16 +6,18 @@ public class Relic implements Serializable {
     private String name;
     private String description;
     private String imgUrl;
-    private String Rarity;
+    private String rarity;
+    private String notes;
 
     public Relic() {
     }
 
-    public Relic(String name, String description, String imgUrl, String rarity) {
+    public Relic(String name, String description, String imgUrl, String rarity, String notes) {
         this.name = name;
         this.description = description;
         this.imgUrl = imgUrl;
-        Rarity = rarity;
+        this.rarity = rarity;
+        this.notes = notes;
     }
 
     public String getName() {
@@ -43,10 +45,18 @@ public class Relic implements Serializable {
     }
 
     public String getRarity() {
-        return Rarity;
+        return rarity;
     }
 
     public void setRarity(String rarity) {
-        Rarity = rarity;
+        this.rarity = rarity;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

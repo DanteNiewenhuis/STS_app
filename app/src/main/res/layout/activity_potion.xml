@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ExpandableActivity">
+    tools:context=".PotionActivity">
 
-    <ExpandableListView
-        android:id="@+id/exp_list_view"
+    <ListView
+        android:id="@+id/potion_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </android.support.constraint.ConstraintLayout>

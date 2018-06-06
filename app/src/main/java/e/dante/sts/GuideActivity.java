@@ -15,8 +15,7 @@ public class GuideActivity extends AppCompatActivity {
         findViewById(R.id.keywords_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GuideActivity.this, ExpandableActivity.class);
-                intent.putExtra("type", "keywords");
+                Intent intent = new Intent(GuideActivity.this, KeywordsActivity.class);
                 startActivity(intent);
             }
         });
@@ -24,8 +23,7 @@ public class GuideActivity extends AppCompatActivity {
         findViewById(R.id.potions_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GuideActivity.this, ExpandableActivity.class);
-                intent.putExtra("type", "potions");
+                Intent intent = new Intent(GuideActivity.this, PotionActivity.class);
                 startActivity(intent);
             }
         });
@@ -33,8 +31,7 @@ public class GuideActivity extends AppCompatActivity {
         findViewById(R.id.events_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GuideActivity.this, ExpandableActivity.class);
-                intent.putExtra("type", "events");
+                Intent intent = new Intent(GuideActivity.this, EventsActivity.class);
                 startActivity(intent);
             }
         });

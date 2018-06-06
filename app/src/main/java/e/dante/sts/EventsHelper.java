@@ -10,44 +10,43 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class CardHelper {
+public class EventsHelper {
     private Callback activity;
     private DatabaseReference mDatabase;
 
-    public CardHelper() {
+    public EventsHelper() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     public interface Callback {
-        void gotCards(ArrayList<Card> cards);
-        void gotCardsError(String message);
+        void gotEvents(ArrayList<Event> events);
+        void gotEventsError(String message);
     }
 
-    public void getCards(Callback activity) {
+    public void getEvents(Callback activity) {
         this.activity = activity;
 
-        DatabaseReference reference = mDatabase.child("Cards");
-        Query query = reference.orderByChild("color");
-        query.addValueEventListener(new cardValueListener());
+        Query query = mDatabase.child("Events");
+        query.addValueEventListener(new eventsValueListener());
     }
 
-    private class cardValueListener implements ValueEventListener {
+    private class eventsValueListener implements ValueEventListener {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            ArrayList<Card> cards = new ArrayList<>();
+            ArrayList<Event> events = new ArrayList<>();
 
             for (DataSnapshot score : dataSnapshot.getChildren()) {
-                Card item = score.getValue(Card.class);
-                cards.add(item);
+                events.add(score.getValue(Event.class));
             }
 
-            activity.gotCards(cards);
+            activity.gotEvents(events);
         }
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
-            activity.gotCardsError(databaseError.getMessage());
+            activity.gotEventsError(databaseError.getMessage());
         }
     }
 }

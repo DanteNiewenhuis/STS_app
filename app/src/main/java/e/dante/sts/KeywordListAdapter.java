@@ -10,12 +10,12 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.List;
 
-public class myExpandableListAdapter extends BaseExpandableListAdapter {
+public class KeywordListAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<String> dataHeaders;
     private HashMap<String, String> dataChild;
 
-    public myExpandableListAdapter(Context context, List<String> dataHeaders, HashMap<String, String> dataChild) {
+    public KeywordListAdapter(Context context, List<String> dataHeaders, HashMap<String, String> dataChild) {
         this.context = context;
         this.dataHeaders = dataHeaders;
         this.dataChild = dataChild;
@@ -65,7 +65,7 @@ public class myExpandableListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         String title = (String) getGroup(groupPosition);
         if (convertView == null) {
-            convertView = LayoutInflater.from(this.context).inflate(R.layout.expandable_group, parent, false);
+            convertView = LayoutInflater.from(this.context).inflate(R.layout.keyword_group, parent, false);
         }
 
         TextView group = convertView.findViewById(R.id.group_view);
@@ -78,7 +78,7 @@ public class myExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         String text = (String) getChild(groupPosition, childPosition);
         if (convertView == null) {
-            convertView = LayoutInflater.from(this.context).inflate(R.layout.expandable_child, parent, false);
+            convertView = LayoutInflater.from(this.context).inflate(R.layout.keyword_child, parent, false);
         }
 
         TextView group = convertView.findViewById(R.id.child_view);

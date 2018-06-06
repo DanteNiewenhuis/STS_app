@@ -9,45 +9,43 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
-public class CardHelper {
+public class KeywordHelper {
     private Callback activity;
     private DatabaseReference mDatabase;
 
-    public CardHelper() {
+    public KeywordHelper() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     public interface Callback {
-        void gotCards(ArrayList<Card> cards);
-        void gotCardsError(String message);
+        void gotKeywords(HashMap<String, String> keywords);
+        void gotKeywordsError(String message);
     }
 
-    public void getCards(Callback activity) {
+    public void getKeywords(Callback activity) {
         this.activity = activity;
 
-        DatabaseReference reference = mDatabase.child("Cards");
-        Query query = reference.orderByChild("color");
-        query.addValueEventListener(new cardValueListener());
+        Query query = mDatabase.child("Keywords");
+        query.addValueEventListener(new keywordsValueListener());
     }
 
-    private class cardValueListener implements ValueEventListener {
+    private class keywordsValueListener implements ValueEventListener {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            ArrayList<Card> cards = new ArrayList<>();
+            HashMap<String, String> keywords = new HashMap<>();
 
             for (DataSnapshot score : dataSnapshot.getChildren()) {
-                Card item = score.getValue(Card.class);
-                cards.add(item);
+                keywords.put((String) score.child("name").getValue(), (String) score.child("description").getValue());
             }
 
-            activity.gotCards(cards);
+            activity.gotKeywords(keywords);
         }
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
-            activity.gotCardsError(databaseError.getMessage());
+            activity.gotKeywordsError(databaseError.getMessage());
         }
     }
 }

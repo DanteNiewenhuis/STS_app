@@ -13,9 +13,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.List;
 
 public class DataScraper extends AsyncTask<Void, Void, Void>{
     private DatabaseReference mDatabase;
@@ -27,9 +25,9 @@ public class DataScraper extends AsyncTask<Void, Void, Void>{
         getRelics();
         getPotions();
         getKeywords();
+        getEvents();
 
-        //TODO implement datascraper
-//        getEvents();
+        //TODO EXTRA: add enemies to the database
 //        getEnemies();
 
         return null;
@@ -74,7 +72,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void>{
                         card.setCost(cols.get(4).text());
                         card.setDescription(cols.get(5).text());
 
-                        cardId = mDatabase.push().getKey();
+                        cardId = name_to_dName(card.getName());
                         mDatabase.child("Cards").child(cardId).setValue(card);
                     }
                 }
@@ -94,7 +92,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void>{
             Element table = doc.select("table").get(0);
             Elements rows = table.select("tr");
 
-            for (int i = 1; i < rows.size(); i++) {
+            for (int i = 0; i < rows.size(); i++) {
                 Element row = rows.get(i);
                 Elements cols = row.select("td");
 
@@ -106,7 +104,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void>{
                     relic.setRarity(cols.get(2).text());
                     relic.setDescription(cols.get(3).text());
 
-                    relicId = mDatabase.push().getKey();
+                    relicId = name_to_dName(relic.getName());
                     mDatabase.child("Relics").child(relicId).setValue(relic);
                 }
             }
@@ -125,7 +123,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void>{
             Element table = doc.select("table").get(0);
             Elements rows = table.select("tr");
 
-            for (int i = 1; i < rows.size(); i++) {
+            for (int i = 0; i < rows.size(); i++) {
                 Element row = rows.get(i);
                 Elements cols = row.select("td");
 
@@ -136,7 +134,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void>{
                     potion.setName(cols.get(1).text());
                     potion.setDescription(cols.get(2).text());
 
-                    potionId = mDatabase.push().getKey();
+                    potionId = name_to_dName(potion.getName());
                     mDatabase.child("Potions").child(potionId).setValue(potion);
                 }
             }
@@ -147,31 +145,92 @@ public class DataScraper extends AsyncTask<Void, Void, Void>{
     }
 
     private void getKeywords() {
-        String url = "https://slaythespire.gamepedia.com/Potions";
+        String url = "https://slaythespire.gamepedia.com/Keywords";
         String keywordId;
         try {
             Document doc = Jsoup.connect(url).get();
 
-            Elements list = doc.select("ul");
+            Element list = doc.select("ul").get(0);
+            Elements items = list.select("li");
 
-            Pattern p1 = Pattern.compile("[^-]*");
-            Pattern p2 = Pattern.compile("[^-]*(.*)");
-            for (int i = 1; i < list.size(); i++) {
-                String item = list.get(i).text();
+            for (int i = 0; i < items.size(); i++) {
+                String item = items.get(i).text();
+                int index = item.indexOf("-");
 
-                Matcher m1 = p1.matcher(item);
-                Matcher m2 = p2.matcher(item);
+                String name = "";
+                String des = "";
+                for (int j = 0; j < item.length(); j++) {
+                    if (j < index - 1){
+                        name += item.charAt(j);
+                    }
+                    if (j > index + 1) {
+                        des += item.charAt(j);
+                    }
+                }
 
-                String name = m1.group(0);
-                String description = m2.group(0);
-
-                keywordId = mDatabase.push().getKey();
+                keywordId = name_to_dName(name);
                 mDatabase.child("Keywords").child(keywordId).child("name").setValue(name);
-                mDatabase.child("Keywords").child(keywordId).child("description").setValue(description);
+                mDatabase.child("Keywords").child(keywordId).child("description").setValue(des);
             }
 
         } catch (IOException e) {
             Log.d("ERROR", e.getMessage());
         }
+    }
+
+    private void getEvents() {
+        String url = "https://slaythespire.gamepedia.com/Category:Act_";
+        String eventId;
+        for (int l = 1; l < 4; l++) {
+            try {
+                Document doc = Jsoup.connect(url + l + "_Events").get();
+                Element div = doc.getElementById("mw-pages");
+                Elements items = div.select("li");
+
+                for (int i = 0; i < items.size(); i++) {
+                    Event event = new Event();
+                    String name = items.get(i).text();
+                    event.setAct(l);
+                    event.setName(name);
+
+                    Document doc2 = Jsoup.connect("https://slaythespire.gamepedia.com/" +
+                            name.replaceAll(" ","_")).get();
+                    Element div2 = doc2.getElementById("mw-content-text");
+                    Elements items2 = div2.select("li");
+
+                    List<String> options = new ArrayList<>();
+                    for (int j = 0; j < items2.size(); j++) {
+                        options.add(items2.get(j).text());
+                    }
+                    event.setOptions(options);
+
+                    eventId = name_to_dName(event.getName());
+                    mDatabase.child("Events").child(eventId).setValue(event);
+                }
+
+            } catch (IOException e) {
+                Log.d("ERROR", e.getMessage());
+            }
+        }
+    }
+
+    private String name_to_dName(String s) {
+        s = s.replaceAll("\\.", "_p_");
+        s = s.replaceAll("\\$", "_d_");
+        s = s.replaceAll("\\[", "_l_");
+        s = s.replaceAll("]", "_r_");
+        s = s.replaceAll("#", "_h_");
+
+        return s;
+    }
+
+    private String dName_to_name(String s) {
+        s = s.replaceAll("_p_", "\\.");
+        s = s.replaceAll("_d_", "\\$");
+        s = s.replaceAll("_l_", "\\[");
+        s = s.replaceAll("_r_", "]");
+        s = s.replaceAll("_h_", "#");
+
+        return s;
     }
 }

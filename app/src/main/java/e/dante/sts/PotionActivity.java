@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -20,37 +19,36 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class RelicsActivity extends AppCompatActivity implements RelicHelper.Callback {
+public class PotionActivity extends AppCompatActivity implements PotionHelper.Callback{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_relics);
+        setContentView(R.layout.activity_potion);
 
-        new RelicHelper().getRelics(this);
+        new PotionHelper().getPotions(this);
     }
 
     @Override
-    public void gotRelics(ArrayList<Relic> relics) {
-        ListView list_view = findViewById(R.id.relic_list_view);
-        list_view.setAdapter(new RelicsAdapter(this, R.layout.relic_item, relics));
-        list_view.setOnItemClickListener(new RelicsItemClickListener());
+    public void gotPotions(ArrayList<Potion> potions) {
+        ListView list_view = findViewById(R.id.potion_list_view);
+        list_view.setAdapter(new PotionsAdapter(this, R.layout.potion_item, potions));
     }
 
     @Override
-    public void gotRelicsError(String message) {
+    public void gotPotionsError(String message) {
         Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
         toast.show();
     }
 
-    private class RelicsAdapter extends ArrayAdapter<Relic> {
+    private class PotionsAdapter extends ArrayAdapter<Potion> {
         private int resource;
-        private ArrayList<Relic> relics;
+        private ArrayList<Potion> potions;
 
-        public RelicsAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Relic> objects) {
+        public PotionsAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Potion> objects) {
             super(context, resource, objects);
             this.resource = resource;
-            this.relics = objects;
+            this.potions = objects;
         }
 
         @NonNull
@@ -60,29 +58,21 @@ public class RelicsActivity extends AppCompatActivity implements RelicHelper.Cal
                 convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
             }
 
-            Relic item = relics.get(position);
+            Potion item = potions.get(position);
 
             String name = item.getName();
-            String description = item.getDescription();
             String imgUrl = item.getImgUrl();
+            String description = item.getDescription();
 
-            ImageView relic_img_view = convertView.findViewById(R.id.potion_img);
+            ImageView imgView = convertView.findViewById(R.id.potion_img);
             TextView nameView = convertView.findViewById(R.id.potion_name);
-            TextView descriptionView = convertView.findViewById(R.id.potion_description);
+            TextView desView = convertView.findViewById(R.id.potion_description);
 
             nameView.setText(name);
-            descriptionView.setText(description);
-            Log.d("gotCards", "img url: " + imgUrl);
-            Picasso.get().load(imgUrl).into(relic_img_view);
+            desView.setText(description);
+            Picasso.get().load(imgUrl).into(imgView);
 
             return convertView;
-        }
-    }
-
-    private class RelicsItemClickListener implements AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            //TODO make items clickable
         }
     }
 }

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="e.dante.sts">
+
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,8 +22,10 @@
         <activity android:name=".RelicsActivity" />
         <activity android:name=".CardDetailActivity" />
         <activity android:name=".RelicDetailActivity" />
-        <activity android:name=".ExpandableActivity" />
-        <activity android:name=".GuideActivity"></activity>
+        <activity android:name=".KeywordsActivity" />
+        <activity android:name=".GuideActivity" />
+        <activity android:name=".PotionActivity" />
+        <activity android:name=".EventsActivity"></activity>
     </application>
 
 </manifest>

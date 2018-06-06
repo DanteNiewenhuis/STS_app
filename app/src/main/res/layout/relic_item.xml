@@ -3,38 +3,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp">
+    android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/relic_img"
+        android:id="@+id/potion_img"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/relic_name"
+        android:id="@+id/potion_name"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
         android:text="CardName"
         android:textSize="24sp"
-        app:layout_constraintStart_toEndOf="@+id/relic_img"
+        app:layout_constraintStart_toEndOf="@+id/potion_img"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/relic_description"
+        android:id="@+id/potion_description"
         android:layout_width="151dp"
         android:layout_height="0dp"
         android:layout_marginBottom="4dp"
         android:text="Description"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/relic_img"
-        app:layout_constraintTop_toBottomOf="@+id/relic_name" />
+        app:layout_constraintStart_toEndOf="@+id/potion_img"
+        app:layout_constraintTop_toBottomOf="@+id/potion_name" />
 
     <RatingBar
-        android:id="@+id/your_relic_rating"
+        android:id="@+id/your_potion_rating"
         style="@style/foodRatingBar"
         android:layout_width="112dp"
         android:layout_height="37dp"
@@ -61,6 +65,6 @@
         android:stepSize="0.1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/your_relic_rating" />
+        app:layout_constraintTop_toBottomOf="@+id/your_potion_rating" />
 
 </android.support.constraint.ConstraintLayout>

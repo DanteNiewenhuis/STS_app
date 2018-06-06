@@ -69,9 +69,9 @@ public class CardsActivity extends AppCompatActivity implements CardHelper.Callb
             String type = item.getType();
             String cost = item.getCost();
 
-            ImageView card_img_view = convertView.findViewById(R.id.relic_img);
-            TextView nameView = convertView.findViewById(R.id.relic_name);
-            TextView descriptionView = convertView.findViewById(R.id.relic_description);
+            ImageView card_img_view = convertView.findViewById(R.id.potion_img);
+            TextView nameView = convertView.findViewById(R.id.potion_name);
+            TextView descriptionView = convertView.findViewById(R.id.potion_description);
             TextView costView = convertView.findViewById(R.id.card_cost);
 
             nameView.setText(name);
@@ -84,7 +84,7 @@ public class CardsActivity extends AppCompatActivity implements CardHelper.Callb
                 convertView.setBackgroundColor(convertView.getResources().getColor(android.R.color.holo_red_light, getDropDownViewTheme()));
             }
             if (color .equals("Green")) {
-                convertView.setBackgroundColor(convertView.getResources().getColor(android.R.color.holo_green_light, getDropDownViewTheme()));
+                convertView.setBackgroundColor(convertView.getResources().getColor(android.R.color.holo_green_dark, getDropDownViewTheme()));
             }
             if (color .equals("Colorless")) {
                 convertView.setBackgroundColor(convertView.getResources().getColor(android.R.color.darker_gray, getDropDownViewTheme()));

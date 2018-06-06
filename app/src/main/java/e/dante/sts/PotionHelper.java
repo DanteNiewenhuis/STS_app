@@ -11,43 +11,42 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class CardHelper {
+public class PotionHelper {
     private Callback activity;
     private DatabaseReference mDatabase;
 
-    public CardHelper() {
+    public PotionHelper() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     public interface Callback {
-        void gotCards(ArrayList<Card> cards);
-        void gotCardsError(String message);
+        void gotPotions(ArrayList<Potion> potions);
+        void gotPotionsError(String message);
     }
 
-    public void getCards(Callback activity) {
+    public void getPotions(Callback activity) {
         this.activity = activity;
 
-        DatabaseReference reference = mDatabase.child("Cards");
-        Query query = reference.orderByChild("color");
-        query.addValueEventListener(new cardValueListener());
+        Query query = mDatabase.child("Potions");
+        query.addValueEventListener(new potionValueListener());
     }
 
-    private class cardValueListener implements ValueEventListener {
+    private class potionValueListener implements ValueEventListener {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            ArrayList<Card> cards = new ArrayList<>();
+            ArrayList<Potion> potions = new ArrayList<>();
 
             for (DataSnapshot score : dataSnapshot.getChildren()) {
-                Card item = score.getValue(Card.class);
-                cards.add(item);
+                Potion item = score.getValue(Potion.class);
+                potions.add(item);
             }
 
-            activity.gotCards(cards);
+            activity.gotPotions(potions);
         }
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
-            activity.gotCardsError(databaseError.getMessage());
+            activity.gotPotionsError(databaseError.getMessage());
         }
     }
 }
