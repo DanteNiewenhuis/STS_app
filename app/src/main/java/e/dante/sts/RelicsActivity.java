@@ -1,5 +1,6 @@
 package e.dante.sts;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -21,26 +22,29 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class RelicsActivity extends AppCompatActivity implements RelicHelper.Callback {
+public class RelicsActivity extends Fragment implements RelicHelper.Callback {
+    private View myView;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_relics);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        myView = inflater.inflate(R.layout.activity_relics, container, false);
 
         new RelicHelper().getRelics(this);
+
+        return myView;
     }
 
     @Override
     public void gotRelics(ArrayList<Relic> relics) {
-        ListView list_view = findViewById(R.id.relic_list_view);
-        list_view.setAdapter(new RelicsAdapter(this, R.layout.relic_item, relics));
+        ListView list_view = myView.findViewById(R.id.relic_list_view);
+        list_view.setAdapter(new RelicsAdapter(getContext(), R.layout.relic_item, relics));
         list_view.setOnItemClickListener(new RelicsItemClickListener());
     }
 
     @Override
     public void gotRelicsError(String message) {
-        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
         toast.show();
     }
 
@@ -83,13 +87,13 @@ public class RelicsActivity extends AppCompatActivity implements RelicHelper.Cal
     private class RelicsItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Log.d("relic listener", "init");
-
-            Intent intent = new Intent(RelicsActivity.this, RelicDetailActivity.class);
-            intent.putExtra("relic", (Relic) parent.getItemAtPosition(position));
-
-            Log.d("relic listener", "start intent");
-            startActivity(intent);
+//            Log.d("relic listener", "init");
+//
+//            Intent intent = new Intent(RelicsActivity.this, RelicDetailActivity.class);
+//            intent.putExtra("relic", (Relic) parent.getItemAtPosition(position));
+//
+//            Log.d("relic listener", "start intent");
+//            startActivity(intent);
         }
     }
 }

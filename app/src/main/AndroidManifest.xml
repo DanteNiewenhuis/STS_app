@@ -24,7 +24,7 @@
         <activity android:name=".RelicDetailActivity" />
         <activity android:name=".KeywordsActivity" />
         <activity android:name=".GuideActivity" />
-        <activity android:name=".PotionActivity" />
+        <activity android:name=".PotionsActivity" />
         <activity android:name=".EventsActivity" />
         <activity android:name=".SignupActivity" />
         <activity android:name=".LoginActivity" />

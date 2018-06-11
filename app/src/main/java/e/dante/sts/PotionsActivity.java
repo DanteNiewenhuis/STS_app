@@ -1,5 +1,6 @@
 package e.dante.sts;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,25 +19,28 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class PotionActivity extends AppCompatActivity implements PotionHelper.Callback{
+public class PotionsActivity extends Fragment implements PotionHelper.Callback{
+    private View myView;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_potion);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        myView = inflater.inflate(R.layout.activity_potion, container, false);
 
         new PotionHelper().getPotions(this);
+
+        return myView;
     }
 
     @Override
     public void gotPotions(ArrayList<Potion> potions) {
-        ListView list_view = findViewById(R.id.potion_list_view);
-        list_view.setAdapter(new PotionsAdapter(this, R.layout.potion_item, potions));
+        ListView list_view = myView.findViewById(R.id.potion_list_view);
+        list_view.setAdapter(new PotionsAdapter(getContext(), R.layout.potion_item, potions));
     }
 
     @Override
     public void gotPotionsError(String message) {
-        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
         toast.show();
     }
 

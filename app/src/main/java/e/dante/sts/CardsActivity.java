@@ -1,5 +1,6 @@
 package e.dante.sts;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -22,26 +23,30 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class CardsActivity extends AppCompatActivity implements CardHelper.Callback{
+public class CardsActivity extends Fragment implements CardHelper.Callback{
+    private View myView;
+
+    @Nullable
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cards);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        myView = inflater.inflate(R.layout.activity_cards, container, false);
 
         new CardHelper().getCards(this);
+
+        return myView;
     }
 
     @Override
     public void gotCards(ArrayList<Card> cards) {
-        ListView listView = findViewById(R.id.card_list_view);
-        listView.setAdapter(new CardsAdapter(this, R.layout.card_item, cards));
+        ListView listView = myView.findViewById(R.id.card_list_view);
+        listView.setAdapter(new CardsAdapter(getContext(), R.layout.card_item, cards));
 
         listView.setOnItemClickListener(new CardsItemClickListener());
     }
 
     @Override
     public void gotCardsError(String message) {
-        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
         toast.show();
     }
 
@@ -101,13 +106,13 @@ public class CardsActivity extends AppCompatActivity implements CardHelper.Callb
     private class CardsItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Log.d("cards listener", "init");
-
-            Intent intent = new Intent(CardsActivity.this, CardDetailActivity.class);
-            intent.putExtra("card", (Card) parent.getItemAtPosition(position));
-
-            Log.d("cards listener", "start intent");
-            startActivity(intent);
+//            Log.d("cards listener", "init");
+//
+//            Intent intent = new Intent(CardsActivity.this, CardDetailActivity.class);
+//            intent.putExtra("card", (Card) parent.getItemAtPosition(position));
+//
+//            Log.d("cards listener", "start intent");
+//            startActivity(intent);
         }
     }
 }

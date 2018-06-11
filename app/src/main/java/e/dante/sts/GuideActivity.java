@@ -23,7 +23,7 @@ public class GuideActivity extends AppCompatActivity {
         findViewById(R.id.potions_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GuideActivity.this, PotionActivity.class);
+                Intent intent = new Intent(GuideActivity.this, PotionsActivity.class);
                 startActivity(intent);
             }
         });

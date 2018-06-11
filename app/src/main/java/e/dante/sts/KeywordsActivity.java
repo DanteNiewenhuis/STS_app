@@ -1,7 +1,12 @@
 package e.dante.sts;
 
+import android.app.Fragment;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
@@ -9,23 +14,26 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class KeywordsActivity extends AppCompatActivity implements KeywordHelper.Callback{
+public class KeywordsActivity extends Fragment implements KeywordHelper.Callback{
+    private View myView;
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_keyword);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        myView = inflater.inflate(R.layout.activity_keywords, container, false);
 
         new KeywordHelper().getKeywords(this);
 
+        return myView;
     }
 
     @Override
     public void gotKeywords(HashMap<String, String> dataChild) {
         ArrayList<String> dataHeaders = new ArrayList<>(dataChild.keySet());
 
-        ExpandableListView expListView = findViewById(R.id.keywords_list_view);
+        ExpandableListView expListView = myView.findViewById(R.id.keywords_list_view);
 
-        ExpandableListAdapter listAdapter = new KeywordListAdapter(this, dataHeaders, dataChild);
+        ExpandableListAdapter listAdapter = new KeywordListAdapter(getContext(), dataHeaders, dataChild);
 
         // setting list adapter
         expListView.setAdapter(listAdapter);
@@ -33,7 +41,7 @@ public class KeywordsActivity extends AppCompatActivity implements KeywordHelper
 
     @Override
     public void gotKeywordsError(String message) {
-        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
         toast.show();
     }
 }
