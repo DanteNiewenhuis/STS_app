@@ -25,7 +25,12 @@
         <activity android:name=".KeywordsActivity" />
         <activity android:name=".GuideActivity" />
         <activity android:name=".PotionActivity" />
-        <activity android:name=".EventsActivity"></activity>
+        <activity android:name=".EventsActivity" />
+        <activity android:name=".SignupActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".TestNavigationActivity"
+            android:label="@string/title_activity_test_navigation"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,9 +63,9 @@ public class PotionActivity extends AppCompatActivity implements PotionHelper.Ca
             String imgUrl = item.getImgUrl();
             String description = item.getDescription();
 
-            ImageView imgView = convertView.findViewById(R.id.potion_img);
-            TextView nameView = convertView.findViewById(R.id.potion_name);
-            TextView desView = convertView.findViewById(R.id.potion_description);
+            ImageView imgView = convertView.findViewById(R.id.card_item_img);
+            TextView nameView = convertView.findViewById(R.id.card_item_name);
+            TextView desView = convertView.findViewById(R.id.card_item_des);
 
             nameView.setText(name);
             desView.setText(description);

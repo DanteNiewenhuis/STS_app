@@ -1,6 +1,7 @@
 package e.dante.sts;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -66,9 +67,9 @@ public class RelicsActivity extends AppCompatActivity implements RelicHelper.Cal
             String description = item.getDescription();
             String imgUrl = item.getImgUrl();
 
-            ImageView relic_img_view = convertView.findViewById(R.id.potion_img);
-            TextView nameView = convertView.findViewById(R.id.potion_name);
-            TextView descriptionView = convertView.findViewById(R.id.potion_description);
+            ImageView relic_img_view = convertView.findViewById(R.id.card_item_img);
+            TextView nameView = convertView.findViewById(R.id.card_item_name);
+            TextView descriptionView = convertView.findViewById(R.id.card_item_des);
 
             nameView.setText(name);
             descriptionView.setText(description);
@@ -81,8 +82,14 @@ public class RelicsActivity extends AppCompatActivity implements RelicHelper.Cal
 
     private class RelicsItemClickListener implements AdapterView.OnItemClickListener {
         @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            //TODO make items clickable
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.d("relic listener", "init");
+
+            Intent intent = new Intent(RelicsActivity.this, RelicDetailActivity.class);
+            intent.putExtra("relic", (Relic) parent.getItemAtPosition(position));
+
+            Log.d("relic listener", "start intent");
+            startActivity(intent);
         }
     }
 }

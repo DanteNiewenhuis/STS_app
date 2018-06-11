@@ -45,6 +45,7 @@ public class CardsActivity extends AppCompatActivity implements CardHelper.Callb
         toast.show();
     }
 
+    // TODO make it load less at a time.
     private class CardsAdapter extends ArrayAdapter<Card> {
         private int resource;
         private ArrayList<Card> cards;
@@ -73,10 +74,10 @@ public class CardsActivity extends AppCompatActivity implements CardHelper.Callb
             String type = item.getType();
             String cost = item.getCost();
 
-            ImageView card_img_view = convertView.findViewById(R.id.potion_img);
-            TextView nameView = convertView.findViewById(R.id.potion_name);
-            TextView descriptionView = convertView.findViewById(R.id.potion_description);
-            TextView costView = convertView.findViewById(R.id.card_cost);
+            ImageView card_img_view = convertView.findViewById(R.id.card_item_img);
+            TextView nameView = convertView.findViewById(R.id.card_item_name);
+            TextView descriptionView = convertView.findViewById(R.id.card_item_des);
+            TextView costView = convertView.findViewById(R.id.card_item_cost);
 
             nameView.setText(name);
             descriptionView.setText(description);
@@ -96,10 +97,10 @@ public class CardsActivity extends AppCompatActivity implements CardHelper.Callb
         }
     }
 
+    // TODO this needs to be changed to a listener for specific points in the item and not the whole item!
     private class CardsItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            //TODO make items clickable
             Log.d("cards listener", "init");
 
             Intent intent = new Intent(CardsActivity.this, CardDetailActivity.class);

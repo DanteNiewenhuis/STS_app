@@ -11,6 +11,8 @@ public class Card implements Serializable {
     private String type;
     private String rarity;
     private String cost;
+    private float yourScore;
+    private float averageScore;
 
     public Card() {
         this.notes = "";
@@ -89,5 +91,21 @@ public class Card implements Serializable {
 
     public void setRarity(String rarity) {
         this.rarity = rarity;
+    }
+
+    public float getYourScore() {
+        return yourScore;
+    }
+
+    public void setYourScore(float yourScore) {
+        this.yourScore = yourScore;
+    }
+
+    public float getAverageScore() {
+        return averageScore;
+    }
+
+    public void setAverageScore(float averageScore) {
+        this.averageScore = averageScore;
     }
 }

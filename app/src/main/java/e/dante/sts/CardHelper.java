@@ -1,7 +1,11 @@
 package e.dante.sts;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,8 +41,31 @@ public class CardHelper {
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             ArrayList<Card> cards = new ArrayList<>();
 
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            FirebaseUser mUser = mAuth.getCurrentUser();
             for (DataSnapshot score : dataSnapshot.getChildren()) {
                 Card item = score.getValue(Card.class);
+
+                if (score.hasChild("scores")) {
+                    score = score.child("scores");
+
+                    if (score.hasChild(mUser.getUid())) {
+                        float rating = Float.parseFloat(score.child(mUser.getUid()).getValue().toString());
+                        item.setYourScore(rating);
+                    }
+
+                    int counter = 0;
+                    float total = 0;
+                    Log.d("CARDHELPER", "making average");
+                    for (DataSnapshot user_score : score.getChildren()) {
+                        Log.d("CARDHELPER", "getting value");
+                        total += Float.parseFloat(user_score.getValue().toString());
+                        counter++;
+                    }
+
+                    Log.d("CARDHELPER", "setting average");
+                    item.setAverageScore(total/counter);
+                }
                 cards.add(item);
             }
 
