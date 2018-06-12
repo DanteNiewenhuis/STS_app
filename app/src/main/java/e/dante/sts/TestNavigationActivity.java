@@ -79,6 +79,19 @@ public class TestNavigationActivity extends AppCompatActivity
 
         else {
             Log.d("CHANGE FRAGMENTS", "login");
+            navigationView.removeHeaderView(navigationView.getHeaderView(0));
+            navigationView.inflateHeaderView(R.layout.activity_login);
+            View hView = navigationView.getHeaderView(0);
+            if (hView == null) {
+                Log.d("handleUSER", "hView is null");
+            }
+            hView.findViewById(R.id.btn_signup).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    navigationView.removeHeaderView(navigationView.getHeaderView(0));
+                    navigationView.inflateHeaderView(R.layout.fragment_sign_up);
+                }
+            });
         }
     }
 
