@@ -11,6 +11,6 @@ public class ResetPassFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reset_pass, container, false);
+        return inflater.inflate(R.layout.fragment_header_reset_pass, container, false);
     }
 }

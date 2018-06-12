@@ -14,7 +14,7 @@ public class RelicDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_relic_detail);
+        setContentView(R.layout.fragment_relic_detail);
 
         Intent intent = getIntent();
         Relic relic = (Relic) intent.getSerializableExtra("relic");

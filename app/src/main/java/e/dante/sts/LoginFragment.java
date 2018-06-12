@@ -1,24 +1,15 @@
 package e.dante.sts;
 
 import android.app.Fragment;
-import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginFragment extends Fragment {
@@ -34,13 +25,12 @@ public class LoginFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
 
         // set the view now
-        myView = inflater.inflate(R.layout.activity_login, container, false);
+        myView = inflater.inflate(R.layout.fragment_header_log_in, container, false);
 
         inputEmail = myView.findViewById(R.id.email);
         inputPassword = myView.findViewById(R.id.password);
-        progressBar = myView.findViewById(R.id.progressBar);
-        btnSignup = myView.findViewById(R.id.btn_signup);
-        btnLogin = myView.findViewById(R.id.btn_login);
+        btnSignup = myView.findViewById(R.id.btn_sign_up);
+        btnLogin = myView.findViewById(R.id.btn_log_in);
         btnReset = myView.findViewById(R.id.btn_reset_password);
 //
 //        //Get Firebase auth instance

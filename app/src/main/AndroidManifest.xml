@@ -11,26 +11,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CardsActivity" />
-        <activity android:name=".RelicsActivity" />
         <activity android:name=".CardDetailActivity" />
         <activity android:name=".RelicDetailActivity" />
-        <activity android:name=".KeywordsActivity" />
-        <activity android:name=".GuideActivity" />
-        <activity android:name=".PotionsActivity" />
-        <activity android:name=".EventsActivity" />
         <activity android:name=".SignupActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".TestNavigationActivity"
-            android:label="@string/title_activity_test_navigation"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

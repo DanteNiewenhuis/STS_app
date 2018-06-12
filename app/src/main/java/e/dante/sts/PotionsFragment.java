@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +18,13 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class PotionsActivity extends Fragment implements PotionHelper.Callback{
+public class PotionsFragment extends Fragment implements PotionHelper.Callback{
     private View myView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.activity_potion, container, false);
+        myView = inflater.inflate(R.layout.fragment_potion, container, false);
 
         new PotionHelper().getPotions(this);
 

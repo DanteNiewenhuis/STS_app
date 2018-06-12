@@ -2,7 +2,6 @@ package e.dante.sts;
 
 import android.app.Fragment;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,35 +11,33 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class KeywordsActivity extends Fragment implements KeywordHelper.Callback{
+public class EventsFragment extends Fragment implements EventsHelper.Callback{
     private View myView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.activity_keywords, container, false);
+        myView = inflater.inflate(R.layout.fragment_events, container, false);
 
-        new KeywordHelper().getKeywords(this);
+        new EventsHelper().getEvents(this);
 
         return myView;
     }
 
+
     @Override
-    public void gotKeywords(HashMap<String, String> dataChild) {
-        ArrayList<String> dataHeaders = new ArrayList<>(dataChild.keySet());
+    public void gotEvents(ArrayList<Event> events) {
+        ExpandableListView expListView = myView.findViewById(R.id.events_list_view);
 
-        ExpandableListView expListView = myView.findViewById(R.id.keywords_list_view);
-
-        ExpandableListAdapter listAdapter = new KeywordListAdapter(getContext(), dataHeaders, dataChild);
+        ExpandableListAdapter listAdapter = new EventListAdapter(getContext(), events);
 
         // setting list adapter
         expListView.setAdapter(listAdapter);
     }
 
     @Override
-    public void gotKeywordsError(String message) {
+    public void gotEventsError(String message) {
         Toast toast = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
         toast.show();
     }
