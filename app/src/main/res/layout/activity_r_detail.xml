@@ -108,13 +108,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:text="Combo Relics"
         android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toEndOf="@+id/nav_user_mail"
-        app:layout_constraintTop_toBottomOf="@+id/relic_image_view" />
+        tools:layout_editor_absoluteY="141dp" />
 
     <TextView
         android:id="@+id/textView5"
