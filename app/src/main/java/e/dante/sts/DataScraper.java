@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import e.dante.sts.Cards.Card;
+
 public class DataScraper extends AsyncTask<Void, Void, Void>{
     private DatabaseReference mDatabase;
 

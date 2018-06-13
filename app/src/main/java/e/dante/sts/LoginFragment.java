@@ -25,13 +25,13 @@ public class LoginFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
 
         // set the view now
-        myView = inflater.inflate(R.layout.fragment_header_log_in, container, false);
+        myView = inflater.inflate(R.layout.header_log_in, container, false);
 
-        inputEmail = myView.findViewById(R.id.email);
-        inputPassword = myView.findViewById(R.id.password);
-        btnSignup = myView.findViewById(R.id.btn_sign_up);
-        btnLogin = myView.findViewById(R.id.btn_log_in);
-        btnReset = myView.findViewById(R.id.btn_reset_password);
+//        inputEmail = myView.findViewById(R.id.email);
+//        inputPassword = myView.findViewById(R.id.password);
+//        btnSignup = myView.findViewById(R.id.btn_sign_up);
+//        btnLogin = myView.findViewById(R.id.btn_log_in);
+//        btnReset = myView.findViewById(R.id.btn_reset_password);
 //
 //        //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -68,29 +68,7 @@ public class LoginFragment extends Fragment {
 //
 //                progressBar.setVisibility(View.VISIBLE);
 //
-//                //authenticate user
-//                auth.signInWithEmailAndPassword(email, password)
-//                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<AuthResult> task) {
-//                                // If sign in fails, display a message to the user. If sign in succeeds
-//                                // the auth state listener will be notified and logic to handle the
-//                                // signed in user can be handled in the listener.
-//                                progressBar.setVisibility(View.GONE);
-//                                if (!task.isSuccessful()) {
-//                                    // there was an error
-//                                    if (password.length() < 6) {
-//                                        inputPassword.setError(getString(R.string.minimum_password));
-//                                    } else {
-//                                        Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
-//                                    }
-//                                } else {
-//                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                                    startActivity(intent);
-//                                    finish();
-//                                }
-//                            }
-//                        });
+
 //            }
 //        });
 

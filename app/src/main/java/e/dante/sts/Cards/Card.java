@@ -1,4 +1,4 @@
-package e.dante.sts;
+package e.dante.sts.Cards;
 
 import java.io.Serializable;
 
