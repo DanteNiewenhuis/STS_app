@@ -1,12 +1,19 @@
 package e.dante.sts.Cards;
 
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -33,12 +40,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import e.dante.sts.GlobalFunctions;
+import e.dante.sts.InfoFragment;
+import e.dante.sts.MainActivity;
 import e.dante.sts.R;
 
 public class CardsFragment extends Fragment implements CardHelper.Callback{
     private View myView;
     private ArrayList<Card> cards;
     private ArrayList<Card> filteredCards;
+    private GlobalFunctions gFunctions;
+    private FragmentManager fragmentManager;
 
     @Nullable
     @Override
@@ -66,6 +78,9 @@ public class CardsFragment extends Fragment implements CardHelper.Callback{
                 return true;
             }
         });
+
+        gFunctions = new GlobalFunctions(this.getActivity());
+        fragmentManager = getFragmentManager();
         return myView;
     }
 
@@ -196,7 +211,10 @@ public class CardsFragment extends Fragment implements CardHelper.Callback{
             TextView costView = convertView.findViewById(R.id.card_item_cost);
 
             nameView.setText(name);
-            descriptionView.setText(description);
+            nameView.setMovementMethod(LinkMovementMethod.getInstance());
+            descriptionView.setText(gFunctions.makeSpans(description));
+            descriptionView.setMovementMethod(LinkMovementMethod.getInstance());
+
             costView.setText(cost);
             Picasso.get().load(imgUrl).into(card_img_view);
 
@@ -212,6 +230,8 @@ public class CardsFragment extends Fragment implements CardHelper.Callback{
             return convertView;
         }
     }
+
+
 
     // TODO this needs to be changed to a listener for specific points in the item and not the whole item!
     private class CardsItemClickListener implements AdapterView.OnItemClickListener {

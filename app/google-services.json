@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "515804350627",
+    "firebase_url": "https://stshelper-8b74b.firebaseio.com",
+    "project_id": "stshelper-8b74b",
+    "storage_bucket": "stshelper-8b74b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:515804350627:android:f54d4bf861c981c0",
+        "android_client_info": {
+          "package_name": "e.dante.sts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "515804350627-ks7lk0e1m34t76pb54bhef5et71dkupe.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "515804350627-ks7lk0e1m34t76pb54bhef5et71dkupe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjJvm8Dmo9zx2OJ3VnrGgGfzS7fD-zj0U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

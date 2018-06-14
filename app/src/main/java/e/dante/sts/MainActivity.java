@@ -1,6 +1,5 @@
 package e.dante.sts;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +24,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import e.dante.sts.Cards.CardsFragment;
+import e.dante.sts.Event.EventsFragment;
+import e.dante.sts.Keyword.KeywordsFragment;
+import e.dante.sts.Potion.PotionsFragment;
+import e.dante.sts.Relics.RelicsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,6 +38,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // TODO FIX BACKCLICK!!!!!
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -267,7 +271,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.test_navigation, menu);
+        getMenuInflater().inflate(R.menu.main_navigation, menu);
         return true;
     }
 

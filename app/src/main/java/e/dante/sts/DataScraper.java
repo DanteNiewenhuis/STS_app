@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import e.dante.sts.Cards.Card;
+import e.dante.sts.Event.Event;
+import e.dante.sts.Potion.Potion;
+import e.dante.sts.Relics.Relic;
 
 public class DataScraper extends AsyncTask<Void, Void, Void>{
     private DatabaseReference mDatabase;
