@@ -7,25 +7,22 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.ArrayList;
 
 import e.dante.sts.R;
 
 public class KeywordListAdapter extends BaseExpandableListAdapter {
     private Context context;
-    private List<String> dataHeaders;
-    private HashMap<String, String> dataChild;
+    private ArrayList<Keyword> dataChild;
 
-    public KeywordListAdapter(Context context, List<String> dataHeaders, HashMap<String, String> dataChild) {
+    public KeywordListAdapter(Context context, ArrayList<Keyword> dataChild) {
         this.context = context;
-        this.dataHeaders = dataHeaders;
         this.dataChild = dataChild;
     }
 
     @Override
     public int getGroupCount() {
-        return this.dataHeaders.size();
+        return this.dataChild.size();
     }
 
     @Override
@@ -35,12 +32,12 @@ public class KeywordListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getGroup(int groupPosition) {
-        return this.dataHeaders.get(groupPosition);
+        return this.dataChild.get(groupPosition);
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return this.dataChild.get(this.dataHeaders.get(groupPosition));
+        return this.dataChild.get(groupPosition);
     }
 
     @Override
@@ -65,26 +62,26 @@ public class KeywordListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        String title = (String) getGroup(groupPosition);
+        Keyword keyword = (Keyword) getGroup(groupPosition);
         if (convertView == null) {
             convertView = LayoutInflater.from(this.context).inflate(R.layout.keyword_group, parent, false);
         }
 
         TextView group = convertView.findViewById(R.id.group_view);
-        group.setText(title);
+        group.setText(keyword.getName());
 
         return convertView;
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        String text = (String) getChild(groupPosition, childPosition);
+        Keyword keyword = (Keyword) getChild(groupPosition, childPosition);
         if (convertView == null) {
             convertView = LayoutInflater.from(this.context).inflate(R.layout.keyword_child, parent, false);
         }
 
         TextView group = convertView.findViewById(R.id.child_view);
-        group.setText(text);
+        group.setText(keyword.getDescription());
 
         return convertView;
     }

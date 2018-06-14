@@ -19,16 +19,17 @@ public class EventsHelper {
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
-    public interface Callback {
-        void gotEvents(ArrayList<Event> events);
-        void gotEventsError(String message);
-    }
-
     public void getEvents(Callback activity) {
         this.activity = activity;
 
         Query query = mDatabase.child("Events");
         query.addValueEventListener(new eventsValueListener());
+    }
+
+    public interface Callback {
+        void gotEvents(ArrayList<Event> events);
+
+        void gotEventsError(String message);
     }
 
     private class eventsValueListener implements ValueEventListener {

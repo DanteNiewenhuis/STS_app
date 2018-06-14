@@ -19,16 +19,17 @@ public class PotionHelper {
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
-    public interface Callback {
-        void gotPotions(ArrayList<Potion> potions);
-        void gotPotionsError(String message);
-    }
-
     public void getPotions(Callback activity) {
         this.activity = activity;
 
         Query query = mDatabase.child("Potions");
         query.addValueEventListener(new potionValueListener());
+    }
+
+    public interface Callback {
+        void gotPotions(ArrayList<Potion> potions);
+
+        void gotPotionsError(String message);
     }
 
     private class potionValueListener implements ValueEventListener {

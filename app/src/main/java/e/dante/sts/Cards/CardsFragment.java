@@ -1,26 +1,17 @@
 package e.dante.sts.Cards;
 
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -33,7 +24,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -42,10 +32,10 @@ import java.util.Comparator;
 
 import e.dante.sts.GlobalFunctions;
 import e.dante.sts.InfoFragment;
-import e.dante.sts.MainActivity;
+import e.dante.sts.InfoHelper;
 import e.dante.sts.R;
 
-public class CardsFragment extends Fragment implements CardHelper.Callback{
+public class CardsFragment extends Fragment implements CardHelper.Callback, InfoHelper.Callback {
     private View myView;
     private ArrayList<Card> cards;
     private ArrayList<Card> filteredCards;
@@ -72,46 +62,23 @@ public class CardsFragment extends Fragment implements CardHelper.Callback{
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 makeList();
-                InputMethodManager imm = (InputMethodManager)v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
                 return true;
             }
         });
 
-        gFunctions = new GlobalFunctions(this.getActivity());
+        gFunctions = new GlobalFunctions(this);
         fragmentManager = getFragmentManager();
         return myView;
     }
 
-
-    private class OptionsButtonClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            if (myView.findViewById(R.id.options_layout).getVisibility() == View.VISIBLE) {
-                myView.findViewById(R.id.options_layout).setVisibility(View.GONE);
-                myView.findViewById(R.id.search_layout).setVisibility(View.GONE);
-                return;
-            }
-
-            if (myView.findViewById(R.id.options_layout).getVisibility() == View.GONE) {
-                myView.findViewById(R.id.options_layout).setVisibility(View.VISIBLE);
-                myView.findViewById(R.id.search_layout).setVisibility(View.VISIBLE);
-            }
-        }
-    }
     @Override
     public void gotCards(ArrayList<Card> cards) {
         this.cards = cards;
 
         makeList();
-    }
-
-    private class OnCheckBoxClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            makeList();
-        }
     }
 
     private void makeList() {
@@ -122,6 +89,7 @@ public class CardsFragment extends Fragment implements CardHelper.Callback{
 
         listView.setOnItemClickListener(new CardsItemClickListener());
     }
+
     @Override
     public void gotCardsError(String message) {
         Toast toast = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
@@ -131,7 +99,7 @@ public class CardsFragment extends Fragment implements CardHelper.Callback{
     private ArrayList<Card> filterArrayList() {
         ArrayList<Card> result = new ArrayList<>();
 
-        for (Card item: this.cards) {
+        for (Card item : this.cards) {
             if (filterMatch(item)) {
                 result.add(item);
             }
@@ -144,10 +112,13 @@ public class CardsFragment extends Fragment implements CardHelper.Callback{
         Collections.sort(result, new Comparator<Card>() {
             @Override
             public int compare(Card card, Card t1) {
-                switch(sortMethod) {
-                    case "Color": return card.getColor().compareTo(t1.getColor());
-                    case "Name": return card.getName().compareTo(t1.getName());
-                    case "Type": return card.getType().compareTo(t1.getType());
+                switch (sortMethod) {
+                    case "Color":
+                        return card.getColor().compareTo(t1.getColor());
+                    case "Name":
+                        return card.getName().compareTo(t1.getName());
+                    case "Type":
+                        return card.getType().compareTo(t1.getType());
                 }
                 return 0;
             }
@@ -174,6 +145,47 @@ public class CardsFragment extends Fragment implements CardHelper.Callback{
         if (colorlessCheck.isChecked()) colorList.add("Colorless");
 
         return (colorList.contains(item.getColor()));
+    }
+
+    @Override
+    public void gotInfo(String name, String type, String des) {
+        DialogFragment dialog = new InfoFragment();
+        Bundle extra = new Bundle();
+        extra.putSerializable("name", name);
+        extra.putSerializable("type", type);
+        extra.putSerializable("des", des);
+        dialog.setArguments(extra);
+        dialog.show(fragmentManager, "dialog");
+
+    }
+
+    @Override
+    public void gotInfoError(String message) {
+        Toast toast = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+    private class OptionsButtonClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            if (myView.findViewById(R.id.options_layout).getVisibility() == View.VISIBLE) {
+                myView.findViewById(R.id.options_layout).setVisibility(View.GONE);
+                myView.findViewById(R.id.search_layout).setVisibility(View.GONE);
+                return;
+            }
+
+            if (myView.findViewById(R.id.options_layout).getVisibility() == View.GONE) {
+                myView.findViewById(R.id.options_layout).setVisibility(View.VISIBLE);
+                myView.findViewById(R.id.search_layout).setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    private class OnCheckBoxClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            makeList();
+        }
     }
 
     // TODO make it load less at a time.
@@ -218,19 +230,18 @@ public class CardsFragment extends Fragment implements CardHelper.Callback{
             costView.setText(cost);
             Picasso.get().load(imgUrl).into(card_img_view);
 
-            if (color .equals("Red")) {
+            if (color.equals("Red")) {
                 convertView.setBackgroundColor(convertView.getResources().getColor(android.R.color.holo_red_light, getDropDownViewTheme()));
             }
-            if (color .equals("Green")) {
+            if (color.equals("Green")) {
                 convertView.setBackgroundColor(convertView.getResources().getColor(android.R.color.holo_green_dark, getDropDownViewTheme()));
             }
-            if (color .equals("Colorless")) {
+            if (color.equals("Colorless")) {
                 convertView.setBackgroundColor(convertView.getResources().getColor(android.R.color.darker_gray, getDropDownViewTheme()));
             }
             return convertView;
         }
     }
-
 
 
     // TODO this needs to be changed to a listener for specific points in the item and not the whole item!

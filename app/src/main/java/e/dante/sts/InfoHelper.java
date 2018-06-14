@@ -1,4 +1,4 @@
-package e.dante.sts.Keyword;
+package e.dante.sts;
 
 import android.support.annotation.NonNull;
 
@@ -9,43 +9,41 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-
-public class KeywordHelper {
+public class InfoHelper {
     private Callback activity;
     private DatabaseReference mDatabase;
+    private String type;
 
-    public KeywordHelper() {
+    public InfoHelper() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
-    public void getKeywords(Callback activity) {
+    public void getInfo(Callback activity, String type, String filter) {
         this.activity = activity;
+        this.type = type;
 
-        Query query = mDatabase.child("Keywords");
-        query.addValueEventListener(new keywordsValueListener());
+        Query query = mDatabase.child(type).child(filter);
+        query.addValueEventListener(new singleKeywordValueListener());
     }
 
     public interface Callback {
-        void gotKeywords(ArrayList<Keyword> keywords);
+        void gotInfo(String name, String type, String des);
 
-        void gotKeywordsError(String message);
+        void gotInfoError(String message);
     }
 
-    private class keywordsValueListener implements ValueEventListener {
+    private class singleKeywordValueListener implements ValueEventListener {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            ArrayList<Keyword> keywords = new ArrayList<>();
-            for (DataSnapshot score : dataSnapshot.getChildren()) {
-                keywords.add(score.getValue(Keyword.class));
-            }
+            String name = (String) dataSnapshot.child("name").getValue();
+            String des = (String) dataSnapshot.child("description").getValue();
 
-            activity.gotKeywords(keywords);
+            activity.gotInfo(name, type, des);
         }
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
-            activity.gotKeywordsError(databaseError.getMessage());
+            activity.gotInfoError(databaseError.getMessage());
         }
     }
 }

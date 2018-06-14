@@ -19,17 +19,18 @@ public class RelicHelper {
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
-    public interface Callback {
-        void gotRelics(ArrayList<Relic> relics);
-        void gotRelicsError(String message);
-    }
-
     public void getRelics(Callback activity) {
         this.activity = activity;
 
         DatabaseReference reference = mDatabase.child("Relics");
         Query query = reference.orderByChild("Rarity");
         query.addValueEventListener(new relicValueListener());
+    }
+
+    public interface Callback {
+        void gotRelics(ArrayList<Relic> relics);
+
+        void gotRelicsError(String message);
     }
 
     private class relicValueListener implements ValueEventListener {

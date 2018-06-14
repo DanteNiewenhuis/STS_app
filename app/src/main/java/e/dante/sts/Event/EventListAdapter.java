@@ -120,7 +120,7 @@ public class EventListAdapter extends BaseExpandableListAdapter {
             String name = "";
             String des = "";
             for (int j = 1; j < option.length(); j++) {
-                if (j < index){
+                if (j < index) {
                     name += option.charAt(j);
                 }
                 if (j > index + 1) {

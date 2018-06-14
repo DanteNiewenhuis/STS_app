@@ -2,9 +2,9 @@ package e.dante.sts.Potion;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 import e.dante.sts.R;
 
-public class PotionsFragment extends Fragment implements PotionHelper.Callback{
+public class PotionsFragment extends Fragment implements PotionHelper.Callback {
     private View myView;
 
     @Nullable

@@ -1,9 +1,9 @@
 package e.dante.sts.Cards;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RatingBar;

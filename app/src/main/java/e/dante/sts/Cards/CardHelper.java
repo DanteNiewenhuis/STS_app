@@ -22,17 +22,18 @@ public class CardHelper {
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
-    public interface Callback {
-        void gotCards(ArrayList<Card> cards);
-        void gotCardsError(String message);
-    }
-
     public void getCards(Callback activity) {
         this.activity = activity;
 
         DatabaseReference reference = mDatabase.child("Cards");
         Query query = reference.orderByChild("color");
         query.addValueEventListener(new cardValueListener());
+    }
+
+    public interface Callback {
+        void gotCards(ArrayList<Card> cards);
+
+        void gotCardsError(String message);
     }
 
     private class cardValueListener implements ValueEventListener {
@@ -61,7 +62,7 @@ public class CardHelper {
                         counter++;
                     }
 
-                    item.setAverageScore(total/counter);
+                    item.setAverageScore(total / counter);
                 }
                 cards.add(item);
             }

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="@drawable/side_nav_bar"
+    android:background="@color/colorPrimaryColor"
     android:fitsSystemWindows="true"
     android:gravity="bottom"
     android:orientation="vertical">
@@ -22,22 +22,24 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="Android Studio"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused" />
 
     <TextView
         android:id="@+id/nav_header_mail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="android.studio@android.com" />
+        android:text="android.studio@android.com"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused" />
 
     <Button
         android:id="@+id/btn_log_out"
         style="?attr/buttonBarButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
+        android:background="@null"
         android:text="Log Out"
-        android:textColor="@android:color/black"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="11sp" />
 
 </LinearLayout>

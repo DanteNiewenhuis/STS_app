@@ -1,8 +1,8 @@
 package e.dante.sts.Event;
 
 import android.app.Fragment;
-import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import e.dante.sts.R;
 
-public class EventsFragment extends Fragment implements EventsHelper.Callback{
+public class EventsFragment extends Fragment implements EventsHelper.Callback {
     private View myView;
 
     @Nullable

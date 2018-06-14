@@ -1,6 +1,5 @@
 package e.dante.sts.Event;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Event {
