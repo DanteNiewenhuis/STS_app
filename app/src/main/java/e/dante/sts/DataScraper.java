@@ -15,7 +15,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataScraper extends AsyncTask<Void, Void, Void>{
+import e.dante.sts.Cards.Card;
+import e.dante.sts.Event.Event;
+import e.dante.sts.Potion.Potion;
+import e.dante.sts.Relics.Relic;
+
+public class DataScraper extends AsyncTask<Void, Void, Void> {
     private DatabaseReference mDatabase;
 
     @Override
@@ -160,7 +165,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void>{
                 String name = "";
                 String des = "";
                 for (int j = 0; j < item.length(); j++) {
-                    if (j < index - 1){
+                    if (j < index - 1) {
                         name += item.charAt(j);
                     }
                     if (j > index + 1) {
@@ -194,7 +199,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void>{
                     event.setName(name);
 
                     Document doc2 = Jsoup.connect("https://slaythespire.gamepedia.com/" +
-                            name.replaceAll(" ","_")).get();
+                            name.replaceAll(" ", "_")).get();
                     Element div2 = doc2.getElementById("mw-content-text");
                     Elements items2 = div2.select("li");
 

@@ -35,34 +35,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/card_item_img"
         app:layout_constraintTop_toBottomOf="@+id/card_item_name" />
-
-    <RatingBar
-        android:id="@+id/your_item_rating"
-        style="@style/foodRatingBar"
-        android:layout_width="112dp"
-        android:layout_height="37dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="5dp"
-        android:numStars="5"
-        android:rating="3.5"
-        android:scaleX="0.5"
-        android:stepSize="0.1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <RatingBar
-        android:id="@+id/avg_potion_rating"
-        style="@style/foodRatingBar"
-        android:layout_width="112dp"
-        android:layout_height="37dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="10dp"
-        android:numStars="5"
-        android:rating="3.5"
-        android:scaleX="0.5"
-        android:stepSize="0.1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/your_item_rating" />
 </android.support.constraint.ConstraintLayout>
