@@ -4,13 +4,15 @@ import java.io.Serializable;
 
 public class Card implements Serializable {
     private String name;
-    private String color;
+    private String hero;
     private String description;
+    private String upgradeDescription;
     private String notes;
     private String imgUrl;
     private String type;
     private String rarity;
     private String cost;
+    private String upgradeCost;
     private float yourScore;
     private float averageScore;
 
@@ -18,9 +20,9 @@ public class Card implements Serializable {
         this.notes = "";
     }
 
-    public Card(String name, String color, String description, String notes, String imgUrl, String type, String rarity, String cost) {
+    public Card(String name, String hero, String description, String notes, String imgUrl, String type, String rarity, String cost) {
         this.name = name;
-        this.color = color;
+        this.hero = hero;
         this.description = description;
         this.notes = notes;
         this.imgUrl = imgUrl;
@@ -37,12 +39,12 @@ public class Card implements Serializable {
         this.name = name;
     }
 
-    public String getColor() {
-        return color;
+    public String getHero() {
+        return hero;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setHero(String hero) {
+        this.hero = hero;
     }
 
     public String getDescription() {
@@ -107,5 +109,21 @@ public class Card implements Serializable {
 
     public void setAverageScore(float averageScore) {
         this.averageScore = averageScore;
+    }
+
+    public String getUpgradeDescription() {
+        return upgradeDescription;
+    }
+
+    public void setUpgradeDescription(String upgradeDescription) {
+        this.upgradeDescription = upgradeDescription;
+    }
+
+    public String getUpgradeCost() {
+        return upgradeCost;
+    }
+
+    public void setUpgradeCost(String upgradeCost) {
+        this.upgradeCost = upgradeCost;
     }
 }

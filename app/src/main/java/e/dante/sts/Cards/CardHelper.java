@@ -26,7 +26,7 @@ public class CardHelper {
         this.activity = activity;
 
         DatabaseReference reference = mDatabase.child("Cards");
-        Query query = reference.orderByChild("color");
+        Query query = reference.orderByChild("name");
         query.addValueEventListener(new cardValueListener());
     }
 

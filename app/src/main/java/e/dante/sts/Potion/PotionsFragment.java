@@ -36,7 +36,7 @@ public class PotionsFragment extends Fragment implements PotionHelper.Callback {
     @Override
     public void gotPotions(ArrayList<Potion> potions) {
         ListView list_view = myView.findViewById(R.id.potion_list_view);
-        list_view.setAdapter(new PotionsAdapter(getContext(), R.layout.potion_item, potions));
+        list_view.setAdapter(new PotionsAdapter(getContext(), R.layout.item_potion, potions));
     }
 
     @Override

@@ -30,7 +30,7 @@
     <LinearLayout
         android:id="@+id/options_layout"
         android:layout_width="match_parent"
-        android:layout_height="116dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -102,25 +102,32 @@
                 android:textStyle="bold" />
 
             <CheckBox
-                android:id="@+id/checkbox_red_cards"
+                android:id="@+id/checkbox_ironclad_cards"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:text="Red Cards" />
 
             <CheckBox
-                android:id="@+id/checkbox_green_cards"
+                android:id="@+id/checkbox_silent_cards"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:text="Green Cards" />
 
             <CheckBox
-                android:id="@+id/checkbox_colorless_cards"
+                android:id="@+id/checkbox_defect_cards"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Colorless Cards" />
+                android:text="Defect Cards" />
+
+            <CheckBox
+                android:id="@+id/checkbox_neutral_cards"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Neutral Cards" />
         </LinearLayout>
     </LinearLayout>
 
@@ -136,12 +143,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/options_layout" />
 
-    <ListView
-        android:id="@+id/card_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:descendantFocusability="blocksDescendants"
-        android:windowSoftInputMode="stateHidden|adjustNothing"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/card_recycle_view"
+        android:layout_width="350dp"
+        android:layout_height="300dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/options_button" />

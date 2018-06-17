@@ -25,12 +25,13 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
+        Log.d("Scraper", "init");
         mDatabase = FirebaseDatabase.getInstance().getReference();
         getCards();
-        getRelics();
-        getPotions();
-        getKeywords();
-        getEvents();
+//        getRelics();
+//        getPotions();
+//        getKeywords();
+//        getEvents();
 
         //TODO EXTRA: add enemies to the database
 //        getEnemies();
@@ -40,14 +41,17 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
 
     private void getCards() {
         ArrayList<String> links = new ArrayList<>();
-        links.add("Red_Cards");
-        links.add("Green_Cards");
-        links.add("Colorless_cards");
+        links.add("Ironclad_cards");
+        links.add("Silent_cards");
+        links.add("Defect_cards");
+        links.add("Neutral_cards");
 
         String url;
         String cardId;
         for (int s = 0; s < links.size(); s++) {
-            url = "https://slaythespire.gamepedia.com/" + links.get(s);
+            Log.d("Scraper", "type: " + links.get(s));
+            url = "http://slay-the-spire.wikia.com/wiki/" + links.get(s);
+            Log.d("Scraper", "url: " + url);
             try {
                 Document doc = Jsoup.connect(url).get();
 
@@ -60,24 +64,37 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
 
                     if (cols.size() > 0) {
                         Card card = new Card();
-                        if (s == 0) {
-                            card.setColor("Red");
-                        }
-                        if (s == 1) {
-                            card.setColor("Green");
-                        }
-                        if (s == 2) {
-                            card.setColor("Colorless");
-                        }
+                        card.setHero(links.get(s).substring(0, links.get(s).length() - 6));
 
                         card.setName(cols.get(0).text());
-                        card.setImgUrl(cols.get(1).select("img").attr("src"));
+                        String imgUrl = cols.get(1).select("a").attr("href");
+                        card.setImgUrl(imgUrl.substring(0, imgUrl.indexOf("latest")) + "latest/");
                         card.setRarity(cols.get(2).text());
                         card.setType(cols.get(3).text());
                         card.setCost(cols.get(4).text());
                         card.setDescription(cols.get(5).text());
 
+                        String url2 = "http://slay-the-spire.wikia.com/wiki/" + card.getName();
+                        Document doc2 = Jsoup.connect(url2).get();
+
+                        //TODO scrape upgraded and normal description and cost from here!!!
+                        Elements divs = doc2.select("div.pi-data-value pi-font");
+
+                        card.setUpgradeCost(divs.get(5).text());
+                        card.setUpgradeDescription(divs.get(6).text());
+
                         cardId = name_to_dName(card.getName());
+                        if (cardId.equals("Strike")) {
+                            if (card.getHero().equals("Ironclad")) {
+                                cardId = cardId + "_i";
+                            }
+                            if (card.getHero().equals("Silent")) {
+                                cardId = cardId + "_s";
+                            }
+                            if (card.getHero().equals("Defect")) {
+                                cardId = cardId + "_d";
+                            }
+                        }
                         mDatabase.child("Cards").child(cardId).setValue(card);
                     }
                 }

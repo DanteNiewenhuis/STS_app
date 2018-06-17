@@ -306,6 +306,8 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.content_frame, new EventsFragment()).commit();
         } else if (id == R.id.nav_test) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new TestFragment()).commit();
+        } else if (id == R.id.nav_database) {
+            new DataScraper().execute();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

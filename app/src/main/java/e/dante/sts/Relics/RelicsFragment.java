@@ -37,7 +37,7 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback {
     @Override
     public void gotRelics(ArrayList<Relic> relics) {
         ListView list_view = myView.findViewById(R.id.relic_list_view);
-        list_view.setAdapter(new RelicsAdapter(getContext(), R.layout.relic_item, relics));
+        list_view.setAdapter(new RelicsAdapter(getContext(), R.layout.item_relic, relics));
         list_view.setOnItemClickListener(new RelicsItemClickListener());
     }
 

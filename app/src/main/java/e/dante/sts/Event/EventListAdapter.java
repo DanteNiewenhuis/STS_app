@@ -88,7 +88,7 @@ public class EventListAdapter extends BaseExpandableListAdapter {
         }
 
         ListView options = convertView.findViewById(R.id.options_list_view);
-        options.setAdapter(new OptionsAdapter(this.context, R.layout.option_item, event.getOptions()));
+        options.setAdapter(new OptionsAdapter(this.context, R.layout.item_option, event.getOptions()));
 
         return convertView;
     }
