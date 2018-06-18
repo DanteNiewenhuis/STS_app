@@ -1,44 +1,29 @@
-package e.dante.sts.Cards;
+package e.dante.sts;
 
 import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintSet;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-
-import e.dante.sts.GlobalFunctions;
-import e.dante.sts.InfoFragment;
-import e.dante.sts.InfoHelper;
-import e.dante.sts.R;
-import e.dante.sts.RatingFragment;
 
 public class CardsFragment extends Fragment implements CardHelper.Callback, CardsAdapter.ItemClickListener {
     private View myView;
@@ -85,7 +70,7 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
             }
         });
 
-        fragmentManager = getFragmentManager();
+//        fragmentManager = getSupportFragmentManager();
         return myView;
     }
 
@@ -167,19 +152,18 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
     private class OptionsButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            ConstraintSet constraintSet = new ConstraintSet();
-            constraintSet.load(getContext(), R.layout.fragment_cards);
+            Log.d("OptionsButton::onClick", "init");
             if (myView.findViewById(R.id.options_layout).getVisibility() == View.VISIBLE) {
+                Log.d("OptionsButton::onClick", "VISIBLE");
                 myView.findViewById(R.id.options_layout).setVisibility(View.GONE);
                 myView.findViewById(R.id.search_layout).setVisibility(View.GONE);
-                constraintSet.connect(R.id.options_button, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0);
                 return;
             }
 
             if (myView.findViewById(R.id.options_layout).getVisibility() == View.GONE) {
+                Log.d("OptionsButton::onClick", "GONE");
                 myView.findViewById(R.id.options_layout).setVisibility(View.VISIBLE);
                 myView.findViewById(R.id.search_layout).setVisibility(View.VISIBLE);
-                constraintSet.connect(R.id.options_button, ConstraintSet.TOP, R.id.options_layout, ConstraintSet.BOTTOM, 0);
             }
         }
     }
@@ -197,7 +181,7 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
         bundle.putString("name", name);
         CardDetailFragment fragment = new CardDetailFragment();
         fragment.setArguments(bundle);
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack("tag").commit();
+//        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack("tag").commit();
     }
 
     public void onRatingClick(View view, int position) {
@@ -207,6 +191,6 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
         extra.putString("name", item.getName());
         extra.putFloat("score", item.getYourScore());
         dialog.setArguments(extra);
-        dialog.show(fragmentManager, "dialog");
+//        dialog.show(fragmentManager, "dialog");
     }
 }

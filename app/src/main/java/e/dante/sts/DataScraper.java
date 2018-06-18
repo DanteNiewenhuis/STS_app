@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import e.dante.sts.Cards.Card;
 import e.dante.sts.Event.Event;
 import e.dante.sts.Potion.Potion;
 import e.dante.sts.Relics.Relic;

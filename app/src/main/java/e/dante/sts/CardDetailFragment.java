@@ -1,4 +1,4 @@
-package e.dante.sts.Cards;
+package e.dante.sts;
 
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,12 +20,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
-
-import e.dante.sts.GlobalFunctions;
-import e.dante.sts.InfoFragment;
-import e.dante.sts.InfoHelper;
-import e.dante.sts.R;
-import e.dante.sts.RatingFragment;
 
 public class CardDetailFragment extends Fragment implements CardHelper.SingleCallback, InfoHelper.Callback{
     private DatabaseReference mDatabase;

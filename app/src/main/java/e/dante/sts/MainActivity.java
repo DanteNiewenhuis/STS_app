@@ -1,16 +1,16 @@
 package e.dante.sts;
 
-import android.app.FragmentManager;
+
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,9 +24,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
-
-import e.dante.sts.Cards.CardsFragment;
 import e.dante.sts.Event.EventsFragment;
 import e.dante.sts.Keyword.KeywordsFragment;
 import e.dante.sts.Potion.PotionsFragment;
@@ -296,24 +293,24 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         if (id == R.id.nav_cards) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new CardsFragment())
                     .addToBackStack("tag").commit();
-        } else if (id == R.id.nav_relics) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new RelicsFragment())
-                    .addToBackStack("tag").commit();
-        } else if (id == R.id.nav_keywords) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new KeywordsFragment())
-                    .addToBackStack("tag").commit();
-        } else if (id == R.id.nav_potions) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new PotionsFragment())
-                    .addToBackStack("tag").commit();
-        } else if (id == R.id.nav_events) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new EventsFragment())
-                    .addToBackStack("tag").commit();
+//        } else if (id == R.id.nav_relics) {
+//            fragmentManager.beginTransaction().replace(R.id.content_frame, new RelicsFragment())
+//                    .addToBackStack("tag").commit();
+//        } else if (id == R.id.nav_keywords) {
+//            fragmentManager.beginTransaction().replace(R.id.content_frame, new KeywordsFragment())
+//                    .addToBackStack("tag").commit();
+//        } else if (id == R.id.nav_potions) {
+//            fragmentManager.beginTransaction().replace(R.id.content_frame, new PotionsFragment())
+//                    .addToBackStack("tag").commit();
+//        } else if (id == R.id.nav_events) {
+//            fragmentManager.beginTransaction().replace(R.id.content_frame, new EventsFragment())
+//                    .addToBackStack("tag").commit();
         } else if (id == R.id.nav_test) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new TestFragment())
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new SecondFragment())
                     .addToBackStack("tag").commit();
         } else if (id == R.id.nav_database) {
             new DataScraper().execute();

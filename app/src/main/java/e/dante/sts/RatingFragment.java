@@ -3,7 +3,6 @@ package e.dante.sts;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import e.dante.sts.Cards.Card;
 
 public class RatingFragment extends DialogFragment {
     private String name;

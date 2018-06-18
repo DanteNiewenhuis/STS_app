@@ -1,4 +1,4 @@
-package e.dante.sts.Cards;
+package e.dante.sts;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -12,8 +12,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-
-import e.dante.sts.R;
 
 public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHolder>{
     private LayoutInflater mInflater;
@@ -31,13 +29,14 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
     @Override
     public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.item_card, parent, false);
+
         return new CardViewHolder(view);
     }
 
     // binds the data to the textview in each cell
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
-        Log.d("CardAdapter", "onBindViiewHolder");
+        Log.d("CardAdapter", "onBindViewHolder");
         Card card = cards.get(position);
         Picasso.get().load(card.getImgUrl() + "scale-to-width-down/200").into(holder.mImage);
 

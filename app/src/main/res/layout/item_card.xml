@@ -8,19 +8,20 @@
 
     <ImageView
         android:id="@+id/card_grid_item_image"
-        android:layout_width="100dp"
-        android:layout_height="130dp"
+        android:layout_width="120dp"
+        android:layout_height="156dp"
         app:srcCompat="@drawable/bash" />
 
     <LinearLayout
-        android:layout_width="100dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/your_card_item_score_layout"
-            android:layout_width="50dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <ImageView
@@ -47,8 +48,9 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="50dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <ImageView

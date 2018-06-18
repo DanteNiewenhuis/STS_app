@@ -1,4 +1,4 @@
-package e.dante.sts.Cards;
+package e.dante.sts;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
