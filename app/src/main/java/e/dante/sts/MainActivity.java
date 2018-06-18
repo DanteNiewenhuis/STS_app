@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.ArrayList;
 
 import e.dante.sts.Cards.CardsFragment;
 import e.dante.sts.Event.EventsFragment;
@@ -295,17 +298,23 @@ public class MainActivity extends AppCompatActivity
 
         FragmentManager fragmentManager = getFragmentManager();
         if (id == R.id.nav_cards) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new CardsFragment()).commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new CardsFragment())
+                    .addToBackStack("tag").commit();
         } else if (id == R.id.nav_relics) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new RelicsFragment()).commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new RelicsFragment())
+                    .addToBackStack("tag").commit();
         } else if (id == R.id.nav_keywords) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new KeywordsFragment()).commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new KeywordsFragment())
+                    .addToBackStack("tag").commit();
         } else if (id == R.id.nav_potions) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new PotionsFragment()).commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new PotionsFragment())
+                    .addToBackStack("tag").commit();
         } else if (id == R.id.nav_events) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new EventsFragment()).commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new EventsFragment())
+                    .addToBackStack("tag").commit();
         } else if (id == R.id.nav_test) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new TestFragment()).commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new TestFragment())
+                    .addToBackStack("tag").commit();
         } else if (id == R.id.nav_database) {
             new DataScraper().execute();
         }

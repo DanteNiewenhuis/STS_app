@@ -67,35 +67,62 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
                         card.setHero(links.get(s).substring(0, links.get(s).length() - 6));
 
                         card.setName(cols.get(0).text());
+                        cardId = card.getName();
+                        if (cardId.equals("J.A.X")) {
+                            cardId = "J.A.X.";
+                            card.setName(cardId);
+                        }
+                        if (cardId.equals("Strike")) {
+                            if (card.getHero().equals("Ironclad")) {
+                                cardId = cardId + "_(Ironclad)";
+                            }
+                            if (card.getHero().equals("Silent")) {
+                                cardId = cardId + "_(Silent)";
+                            }
+                            if (card.getHero().equals("Defect")) {
+                                cardId = cardId + "_(Defect)";
+                            }
+                        }
+                        if (cardId.equals("Defend")) {
+                            if (card.getHero().equals("Ironclad")) {
+                                cardId = cardId + "_(Ironclad)";
+                            }
+                            if (card.getHero().equals("Silent")) {
+                                cardId = cardId + "_(Silent)";
+                            }
+                            if (card.getHero().equals("Defect")) {
+                                cardId = cardId + "_(Defect)";
+                            }
+                        }
+                        Log.d("datascraper", "name: " + cardId);
                         String imgUrl = cols.get(1).select("a").attr("href");
                         card.setImgUrl(imgUrl.substring(0, imgUrl.indexOf("latest")) + "latest/");
                         card.setRarity(cols.get(2).text());
                         card.setType(cols.get(3).text());
-                        card.setCost(cols.get(4).text());
-                        card.setDescription(cols.get(5).text());
 
-                        String url2 = "http://slay-the-spire.wikia.com/wiki/" + card.getName();
+                        String url2 = "http://slay-the-spire.wikia.com/wiki/" + cardId;
                         Document doc2 = Jsoup.connect(url2).get();
 
                         //TODO scrape upgraded and normal description and cost from here!!!
-                        Elements divs = doc2.select("div.pi-data-value pi-font");
-
-                        card.setUpgradeCost(divs.get(5).text());
-                        card.setUpgradeDescription(divs.get(6).text());
-
-                        cardId = name_to_dName(card.getName());
-                        if (cardId.equals("Strike")) {
-                            if (card.getHero().equals("Ironclad")) {
-                                cardId = cardId + "_i";
-                            }
-                            if (card.getHero().equals("Silent")) {
-                                cardId = cardId + "_s";
-                            }
-                            if (card.getHero().equals("Defect")) {
-                                cardId = cardId + "_d";
-                            }
+                        Element div = doc2.getElementById("mw-content-text");
+                        Elements divs = div.select("div.pi-data-value");
+                        if (cardId.equals("Doppelganger")) {
+                            card.setCost("X");
+                            card.setDescription(divs.get(3).text());
+                            card.setUpgradeCost("X");
+                            card.setUpgradeDescription(divs.get(4).text());
                         }
+                        else {
+                            card.setCost(divs.get(3).text());
+                            card.setDescription(divs.get(4).text());
+                            card.setUpgradeCost(divs.get(5).text());
+                            card.setUpgradeDescription(divs.get(6).text());
+                        }
+
+                        cardId = name_to_dName(cardId);
                         mDatabase.child("Cards").child(cardId).setValue(card);
+                        mDatabase.child("Cards").child(cardId).child("yourScore").setValue(null);
+                        mDatabase.child("Cards").child(cardId).child("averageScore").setValue(null);
                     }
                 }
 
@@ -137,7 +164,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
     }
 
     private void getPotions() {
-        String url = "https://slaythespire.gamepedia.com/Potions";
+        String url = "http://slay-the-spire.wikia.com/wiki/Potions";
         String potionId;
         try {
             Document doc = Jsoup.connect(url).get();

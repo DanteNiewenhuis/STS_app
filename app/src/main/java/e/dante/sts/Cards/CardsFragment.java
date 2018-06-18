@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintSet;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
@@ -37,12 +38,12 @@ import e.dante.sts.GlobalFunctions;
 import e.dante.sts.InfoFragment;
 import e.dante.sts.InfoHelper;
 import e.dante.sts.R;
+import e.dante.sts.RatingFragment;
 
-public class CardsFragment extends Fragment implements CardHelper.Callback, InfoHelper.Callback, CardsAdapter.ItemClickListener {
+public class CardsFragment extends Fragment implements CardHelper.Callback, CardsAdapter.ItemClickListener {
     private View myView;
     private ArrayList<Card> cards;
     private ArrayList<Card> filteredCards;
-    private GlobalFunctions gFunctions;
     private FragmentManager fragmentManager;
     private CardsAdapter adapter;
     private RecyclerView recyclerView;
@@ -53,10 +54,6 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Info
         myView = inflater.inflate(R.layout.fragment_cards, container, false);
 
         ArrayList<Card> items = new ArrayList<>();
-        Card card = new Card();
-        card.setImgUrl("https://vignette.wikia.nocookie.net/slay-the-spire/images/f/f2/R-bash.png/revision/latest?cb=20171229053856");
-        card.setName("testName");
-        items.add(card);
         recyclerView = myView.findViewById(R.id.card_recycle_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this.getContext(),3));
 
@@ -88,7 +85,6 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Info
             }
         });
 
-        gFunctions = new GlobalFunctions(this);
         fragmentManager = getFragmentManager();
         return myView;
     }
@@ -168,36 +164,22 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Info
         return (colorList.contains(item.getHero()));
     }
 
-    @Override
-    public void gotInfo(String name, String type, String des) {
-        DialogFragment dialog = new InfoFragment();
-        Bundle extra = new Bundle();
-        extra.putSerializable("name", name);
-        extra.putSerializable("type", type);
-        extra.putSerializable("des", des);
-        dialog.setArguments(extra);
-        dialog.show(fragmentManager, "dialog");
-
-    }
-
-    @Override
-    public void gotInfoError(String message) {
-        Toast toast = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
-        toast.show();
-    }
-
     private class OptionsButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
+            ConstraintSet constraintSet = new ConstraintSet();
+            constraintSet.load(getContext(), R.layout.fragment_cards);
             if (myView.findViewById(R.id.options_layout).getVisibility() == View.VISIBLE) {
                 myView.findViewById(R.id.options_layout).setVisibility(View.GONE);
                 myView.findViewById(R.id.search_layout).setVisibility(View.GONE);
+                constraintSet.connect(R.id.options_button, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0);
                 return;
             }
 
             if (myView.findViewById(R.id.options_layout).getVisibility() == View.GONE) {
                 myView.findViewById(R.id.options_layout).setVisibility(View.VISIBLE);
                 myView.findViewById(R.id.search_layout).setVisibility(View.VISIBLE);
+                constraintSet.connect(R.id.options_button, ConstraintSet.TOP, R.id.options_layout, ConstraintSet.BOTTOM, 0);
             }
         }
     }
@@ -210,22 +192,21 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Info
     }
 
     public void onItemClick(View view, int position) {
-        Card item = adapter.getItem(position);
-        Log.d("onItemClick", "clicked card: " + item.getName());
+        String name = adapter.getItem(position).getName();
+        Bundle bundle = new Bundle();
+        bundle.putString("name", name);
+        CardDetailFragment fragment = new CardDetailFragment();
+        fragment.setArguments(bundle);
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack("tag").commit();
     }
 
-
-    // TODO this needs to be changed to a listener for specific points in the item and not the whole item!
-    private class CardsItemClickListener implements AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//            Log.d("cards listener", "init");
-//
-//            Intent intent = new Intent(CardsActivity.this, CardDetailActivity.class);
-//            intent.putExtra("card", (Card) parent.getItemAtPosition(position));
-//
-//            Log.d("cards listener", "start intent");
-//            startActivity(intent);
-        }
+    public void onRatingClick(View view, int position) {
+        Card item = adapter.getItem(position);
+        DialogFragment dialog = new RatingFragment();
+        Bundle extra = new Bundle();
+        extra.putString("name", item.getName());
+        extra.putFloat("score", item.getYourScore());
+        dialog.setArguments(extra);
+        dialog.show(fragmentManager, "dialog");
     }
 }

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class CardHelper {
     private Callback activity;
+    private SingleCallback singleActivity;
     private DatabaseReference mDatabase;
 
     public CardHelper() {
@@ -30,10 +31,24 @@ public class CardHelper {
         query.addValueEventListener(new cardValueListener());
     }
 
+    public void getSingleCard(SingleCallback activity, String name) {
+        this.singleActivity = activity;
+
+        DatabaseReference reference = mDatabase.child("Cards").child(name);
+        Query query = reference.orderByChild("name");
+        query.addValueEventListener(new singleCardValueListener());
+    }
+
     public interface Callback {
         void gotCards(ArrayList<Card> cards);
 
         void gotCardsError(String message);
+    }
+
+    public interface SingleCallback {
+        void gotSingleCard(Card cards);
+
+        void gotSingleCardError(String message);
     }
 
     private class cardValueListener implements ValueEventListener {
@@ -74,6 +89,42 @@ public class CardHelper {
         public void onCancelled(@NonNull DatabaseError databaseError) {
             Log.d("ERRORORROROORR", "cards");
             activity.gotCardsError(databaseError.getMessage());
+        }
+    }
+
+    private class singleCardValueListener implements ValueEventListener {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            FirebaseUser mUser = mAuth.getCurrentUser();
+            Card item = dataSnapshot.getValue(Card.class);
+
+            if (dataSnapshot.hasChild("scores")) {
+                dataSnapshot = dataSnapshot.child("scores");
+
+
+                if ((mUser != null) && (dataSnapshot.hasChild(mUser.getUid()))) {
+                    float rating = Float.parseFloat(dataSnapshot.child(mUser.getUid()).getValue().toString());
+                    item.setYourScore(rating);
+                }
+
+                int counter = 0;
+                float total = 0;
+                for (DataSnapshot user_score : dataSnapshot.getChildren()) {
+                    total += Float.parseFloat(user_score.getValue().toString());
+                    counter++;
+                }
+
+                item.setAverageScore(total / counter);
+            }
+
+            singleActivity.gotSingleCard(item);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+            Log.d("ERRORORROROORR", "cards");
+            singleActivity.gotSingleCardError(databaseError.getMessage());
         }
     }
 }

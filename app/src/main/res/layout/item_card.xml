@@ -18,6 +18,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/your_card_item_score_layout"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:orientation="vertical">
