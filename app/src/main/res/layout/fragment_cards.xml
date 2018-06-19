@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    tools:context=".CardsFragment">
+    tools:context=".Cards.CardsFragment">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/search_layout"
@@ -14,7 +14,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/search_input"
@@ -31,9 +31,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:baselineAligned="false"
         android:orientation="horizontal"
-        android:visibility="gone"
-        android:baselineAligned="false">
+        android:visibility="visible">
 
         <LinearLayout
             android:id="@+id/sort_layout"
@@ -49,6 +49,12 @@
                 android:text="Sort"
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/reverse_check"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Reverse" />
 
             <RadioGroup
                 android:id="@+id/sort_group"
