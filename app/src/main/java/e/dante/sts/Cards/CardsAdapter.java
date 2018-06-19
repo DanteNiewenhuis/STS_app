@@ -24,7 +24,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
     private ItemClickListener mClickListener;
 
     CardsAdapter(Context context, ArrayList<Card> data) {
-        Log.d("CardAdapter", "Constructor");
+//        Log.d("CardAdapter", "Constructor");
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.cards = data;
@@ -50,7 +50,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
     // binds the data to the textview in each cell
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
-        Log.d("CardAdapter", "onBindViewHolder");
+//        Log.d("CardAdapter", "onBindViewHolder");
         Card card = cards.get(position);
         Picasso.get().load(card.getImgUrl() + "scale-to-width-down/200").into(holder.mImage);
 
@@ -84,12 +84,14 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
 
         CardViewHolder(View itemView) {
             super(itemView);
-            Log.d("CardAdapter", "ViewHolder");
+//            Log.d("CardAdapter", "ViewHolder");
             mImage = itemView.findViewById(R.id.card_grid_item_image);
             mImage.setOnClickListener(this);
             mYourScore = itemView.findViewById(R.id.your_card_item_score);
             mAverageScore = itemView.findViewById(R.id.average_card_item_score);
             mStar = itemView.findViewById(R.id.your_card_item_score_layout);
+
+            //TODO implement not being able to vote when not logged in
             mStar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

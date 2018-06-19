@@ -1,17 +1,19 @@
 package e.dante.sts.Cards;
 
+import com.google.gson.Gson;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.design.widget.TextInputEditText;
+import android.text.Layout;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,13 +23,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
+import e.dante.sts.ComboFragment;
+import e.dante.sts.ComboHelper;
 import e.dante.sts.GlobalFunctions;
 import e.dante.sts.InfoFragment;
 import e.dante.sts.InfoHelper;
+import e.dante.sts.InputFragment;
 import e.dante.sts.R;
 import e.dante.sts.RatingFragment;
 
-public class CardDetailFragment extends Fragment implements CardHelper.SingleCallback, InfoHelper.Callback {
+public class CardDetailFragment extends Fragment implements CardHelper.SingleCallback,
+        InfoHelper.Callback, ComboHelper.Callback {
     private DatabaseReference mDatabase;
     private String name;
     private FirebaseUser mUser;
@@ -69,19 +77,27 @@ public class CardDetailFragment extends Fragment implements CardHelper.SingleCal
 
         TextView nameView = myView.findViewById(R.id.card_name_view);
         TextView nameUpgradeView = myView.findViewById(R.id.card_upgrade_name_view);
-        TextInputEditText notesView = myView.findViewById(R.id.card_notes_input);
+        TextView notesView = myView.findViewById(R.id.card_notes_view);
         TextView yourScore = myView.findViewById(R.id.your_card_detail_score);
         TextView averageScore = myView.findViewById(R.id.average_card_detail_score);
 
         ImageView cardImgView = myView.findViewById(R.id.card_image_view);
 
-        //TODO implement the grids
-        GridView comboCardsView = myView.findViewById(R.id.combo_cards_grid);
-        GridView comboRelicsView = myView.findViewById(R.id.combo_relics_grid);
+        //TODO implement the combogrids
+        LinearLayout comboCardsLayout = myView.findViewById(R.id.combo_cards_layout);
+//        GridView comboRelicsView = myView.findViewById(R.id.combo_relics_list);
 
+        comboCardsLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new ComboHelper().getCombos(CardDetailFragment.this, card.getName(), "Cards", "Cards");
+            }
+        });
+
+        //TODO implement not being able to vote when not logged in
         nameView.setText(card.getName());
         nameUpgradeView.setText(card.getName() + "+");
-        notesView.setText(card.getNotes());
+        notesView.setText(card.getYourNote());
         yourScore.setText(card.getYourScore() + "/10");
         averageScore.setText(card.getAverageScore() + "/10");
 
@@ -93,6 +109,19 @@ public class CardDetailFragment extends Fragment implements CardHelper.SingleCal
                 onRatingClick(card.getName(), card.getYourScore());
             }
         });
+        notesView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment dialog = new InputFragment();
+                Bundle extra = new Bundle();
+                extra.putString("name", card.getName());
+                extra.putString("oldNote", card.getYourNote());
+                dialog.setArguments(extra);
+                dialog.show(getActivity().getSupportFragmentManager(), "dialog");
+            }
+        });
+
+
     }
 
     @Override
@@ -134,5 +163,17 @@ public class CardDetailFragment extends Fragment implements CardHelper.SingleCal
     public void gotInfoError(String message) {
         Toast toast = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
         toast.show();
+    }
+
+    @Override
+    public void gotCombos(String name, String type1, String type2, List<String> combos) {
+        DialogFragment dialog = new ComboFragment();
+        Bundle extra = new Bundle();
+        extra.putString("name", name);
+        extra.putString("type1", type1);
+        extra.putString("type2", type2);
+        extra.putSerializable("combos", new Gson().toJson(combos));
+        dialog.setArguments(extra);
+        dialog.show(getActivity().getSupportFragmentManager(), "dialog");
     }
 }

@@ -28,7 +28,7 @@ public class RelicDetailActivity extends AppCompatActivity {
         ImageView relicImgView = findViewById(R.id.relic_image_view);
 
         //TODO implement the grids
-        GridView comboCardsView = findViewById(R.id.combo_cards_grid);
+        GridView comboCardsView = findViewById(R.id.combo_relics_list);
         GridView comboRelicsView = findViewById(R.id.combo_relics_grid);
 
         nameView.setText(relic.getName());

@@ -1,34 +1,25 @@
 package e.dante.sts.Cards;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Card implements Serializable {
     private String name;
     private String hero;
     private String description;
     private String upgradeDescription;
-    private String notes;
+    private String yourNote;
     private String imgUrl;
     private String type;
     private String rarity;
     private String cost;
     private String upgradeCost;
+    private List<String> yourComboCards;
     private float yourScore;
     private float averageScore;
 
     public Card() {
-        this.notes = "";
-    }
 
-    public Card(String name, String hero, String description, String notes, String imgUrl, String type, String rarity, String cost) {
-        this.name = name;
-        this.hero = hero;
-        this.description = description;
-        this.notes = notes;
-        this.imgUrl = imgUrl;
-        this.type = type;
-        this.rarity = rarity;
-        this.cost = cost;
     }
 
     public String getName() {
@@ -55,12 +46,12 @@ public class Card implements Serializable {
         this.description = description;
     }
 
-    public String getNotes() {
-        return notes;
+    public String getYourNote() {
+        return yourNote;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setYourNote(String yourNote) {
+        this.yourNote = yourNote;
     }
 
     public String getCost() {
@@ -125,5 +116,13 @@ public class Card implements Serializable {
 
     public void setUpgradeCost(String upgradeCost) {
         this.upgradeCost = upgradeCost;
+    }
+
+    public List<String> getYourComboCards() {
+        return yourComboCards;
+    }
+
+    public void setYourComboCards(List<String> yourComboCards) {
+        this.yourComboCards = yourComboCards;
     }
 }

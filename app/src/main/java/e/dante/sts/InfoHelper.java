@@ -28,17 +28,17 @@ public class InfoHelper {
     }
 
     public void getInfo(Callback activity, String type, String filter) {
-        Log.d("getInfo", "init");
+//        Log.d("getInfo", "init");
         this.activity = activity;
         this.type = type;
 
         Query query = mDatabase.child(type).child(filter);
         query.addValueEventListener(new SingleKeywordValueListener());
-        Log.d("getInfo", "done");
+//        Log.d("getInfo", "done");
     }
 
     public void getSpan(Callback activity, int viewId, String input) {
-        Log.d("getList", "init");
+//        Log.d("getList", "init");
         this.activity = activity;
         this.input = input;
         this.viewId = viewId;
@@ -56,11 +56,11 @@ public class InfoHelper {
     private class SingleKeywordValueListener implements ValueEventListener {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            Log.d("onDataChange", "init");
+//            Log.d("onDataChange", "init");
             String name = (String) dataSnapshot.child("name").getValue();
             String des = (String) dataSnapshot.child("description").getValue();
 
-            Log.d("onDataChange", "done");
+//            Log.d("onDataChange", "done");
             activity.gotInfo(name, type, des);
         }
 
@@ -73,12 +73,12 @@ public class InfoHelper {
     private class ListValueListener implements ValueEventListener {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            Log.d("onDataChange", "init");
+//            Log.d("onDataChange", "init");
             SpannableString ss = new SpannableString(input);
 
             for (DataSnapshot item: dataSnapshot.getChildren()) {
                 String word = item.getKey();
-                Log.d("onDataChange", "word: " + word);
+//                Log.d("onDataChange", "word: " + word);
                 for (int index = input.toLowerCase().indexOf(word.toLowerCase());
                      index >= 0;
                      index = input.toLowerCase().indexOf(word.toLowerCase(), index + 1)) {
@@ -87,7 +87,7 @@ public class InfoHelper {
             }
 
 
-            Log.d("onDataChange", "done");
+//            Log.d("onDataChange", "done");
             activity.gotSpan(viewId, ss);
         }
 

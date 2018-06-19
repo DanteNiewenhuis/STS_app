@@ -58,11 +58,12 @@ public class CardHelper {
 
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             FirebaseUser mUser = mAuth.getCurrentUser();
-            for (DataSnapshot score : dataSnapshot.getChildren()) {
-                Card item = score.getValue(Card.class);
+            for (DataSnapshot dataChild : dataSnapshot.getChildren()) {
+                Card item = dataChild.getValue(Card.class);
+                Log.d("onDataChangedSingle", "name: " + item.getName());
 
-                if (score.hasChild("scores")) {
-                    score = score.child("scores");
+                if (dataChild.hasChild("scores")) {
+                    DataSnapshot score = dataChild.child("scores");
 
 
                     if ((mUser != null) && (score.hasChild(mUser.getUid()))) {
@@ -100,22 +101,36 @@ public class CardHelper {
             Card item = dataSnapshot.getValue(Card.class);
 
             if (dataSnapshot.hasChild("scores")) {
-                dataSnapshot = dataSnapshot.child("scores");
+                DataSnapshot score = dataSnapshot.child("scores");
 
 
-                if ((mUser != null) && (dataSnapshot.hasChild(mUser.getUid()))) {
-                    float rating = Float.parseFloat(dataSnapshot.child(mUser.getUid()).getValue().toString());
+                if ((mUser != null) && (score.hasChild(mUser.getUid()))) {
+                    float rating = Float.parseFloat(score.child(mUser.getUid()).getValue().toString());
                     item.setYourScore(rating);
                 }
 
                 int counter = 0;
                 float total = 0;
-                for (DataSnapshot user_score : dataSnapshot.getChildren()) {
+                for (DataSnapshot user_score : score.getChildren()) {
                     total += Float.parseFloat(user_score.getValue().toString());
                     counter++;
                 }
 
                 item.setAverageScore(total / counter);
+            }
+
+
+            if (dataSnapshot.hasChild("notes")) {
+                Log.d("Detail Notes", "init");
+                DataSnapshot notes = dataSnapshot.child("notes");
+
+
+                if ((mUser != null) && (notes.hasChild(mUser.getUid()))) {
+                    String note = (String) notes.child(mUser.getUid()).getValue();
+                    Log.d("onDataChange Detail", "note: " + note);
+                    item.setYourNote(note);
+                    Log.d("onDataChange Detail", "note: " + item.getYourNote());
+                }
             }
 
             singleActivity.gotSingleCard(item);
