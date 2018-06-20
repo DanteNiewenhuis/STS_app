@@ -14,7 +14,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/search_input"
@@ -60,10 +60,10 @@
                 android:id="@+id/sort_group"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:checkedButton="@+id/radio_color">
+                android:checkedButton="@+id/radio_class">
 
                 <RadioButton
-                    android:id="@+id/radio_color"
+                    android:id="@+id/radio_class"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -133,6 +133,7 @@
 
     <Button
         android:id="@+id/options_button"
+        style="@android:style/Theme.Material.Light.DarkActionBar"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:background="#959595" />

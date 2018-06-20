@@ -18,6 +18,7 @@ public class CardHelper {
     private Callback activity;
     private SingleCallback singleActivity;
     private DatabaseReference mDatabase;
+    private String name;
 
     public CardHelper() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -33,8 +34,9 @@ public class CardHelper {
 
     public void getSingleCard(SingleCallback activity, String name) {
         this.singleActivity = activity;
+        this.name = name;
 
-        DatabaseReference reference = mDatabase.child("Cards").child(name);
+        DatabaseReference reference = mDatabase;
         Query query = reference.orderByChild("name");
         query.addValueEventListener(new singleCardValueListener());
     }
@@ -98,10 +100,12 @@ public class CardHelper {
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             FirebaseUser mUser = mAuth.getCurrentUser();
-            Card item = dataSnapshot.getValue(Card.class);
 
-            if (dataSnapshot.hasChild("scores")) {
-                DataSnapshot score = dataSnapshot.child("scores");
+            DataSnapshot cardSnapshot = dataSnapshot.child("Cards").child(name);
+            DataSnapshot comboSnapshot = dataSnapshot.child("Combos");
+            Card item = cardSnapshot.getValue(Card.class);
+            if (cardSnapshot.hasChild("scores")) {
+                DataSnapshot score = cardSnapshot.child("scores");
 
 
                 if ((mUser != null) && (score.hasChild(mUser.getUid()))) {
@@ -120,9 +124,9 @@ public class CardHelper {
             }
 
 
-            if (dataSnapshot.hasChild("notes")) {
+            if (cardSnapshot.hasChild("notes")) {
                 Log.d("Detail Notes", "init");
-                DataSnapshot notes = dataSnapshot.child("notes");
+                DataSnapshot notes = cardSnapshot.child("notes");
 
 
                 if ((mUser != null) && (notes.hasChild(mUser.getUid()))) {
@@ -133,6 +137,37 @@ public class CardHelper {
                 }
             }
 
+            ArrayList<String> comboCards = new ArrayList<>();
+            ArrayList<String> comboRelics = new ArrayList<>();
+            comboSnapshot = comboSnapshot.child("Cards");
+            if (comboSnapshot.hasChild(name)) {
+                DataSnapshot cardCombo = comboSnapshot.child(name);
+                if (cardCombo.hasChild("Cards")) {
+                    DataSnapshot cardComboCards = cardCombo.child("Cards");
+
+                    if ((mUser != null) && (cardComboCards.hasChild(mUser.getUid()))) {
+                        Log.d("CardHelper", "got combo card in UID");
+                        for (DataSnapshot card : cardComboCards.child(mUser.getUid()).getChildren()) {
+                            Log.d("CardHelper", "got combo card" + card.getKey());
+                            comboCards.add(card.getKey());
+                        }
+                    }
+                }
+                if (cardCombo.hasChild("Relics")) {
+                    DataSnapshot cardComboRelics = cardCombo.child("Relics");
+
+                    if ((mUser != null) && (cardComboRelics.hasChild(mUser.getUid()))) {
+                        Log.d("CardHelper", "got combo card in UID");
+                        for (DataSnapshot relic : cardComboRelics.child(mUser.getUid()).getChildren()) {
+                            Log.d("CardHelper", "got combo card" + relic.getKey());
+                            comboRelics.add(relic.getKey());
+                        }
+                    }
+                }
+            }
+
+            item.setYourComboCards(comboCards);
+            item.setYourComboRelics(comboRelics);
             singleActivity.gotSingleCard(item);
         }
 

@@ -1,11 +1,7 @@
 package e.dante.sts;
 
 import android.support.annotation.NonNull;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ClickableSpan;
 import android.util.Log;
-import android.view.View;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,49 +14,38 @@ import java.util.ArrayList;
 
 public class InfoHelper {
     private Callback activity;
-    private String input;
     private DatabaseReference mDatabase;
     private String type;
-    private int viewId;
 
     public InfoHelper() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     public void getInfo(Callback activity, String type, String filter) {
-//        Log.d("getInfo", "init");
         this.activity = activity;
         this.type = type;
 
         Query query = mDatabase.child(type).child(filter);
         query.addValueEventListener(new SingleKeywordValueListener());
-//        Log.d("getInfo", "done");
     }
 
-    public void getSpan(Callback activity, int viewId, String input) {
-//        Log.d("getList", "init");
-        this.activity = activity;
-        this.input = input;
-        this.viewId = viewId;
-
-        Query query = mDatabase.child("Keywords");
+    public void getLists() {
+        Query query = mDatabase;
         query.addValueEventListener(new ListValueListener());
     }
 
     public interface Callback {
         void gotInfo(String name, String type, String des);
         void gotInfoError(String message);
-        void gotSpan(int viewId, SpannableString ss);
     }
 
     private class SingleKeywordValueListener implements ValueEventListener {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//            Log.d("onDataChange", "init");
             String name = (String) dataSnapshot.child("name").getValue();
             String des = (String) dataSnapshot.child("description").getValue();
 
-//            Log.d("onDataChange", "done");
+            Log.d("SingleKeywordValueListener", "sending now");
             activity.gotInfo(name, type, des);
         }
 
@@ -73,36 +58,57 @@ public class InfoHelper {
     private class ListValueListener implements ValueEventListener {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//            Log.d("onDataChange", "init");
-            SpannableString ss = new SpannableString(input);
+            Globals sharedData = Globals.getInstance();
 
-            for (DataSnapshot item: dataSnapshot.getChildren()) {
-                String word = item.getKey();
-//                Log.d("onDataChange", "word: " + word);
-                for (int index = input.toLowerCase().indexOf(word.toLowerCase());
-                     index >= 0;
-                     index = input.toLowerCase().indexOf(word.toLowerCase(), index + 1)) {
-                    ss.setSpan(makeClickableSpan(word), index, index + word.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
+            ArrayList<String> cards = new ArrayList<>();
+            DataSnapshot cardsSnapshot = dataSnapshot.child("Cards");
+            for (DataSnapshot card: cardsSnapshot.getChildren()) {
+                cards.add((String) card.child("name").getValue());
             }
 
+            Log.d("LisValueListener", "length cards: " + cards.size());
+            sharedData.setCards(cards);
 
-//            Log.d("onDataChange", "done");
-            activity.gotSpan(viewId, ss);
+            ArrayList<String> relics = new ArrayList<>();
+            DataSnapshot relicsSnapshot = dataSnapshot.child("Relics");
+            for (DataSnapshot relic: relicsSnapshot.getChildren()) {
+                relics.add((String) relic.child("name").getValue());
+            }
+
+            Log.d("LisValueListener", "length relics: " + relics.size());
+            sharedData.setRelics(relics);
+
+            ArrayList<String> keywords = new ArrayList<>();
+            DataSnapshot keywordsSnapshot = dataSnapshot.child("Keywords");
+            for (DataSnapshot keyword: keywordsSnapshot.getChildren()) {
+                keywords.add((String) keyword.child("name").getValue());
+            }
+
+            Log.d("LisValueListener", "length keywords: " + keywords.size());
+            sharedData.setKeywords(keywords);
+
+            ArrayList<String> events = new ArrayList<>();
+            DataSnapshot eventsSnapshot = dataSnapshot.child("Events");
+            for (DataSnapshot event: eventsSnapshot.getChildren()) {
+                events.add((String) event.child("name").getValue());
+            }
+
+            Log.d("LisValueListener", "length events: " + events.size());
+            sharedData.setEvents(events);
+
+            ArrayList<String> potions = new ArrayList<>();
+            DataSnapshot potionsSnapshot = dataSnapshot.child("Potions");
+            for (DataSnapshot potion: potionsSnapshot.getChildren()) {
+                potions.add((String) potion.child("name").getValue());
+            }
+
+            Log.d("LisValueListener", "length potions: " + potions.size());
+            sharedData.setPotions(potions);
         }
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
 
         }
-    }
-
-    private ClickableSpan makeClickableSpan(final String filter) {
-        return new ClickableSpan() {
-            @Override
-            public void onClick(View view) {
-                new InfoHelper().getInfo(activity, "Keywords", filter);
-            }
-        };
     }
 }

@@ -32,7 +32,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/card_image_view"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/normal_card_layout" />
 
     <ImageView
         android:id="@+id/card_image_view"
@@ -41,8 +41,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/bash" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -114,7 +113,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/normal_card_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -153,12 +152,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/upgraded_card_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:gravity="left"
         android:orientation="horizontal"
@@ -201,19 +198,121 @@
         android:textColor="@android:color/black"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/linearLayout3"
-        app:layout_constraintTop_toBottomOf="@+id/card_image_view" />
+        app:layout_constraintTop_toBottomOf="@+id/upgraded_card_layout" />
 
     <TextView
         android:id="@+id/card_notes_view"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="TextView"
+        android:hint="add your own note"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/linearLayout3"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card_notes_view">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/combo_cards_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Combo Cards"
+                android:textColor="@android:color/black"
+                app:layout_constraintTop_toBottomOf="@+id/card_notes_view"
+                tools:layout_editor_absoluteX="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <AutoCompleteTextView
+                    android:id="@+id/auto_text_cards"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Combo Card"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/cards_add_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="3"
+                    android:background="@null"
+                    android:text="Add"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/colorPrimaryDark" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/combo_relic_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Combo Cards"
+                android:textColor="@android:color/black"
+                app:layout_constraintTop_toBottomOf="@+id/card_notes_view"
+                tools:layout_editor_absoluteX="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <AutoCompleteTextView
+                    android:id="@+id/auto_text_relics"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Combo Relic"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/relics_add_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="3"
+                    android:background="@null"
+                    android:text="Add"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/colorPrimaryDark" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="0dp"
@@ -221,12 +320,12 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_notes_view">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
 
         <LinearLayout
             android:id="@+id/combo_cards_layout"
@@ -235,30 +334,16 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/combo_cards_text"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="10"
-                android:text="Combo Cards"
-                android:textColor="@android:color/black"
-                app:layout_constraintTop_toBottomOf="@+id/card_notes_view"
-                tools:layout_editor_absoluteX="8dp" />
-
-            <GridView
+            <ListView
                 android:id="@+id/combo_cards_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/combo_cards_list"
-                app:layout_constraintTop_toBottomOf="@+id/textView3">
+                android:layout_weight="1">
 
-            </GridView>
+            </ListView>
         </LinearLayout>
 
         <LinearLayout
@@ -267,30 +352,16 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/combo_relic_text"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="10"
-                android:text="Combo Cards"
-                android:textColor="@android:color/black"
-                app:layout_constraintTop_toBottomOf="@+id/card_notes_view"
-                tools:layout_editor_absoluteX="8dp" />
-
-            <GridView
+            <ListView
                 android:id="@+id/combo_relics_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/combo_cards_list"
-                app:layout_constraintTop_toBottomOf="@+id/textView3">
+                android:layout_weight="1">
 
-            </GridView>
+            </ListView>
         </LinearLayout>
 
     </LinearLayout>

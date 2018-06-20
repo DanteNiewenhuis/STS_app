@@ -1,19 +1,11 @@
 package e.dante.sts.Event;
 
-import java.util.List;
-
 public class Event {
     private String name;
-    private List<String> options;
+    private String options;
     private int act;
 
     public Event() {
-    }
-
-    public Event(String name, List<String> options, int act) {
-        this.name = name;
-        this.options = options;
-        this.act = act;
     }
 
     public String getName() {
@@ -24,11 +16,11 @@ public class Event {
         this.name = name;
     }
 
-    public List<String> getOptions() {
+    public String getOptions() {
         return options;
     }
 
-    public void setOptions(List<String> options) {
+    public void setOptions(String options) {
         this.options = options;
     }
 

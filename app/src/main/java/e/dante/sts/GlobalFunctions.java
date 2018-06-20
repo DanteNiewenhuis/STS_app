@@ -13,27 +13,29 @@ public class GlobalFunctions {
         this.activity = activity;
     }
 
-//    public SpannableString makeSpans(String input) {
-//        Log.d("makeSpans", "word: " + "init");
-//        SpannableString ss = new SpannableString(input);
-//
-//        for (String word : MainActivity.globalKeywordList) {
-//            Log.d("makeSpans", "word: " + word);
-//            for (int index = input.toLowerCase().indexOf(word.toLowerCase());
-//                 index >= 0;
-//                 index = input.toLowerCase().indexOf(word.toLowerCase(), index + 1)) {
-//                ss.setSpan(makeClickableSpan(word), index, index + word.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            }
-//        }
-//
-//        return ss;
-//    }
+    public SpannableString makeSpans(String input) {
+        Log.d("makeSpans", "intput: " + input);
+        SpannableString ss = new SpannableString(input);
 
-    private ClickableSpan makeClickableSpan(final String filter) {
+        for (String word : Globals.getInstance().getKeywords()) {
+            Log.d("makeSpans", "word: " + word);
+            for (int index = input.toLowerCase().indexOf(word.toLowerCase());
+                 index >= 0;
+                 index = input.toLowerCase().indexOf(word.toLowerCase(), index + 1)) {
+                ss.setSpan(makeClickableSpan("Keywords", word), index, index + word.length(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+
+        return ss;
+    }
+
+    private ClickableSpan makeClickableSpan(final String type, final String filter) {
         return new ClickableSpan() {
             @Override
             public void onClick(View view) {
-                new InfoHelper().getInfo(activity, "Keywords", filter);
+                Log.d("ClickableSpan", "filter: " + filter);
+                new InfoHelper().getInfo(activity, type, filter);
             }
         };
     }

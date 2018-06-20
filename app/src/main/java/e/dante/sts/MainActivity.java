@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity
         } else {
             viewLogIn();
         }
+
+        new InfoHelper().getLists();
     }
 
     private void viewLogIn() {

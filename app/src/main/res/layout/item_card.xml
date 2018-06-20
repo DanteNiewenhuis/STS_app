@@ -9,8 +9,7 @@
     <ImageView
         android:id="@+id/card_grid_item_image"
         android:layout_width="120dp"
-        android:layout_height="156dp"
-        app:srcCompat="@drawable/bash" />
+        android:layout_height="156dp" />
 
     <LinearLayout
         android:layout_width="match_parent"

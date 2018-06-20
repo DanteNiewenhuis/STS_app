@@ -13,7 +13,6 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import e.dante.sts.Cards.Card;
 import e.dante.sts.Event.Event;
@@ -27,8 +26,8 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... voids) {
         Log.d("Scraper", "init");
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        getCards();
-//        getRelics();
+//        getCards();
+        getRelics();
 //        getPotions();
 //        getKeywords();
 //        getEvents();
@@ -94,13 +93,14 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
                                 cardId = cardId + "_(Defect)";
                             }
                         }
-                        Log.d("datascraper", "name: " + cardId);
+
                         String imgUrl = cols.get(1).select("a").attr("href");
                         card.setImgUrl(imgUrl.substring(0, imgUrl.indexOf("latest")) + "latest/");
                         card.setRarity(cols.get(2).text());
                         card.setType(cols.get(3).text());
 
-                        String url2 = "http://slay-the-spire.wikia.com/wiki/" + cardId;
+                        Log.d("Scraper", "cardId: " + cardId);
+                        String url2 = "http://slay-the-spire.wikia.com/wiki/" + cardId.replaceAll(" ", "_");
                         Document doc2 = Jsoup.connect(url2).get();
 
                         //TODO scrape upgraded and normal description and cost from here!!!
@@ -123,6 +123,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
                         mDatabase.child("Cards").child(cardId).setValue(card);
                         mDatabase.child("Cards").child(cardId).child("yourScore").setValue(null);
                         mDatabase.child("Cards").child(cardId).child("averageScore").setValue(null);
+                        mDatabase.child("Cards").child(cardId).child("notes").setValue(null);
                     }
                 }
 
@@ -133,7 +134,8 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
     }
 
     private void getRelics() {
-        String url = "https://slaythespire.gamepedia.com/Relics";
+        Log.d("Scraper", "Relics: start");
+        String url = "http://slay-the-spire.wikia.com/wiki/Relics";
         String relicId;
         try {
             Document doc = Jsoup.connect(url).get();
@@ -148,12 +150,28 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
                 if (cols.size() > 0) {
                     Relic relic = new Relic();
 
-                    relic.setImgUrl(cols.get(0).select("img").attr("src"));
                     relic.setName(cols.get(1).text());
-                    relic.setRarity(cols.get(2).text());
+                    relic.setRarity(cols.get(2).text().split(" ")[0]);
                     relic.setDescription(cols.get(3).text());
 
                     relicId = name_to_dName(relic.getName());
+                    Log.d("RelicScraper", "relic: " + relicId);
+                    String url2 = "http://slay-the-spire.wikia.com/wiki/" + relicId.replaceAll(" ", "_");;
+                    Document doc2 = Jsoup.connect(url2).get();
+
+                    Element div = doc2.getElementById("mw-content-text");
+                    Element img = div.select("img").get(0);
+                    try {
+                        Element info = div.select("p").get(0);
+                        relic.setInfo(info.text());
+                    }
+                    catch (IndexOutOfBoundsException e) {
+                        relic.setInfo("");
+                    }
+                    Element div2 = div.select("div.pi-data-value").get(3);
+
+                    relic.setImgUrl(img.attr("src"));
+                    relic.setHero(div2.text());
                     mDatabase.child("Relics").child(relicId).setValue(relic);
                 }
             }
@@ -161,6 +179,8 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
         } catch (IOException e) {
             Log.d("ERROR", e.getMessage());
         }
+
+        Log.d("Scraper", "Relics: done");
     }
 
     private void getPotions() {
@@ -179,7 +199,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
                 if (cols.size() > 0) {
                     Potion potion = new Potion();
 
-                    potion.setImgUrl(cols.get(0).select("img").attr("src"));
+                    potion.setImgUrl(cols.get(0).select("a").attr("href"));
                     potion.setName(cols.get(1).text());
                     potion.setDescription(cols.get(2).text());
 
@@ -228,38 +248,36 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
     }
 
     private void getEvents() {
-        String url = "https://slaythespire.gamepedia.com/Category:Act_";
+        String url = "http://slay-the-spire.wikia.com/wiki/Events";
         String eventId;
-        for (int l = 1; l < 4; l++) {
-            try {
-                Document doc = Jsoup.connect(url + l + "_Events").get();
-                Element div = doc.getElementById("mw-pages");
-                Elements items = div.select("li");
+        try {
+            Document doc = Jsoup.connect(url).get();
+            Element div = doc.getElementById("mw-content-text");
+            Elements lists = div.select("ul");
 
-                for (int i = 0; i < items.size(); i++) {
+            for (int i = 0; i < 4; i++) {
+                Element list = lists.get(i);
+                Elements items = list.select("li");
+
+                for (int j = 0; j < items.size(); j++) {
                     Event event = new Event();
-                    String name = items.get(i).text();
-                    event.setAct(l);
+                    String name = items.get(j).text();
+
+                    event.setAct(i + 1);
                     event.setName(name);
 
-                    Document doc2 = Jsoup.connect("https://slaythespire.gamepedia.com/" +
-                            name.replaceAll(" ", "_")).get();
-                    Element div2 = doc2.getElementById("mw-content-text");
-                    Elements items2 = div2.select("li");
-
-                    List<String> options = new ArrayList<>();
-                    for (int j = 0; j < items2.size(); j++) {
-                        options.add(items2.get(j).text());
-                    }
-                    event.setOptions(options);
+                        Document doc2 = Jsoup.connect("http://slay-the-spire.wikia.com/wiki/" +
+                                name.replaceAll(" ", "_")).get();
+                        Element div2 = doc2.getElementById("mw-content-text");
+                        event.setOptions(div2.text());
 
                     eventId = name_to_dName(event.getName());
                     mDatabase.child("Events").child(eventId).setValue(event);
                 }
-
-            } catch (IOException e) {
-                Log.d("ERROR", e.getMessage());
             }
+
+        } catch (IOException e) {
+            Log.d("ERROR", e.getMessage());
         }
     }
 

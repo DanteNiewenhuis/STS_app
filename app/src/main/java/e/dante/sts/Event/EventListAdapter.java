@@ -88,7 +88,7 @@ public class EventListAdapter extends BaseExpandableListAdapter {
         }
 
         ListView options = convertView.findViewById(R.id.options_list_view);
-        options.setAdapter(new OptionsAdapter(this.context, R.layout.item_option, event.getOptions()));
+//        options.setAdapter(new OptionsAdapter(this.context, R.layout.item_option, event.getOptions()));
 
         return convertView;
     }
@@ -112,8 +112,8 @@ public class EventListAdapter extends BaseExpandableListAdapter {
 
             String option = options.get(position);
 
-            TextView nameView = convertView.findViewById(R.id.option_title_view);
-            TextView desView = convertView.findViewById(R.id.option_description_view);
+//            TextView nameView = convertView.findViewById(R.id.option_title_view);
+//            TextView desView = convertView.findViewById(R.id.option_description_view);
 
             int index = option.indexOf("]");
 
@@ -128,8 +128,8 @@ public class EventListAdapter extends BaseExpandableListAdapter {
                 }
             }
 
-            nameView.setText(name + ": ");
-            desView.setText(des);
+//            nameView.setText(name + ": ");
+//            desView.setText(des);
 
             return convertView;
         }

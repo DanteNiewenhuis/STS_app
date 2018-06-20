@@ -15,12 +15,11 @@ public class Card implements Serializable {
     private String cost;
     private String upgradeCost;
     private List<String> yourComboCards;
+    private List<String> yourComboRelics;
     private float yourScore;
     private float averageScore;
 
-    public Card() {
-
-    }
+    public Card() { }
 
     public String getName() {
         return name;
@@ -124,5 +123,13 @@ public class Card implements Serializable {
 
     public void setYourComboCards(List<String> yourComboCards) {
         this.yourComboCards = yourComboCards;
+    }
+
+    public List<String> getYourComboRelics() {
+        return yourComboRelics;
+    }
+
+    public void setYourComboRelics(List<String> yourComboRelics) {
+        this.yourComboRelics = yourComboRelics;
     }
 }
