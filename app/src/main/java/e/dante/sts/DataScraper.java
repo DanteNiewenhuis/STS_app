@@ -1,6 +1,8 @@
 package e.dante.sts;
 
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
@@ -27,9 +29,9 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
         Log.d("Scraper", "init");
         mDatabase = FirebaseDatabase.getInstance().getReference();
 //        getCards();
-        getRelics();
+//        getRelics();
 //        getPotions();
-//        getKeywords();
+        getKeywords();
 //        getEvents();
 
         //TODO EXTRA: add enemies to the database
@@ -119,7 +121,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
                             card.setUpgradeDescription(divs.get(6).text());
                         }
 
-                        cardId = name_to_dName(cardId);
+                        cardId = Globals.getInstance().name_to_dName(cardId);
                         mDatabase.child("Cards").child(cardId).setValue(card);
                         mDatabase.child("Cards").child(cardId).child("yourScore").setValue(null);
                         mDatabase.child("Cards").child(cardId).child("averageScore").setValue(null);
@@ -154,7 +156,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
                     relic.setRarity(cols.get(2).text().split(" ")[0]);
                     relic.setDescription(cols.get(3).text());
 
-                    relicId = name_to_dName(relic.getName());
+                    relicId = Globals.getInstance().name_to_dName(relic.getName());
                     Log.d("RelicScraper", "relic: " + relicId);
                     String url2 = "http://slay-the-spire.wikia.com/wiki/" + relicId.replaceAll(" ", "_");;
                     Document doc2 = Jsoup.connect(url2).get();
@@ -201,9 +203,10 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
 
                     potion.setImgUrl(cols.get(0).select("a").attr("href"));
                     potion.setName(cols.get(1).text());
-                    potion.setDescription(cols.get(2).text());
+                    potion.setRarity(cols.get(2).text());
+                    potion.setDescription(cols.get(3).text());
 
-                    potionId = name_to_dName(potion.getName());
+                    potionId = Globals.getInstance().name_to_dName(potion.getName());
                     mDatabase.child("Potions").child(potionId).setValue(potion);
                 }
             }
@@ -237,7 +240,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
                     }
                 }
 
-                keywordId = name_to_dName(name);
+                keywordId = Globals.getInstance().name_to_dName(name);
                 mDatabase.child("Keywords").child(keywordId).child("name").setValue(name);
                 mDatabase.child("Keywords").child(keywordId).child("description").setValue(des);
             }
@@ -262,16 +265,18 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
                 for (int j = 0; j < items.size(); j++) {
                     Event event = new Event();
                     String name = items.get(j).text();
-
+                    Log.d("EVENTSCRAPER", "name: " + name);
                     event.setAct(i + 1);
                     event.setName(name);
 
-                        Document doc2 = Jsoup.connect("http://slay-the-spire.wikia.com/wiki/" +
-                                name.replaceAll(" ", "_")).get();
-                        Element div2 = doc2.getElementById("mw-content-text");
-                        event.setOptions(div2.text());
+                    String link = items.get(j).select("a").get(0).attr("abs:href");
+                    Log.d("EVENTSCRAPER", "link: " + link);
 
-                    eventId = name_to_dName(event.getName());
+                        Document doc2 = Jsoup.connect(link).get();
+                        Element div2 = doc2.getElementById("mw-content-text");
+                        event.setOptions(div2.html());
+
+                    eventId = Globals.getInstance().name_to_dName(event.getName());
                     mDatabase.child("Events").child(eventId).setValue(event);
                 }
             }
@@ -279,25 +284,5 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
         } catch (IOException e) {
             Log.d("ERROR", e.getMessage());
         }
-    }
-
-    private String name_to_dName(String s) {
-        s = s.replaceAll("\\.", "_p_");
-        s = s.replaceAll("\\$", "_d_");
-        s = s.replaceAll("\\[", "_l_");
-        s = s.replaceAll("]", "_r_");
-        s = s.replaceAll("#", "_h_");
-
-        return s;
-    }
-
-    private String dName_to_name(String s) {
-        s = s.replaceAll("_p_", "\\.");
-        s = s.replaceAll("_d_", "\\$");
-        s = s.replaceAll("_l_", "\\[");
-        s = s.replaceAll("_r_", "]");
-        s = s.replaceAll("_h_", "#");
-
-        return s;
     }
 }

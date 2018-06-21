@@ -60,17 +60,17 @@ public class RelicsAdapter extends RecyclerView.Adapter<RelicsAdapter.RelicViewH
         Picasso.get().load(relic.getImgUrl() + "scale-to-width-down/200").into(holder.mImage);
 
         if ((relic.getYourScore() % 1) == 0) {
-            holder.mYourScore.setText((int) relic.getYourScore() + "/10");
+            holder.mYourScore.setText((int) relic.getYourScore() + "/5");
         }
         else {
-            holder.mYourScore.setText(relic.getYourScore() + "/10");
+            holder.mYourScore.setText(relic.getYourScore() + "/5");
         }
 
         if ((relic.getAverageScore() % 1) == 0) {
-            holder.mAverageScore.setText((int) relic.getAverageScore() + "/10");
+            holder.mAverageScore.setText((int) relic.getAverageScore() + "/5");
         }
         else {
-            holder.mAverageScore.setText(relic.getAverageScore() + "/10");
+            holder.mAverageScore.setText(relic.getAverageScore() + "/5");
         }
     }
 
@@ -111,7 +111,7 @@ public class RelicsAdapter extends RecyclerView.Adapter<RelicsAdapter.RelicViewH
 
         @Override
         public void onClick(View view) {
-//            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 

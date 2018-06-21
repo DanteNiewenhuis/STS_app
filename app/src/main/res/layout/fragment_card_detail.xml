@@ -3,11 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Relics.RelicDetailActivity">
+    android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/card_name_view"
+        android:id="@+id/card_detail_name_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -17,11 +16,11 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/card_image_view"
+        app:layout_constraintStart_toEndOf="@+id/card_detail_image_view"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/card_upgrade_name_view"
+        android:id="@+id/card_detail_upgrade_name_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -31,11 +30,11 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/card_image_view"
-        app:layout_constraintTop_toBottomOf="@+id/normal_card_layout" />
+        app:layout_constraintStart_toEndOf="@+id/card_detail_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/card_detail_normal_layout" />
 
     <ImageView
-        android:id="@+id/card_image_view"
+        android:id="@+id/card_detail_image_view"
         android:layout_width="110dp"
         android:layout_height="143dp"
         android:layout_marginLeft="8dp"
@@ -44,29 +43,29 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/relic_detail_score_layout"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_image_view">
+        app:layout_constraintTop_toBottomOf="@+id/card_detail_image_view">
 
         <LinearLayout
-            android:id="@+id/your_card_score_detail_layout"
+            android:id="@+id/card_detail_your_score_layout"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/your_card_detail_star"
+                android:id="@+id/card_detail_your_star"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ratingstars" />
 
             <TextView
-                android:id="@+id/your_card_detail_score"
+                android:id="@+id/card_detail_your_score"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="7/10"
@@ -89,13 +88,13 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/average_card_detail_star"
+                android:id="@+id/card_detail_average_star"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ratingstars" />
 
             <TextView
-                android:id="@+id/average_card_detail_score"
+                android:id="@+id/card_detail_average_score"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="7/10"
@@ -113,7 +112,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/normal_card_layout"
+        android:id="@+id/card_detail_normal_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -126,11 +125,11 @@
         android:paddingLeft="5sp"
         android:paddingRight="5sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/card_image_view"
-        app:layout_constraintTop_toBottomOf="@+id/card_name_view">
+        app:layout_constraintStart_toEndOf="@+id/card_detail_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/card_detail_name_view">
 
         <TextView
-            android:id="@+id/card_cost_view"
+            android:id="@+id/card_detail_normal_cost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -138,7 +137,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/card_description_view"
+            android:id="@+id/card_detail_normal_description"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5sp"
@@ -146,13 +145,13 @@
             android:padding="5sp"
             android:text="Deal 8 damage.  Apply 2 Vulnerable."
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/card_name_view"
+            app:layout_constraintStart_toEndOf="@+id/card_detail_name_view"
             app:layout_constraintTop_toTopOf="parent" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/upgraded_card_layout"
+        android:id="@+id/card_detail_upgraded_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -163,11 +162,11 @@
         android:paddingLeft="5sp"
         android:paddingRight="5sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/card_image_view"
-        app:layout_constraintTop_toBottomOf="@+id/card_upgrade_name_view">
+        app:layout_constraintStart_toEndOf="@+id/card_detail_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/card_detail_upgrade_name_view">
 
         <TextView
-            android:id="@+id/card_upgrade_cost_view"
+            android:id="@+id/card_detail_upgrade_cost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -175,7 +174,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/card_upgrade_description_view"
+            android:id="@+id/card_detail_upgrade_description"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5sp"
@@ -183,7 +182,7 @@
             android:padding="5sp"
             android:text=" Deal 10 damage.  Apply 3 Vulnerable."
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/card_name_view"
+            app:layout_constraintStart_toEndOf="@+id/card_detail_name_view"
             app:layout_constraintTop_toTopOf="parent" />
 
     </LinearLayout>
@@ -197,11 +196,11 @@
         android:text="Notes"
         android:textColor="@android:color/black"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout3"
-        app:layout_constraintTop_toBottomOf="@+id/upgraded_card_layout" />
+        app:layout_constraintStart_toEndOf="@+id/relic_detail_score_layout"
+        app:layout_constraintTop_toBottomOf="@+id/card_detail_upgraded_layout" />
 
     <TextView
-        android:id="@+id/card_notes_view"
+        android:id="@+id/card_detail_notes"
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginEnd="8dp"
@@ -209,7 +208,7 @@
         android:hint="add your own note"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout3"
+        app:layout_constraintStart_toEndOf="@+id/relic_detail_score_layout"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <LinearLayout
@@ -223,7 +222,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/card_notes_view">
+        app:layout_constraintTop_toBottomOf="@id/card_detail_notes">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -232,13 +231,13 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/combo_cards_text"
+                android:id="@+id/card_detail_combo_card_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="Combo Cards"
                 android:textColor="@android:color/black"
-                app:layout_constraintTop_toBottomOf="@+id/card_notes_view"
+                app:layout_constraintTop_toBottomOf="@+id/card_detail_notes"
                 tools:layout_editor_absoluteX="8dp" />
 
             <LinearLayout
@@ -248,7 +247,7 @@
                 android:orientation="horizontal">
 
                 <AutoCompleteTextView
-                    android:id="@+id/auto_text_cards"
+                    android:id="@+id/card_detail_cards_auto_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -256,7 +255,7 @@
                     android:textSize="10sp" />
 
                 <TextView
-                    android:id="@+id/cards_add_button"
+                    android:id="@+id/card_detail_card_add_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
@@ -276,13 +275,13 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/combo_relic_text"
+                android:id="@+id/card_detail_combo_relic_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="Combo Cards"
                 android:textColor="@android:color/black"
-                app:layout_constraintTop_toBottomOf="@+id/card_notes_view"
+                app:layout_constraintTop_toBottomOf="@+id/card_detail_notes"
                 tools:layout_editor_absoluteX="8dp" />
 
             <LinearLayout
@@ -292,7 +291,7 @@
                 android:orientation="horizontal">
 
                 <AutoCompleteTextView
-                    android:id="@+id/auto_text_relics"
+                    android:id="@+id/card_detail_relics_auto_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -300,7 +299,7 @@
                     android:textSize="10sp" />
 
                 <TextView
-                    android:id="@+id/relics_add_button"
+                    android:id="@+id/card_detail_relic_add_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
@@ -328,14 +327,14 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
 
         <LinearLayout
-            android:id="@+id/combo_cards_layout"
+            android:id="@+id/card_detail_combo_cards_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <ListView
-                android:id="@+id/combo_cards_list"
+                android:id="@+id/card_detail_combo_cards_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="8dp"
@@ -347,13 +346,14 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/card_detail_combo_relics_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <ListView
-                android:id="@+id/combo_relics_list"
+                android:id="@+id/card_detail_combo_relics_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="8dp"

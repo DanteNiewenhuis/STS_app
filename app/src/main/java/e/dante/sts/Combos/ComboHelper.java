@@ -1,4 +1,4 @@
-package e.dante.sts;
+package e.dante.sts.Combos;
 
 import android.support.annotation.NonNull;
 
@@ -17,6 +17,7 @@ import java.util.List;
 public class ComboHelper {
 
     private Callback activity;
+    private ListCallback listActivity;
     private DatabaseReference mDatabase;
     private String type1;
     private String type2;
@@ -32,18 +33,54 @@ public class ComboHelper {
         void gotCombos(String name, String type1, String type2, List<String> combos);
     }
 
+    public interface ListCallback {
+        void gotComboList(ArrayList<Combo> combos);
+    }
+
     public void getCombos(Callback activity, String name, String type1, String type2) {
         this.activity = activity;
         this.name = name;
         this.type1 = type1;
         this.type2 = type2;
 
-        DatabaseReference reference = mDatabase.child("Combos").child(type1).child(name).child(type2);
-        Query query = reference.orderByChild("name");
+        Query query = mDatabase;
+        query.addValueEventListener(new CombosValueListener());
+    }
+
+    public void getComboList(ListCallback activity, String name, String type) {
+        this.listActivity = activity;
+        this.name = name;
+        this.type1 = type;
+
+        Query query = mDatabase;
         query.addValueEventListener(new CombosValueListener());
     }
 
     private class CombosValueListener implements ValueEventListener {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            ArrayList<String> combos = new ArrayList<>();
+
+            if (mUser != null) {
+                DataSnapshot userCombos = dataSnapshot.child(mUser.getUid());
+
+                for (DataSnapshot combo: userCombos.getChildren()) {
+                    if (Integer.parseInt(combo.getValue().toString()) == 1) {
+                        combos.add(combo.getKey());
+                    }
+                }
+            }
+
+            activity.gotCombos(name, type1, type2, combos);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    }
+
+    private class ComboListValueListener implements ValueEventListener {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             ArrayList<String> combos = new ArrayList<>();

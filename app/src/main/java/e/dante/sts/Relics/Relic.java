@@ -1,17 +1,20 @@
 package e.dante.sts.Relics;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Relic implements Serializable {
     private String name;
     private String description;
     private String imgUrl;
     private String rarity;
-    private String notes;
     private String info;
     private String hero;
+    private String yourNote;
     private float yourScore;
     private float averageScore;
+    private List<String> yourComboCards;
+    private List<String> yourComboRelics;
 
     public Relic() {
     }
@@ -48,14 +51,6 @@ public class Relic implements Serializable {
         this.rarity = rarity;
     }
 
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
     public String getInfo() {
         return info;
     }
@@ -86,5 +81,29 @@ public class Relic implements Serializable {
 
     public void setHero(String hero) {
         this.hero = hero;
+    }
+
+    public String getYourNote() {
+        return yourNote;
+    }
+
+    public void setYourNote(String yourNote) {
+        this.yourNote = yourNote;
+    }
+
+    public List<String> getYourComboCards() {
+        return yourComboCards;
+    }
+
+    public void setYourComboCards(List<String> yourComboCards) {
+        this.yourComboCards = yourComboCards;
+    }
+
+    public List<String> getYourComboRelics() {
+        return yourComboRelics;
+    }
+
+    public void setYourComboRelics(List<String> yourComboRelics) {
+        this.yourComboRelics = yourComboRelics;
     }
 }

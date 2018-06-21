@@ -1,5 +1,6 @@
 package e.dante.sts;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Globals {
@@ -16,8 +17,16 @@ public class Globals {
         Globals.instance = instance;
     }
 
-    private List<String> cards;
-    private List<String> relics;
+    private List<String> ironcladCards;
+    private List<String> silentCards;
+    private List<String> defectCards;
+    private List<String> anyCards;
+
+    private List<String> ironcladRelics;
+    private List<String> silentRelics;
+    private List<String> defectRelics;
+    private List<String> anyRelics;
+
     private List<String> keywords;
     private List<String> events;
     private List<String> potions;
@@ -28,19 +37,60 @@ public class Globals {
     }
 
     public List<String> getCards() {
-        return cards;
+        ArrayList<String> result = new ArrayList<>(anyCards);
+
+        result.addAll(ironcladCards);
+        result.addAll(silentCards);
+        result.addAll(defectCards);
+
+        return result;
     }
 
-    public void setCards(List<String> cards) {
-        this.cards = cards;
+    public List<String> getCards(String kind) {
+        ArrayList<String> result = new ArrayList<>(anyCards);
+
+        switch (kind) {
+            case "IronClad":
+                result.addAll(ironcladCards);
+                break;
+            case "Silent":
+                result.addAll(silentCards);
+                break;
+            case "Defect":
+                result.addAll(defectCards);
+                break;
+        }
+
+        return result;
     }
 
     public List<String> getRelics() {
-        return relics;
+        ArrayList<String> result = new ArrayList<>(anyRelics);
+
+        result.addAll(ironcladRelics);
+        result.addAll(silentRelics);
+        result.addAll(defectRelics);
+
+        return result;
     }
 
-    public void setRelics(List<String> relics) {
-        this.relics = relics;
+    public List<String> getRelics(String kind) {
+        ArrayList<String> result = new ArrayList<>(anyRelics);
+
+        switch (kind) {
+            case "Any": return getRelics();
+            case "IronClad":
+                result.addAll(ironcladRelics);
+                break;
+            case "Silent":
+                result.addAll(silentRelics);
+                break;
+            case "Defect":
+                result.addAll(defectRelics);
+                break;
+        }
+
+        return result;
     }
 
     public List<String> getKeywords() {
@@ -65,5 +115,89 @@ public class Globals {
 
     public void setPotions(List<String> potions) {
         this.potions = potions;
+    }
+
+    public List<String> getIroncladCards() {
+        return ironcladCards;
+    }
+
+    public void setIroncladCards(List<String> ironcladCards) {
+        this.ironcladCards = ironcladCards;
+    }
+
+    public List<String> getSilentCards() {
+        return silentCards;
+    }
+
+    public void setSilentCards(List<String> silentCards) {
+        this.silentCards = silentCards;
+    }
+
+    public List<String> getDefectCards() {
+        return defectCards;
+    }
+
+    public void setDefectCards(List<String> defectCards) {
+        this.defectCards = defectCards;
+    }
+
+    public List<String> getAnyCards() {
+        return anyCards;
+    }
+
+    public void setAnyCards(List<String> anyCards) {
+        this.anyCards = anyCards;
+    }
+
+    public List<String> getIroncladRelics() {
+        return ironcladRelics;
+    }
+
+    public void setIroncladRelics(List<String> ironcladRelics) {
+        this.ironcladRelics = ironcladRelics;
+    }
+
+    public List<String> getSilentRelics() {
+        return silentRelics;
+    }
+
+    public void setSilentRelics(List<String> silentRelics) {
+        this.silentRelics = silentRelics;
+    }
+
+    public List<String> getDefectRelics() {
+        return defectRelics;
+    }
+
+    public void setDefectRelics(List<String> defectRelics) {
+        this.defectRelics = defectRelics;
+    }
+
+    public List<String> getAnyRelics() {
+        return anyRelics;
+    }
+
+    public void setAnyRelics(List<String> anyRelics) {
+        this.anyRelics = anyRelics;
+    }
+
+    public String name_to_dName(String s) {
+        s = s.replaceAll("\\.", "_p_");
+        s = s.replaceAll("\\$", "_d_");
+        s = s.replaceAll("\\[", "_l_");
+        s = s.replaceAll("]", "_r_");
+        s = s.replaceAll("#", "_h_");
+
+        return s;
+    }
+
+    public String dName_to_name(String s) {
+        s = s.replaceAll("_p_", "\\.");
+        s = s.replaceAll("_d_", "\\$");
+        s = s.replaceAll("_l_", "\\[");
+        s = s.replaceAll("_r_", "]");
+        s = s.replaceAll("_h_", "#");
+
+        return s;
     }
 }

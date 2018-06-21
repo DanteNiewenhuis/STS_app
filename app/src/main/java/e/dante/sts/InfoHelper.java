@@ -45,7 +45,6 @@ public class InfoHelper {
             String name = (String) dataSnapshot.child("name").getValue();
             String des = (String) dataSnapshot.child("description").getValue();
 
-            Log.d("SingleKeywordValueListener", "sending now");
             activity.gotInfo(name, type, des);
         }
 
@@ -60,24 +59,66 @@ public class InfoHelper {
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             Globals sharedData = Globals.getInstance();
 
-            ArrayList<String> cards = new ArrayList<>();
+            ///////////////// CARDS ////////////////////
+            ArrayList<String> anyCards = new ArrayList<>();
+            ArrayList<String> ironcladCards = new ArrayList<>();
+            ArrayList<String> silentCards = new ArrayList<>();
+            ArrayList<String> defectCards = new ArrayList<>();
+
             DataSnapshot cardsSnapshot = dataSnapshot.child("Cards");
             for (DataSnapshot card: cardsSnapshot.getChildren()) {
-                cards.add((String) card.child("name").getValue());
+                Log.d("DataSnapshot", "card: " + card.child("name").getValue());
+                switch (card.child("hero").getValue().toString()) {
+                    case "Neutral":
+                        anyCards.add((String) card.child("name").getValue());
+                        break;
+                    case "Ironclad":
+                        ironcladCards.add((String) card.child("name").getValue());
+                        break;
+                    case "Silent":
+                        silentCards.add((String) card.child("name").getValue());
+                        break;
+                    case "Defect":
+                        defectCards.add((String) card.child("name").getValue());
+                        break;
+                }
             }
 
-            Log.d("LisValueListener", "length cards: " + cards.size());
-            sharedData.setCards(cards);
+            sharedData.setAnyCards(anyCards);
+            sharedData.setIroncladCards(ironcladCards);
+            sharedData.setSilentCards(silentCards);
+            sharedData.setDefectCards(defectCards);
 
-            ArrayList<String> relics = new ArrayList<>();
+            ///////////////// RELICS ////////////////////
+            ArrayList<String> anyRelics = new ArrayList<>();
+            ArrayList<String> ironcladRelics = new ArrayList<>();
+            ArrayList<String> silentRelics = new ArrayList<>();
+            ArrayList<String> defectRelics = new ArrayList<>();
+
             DataSnapshot relicsSnapshot = dataSnapshot.child("Relics");
             for (DataSnapshot relic: relicsSnapshot.getChildren()) {
-                relics.add((String) relic.child("name").getValue());
+                switch (relic.child("hero").getValue().toString()) {
+                    case "Any":
+                        anyRelics.add((String) relic.child("name").getValue());
+                        break;
+                    case "Ironclad":
+                        ironcladRelics.add((String) relic.child("name").getValue());
+                        break;
+                    case "Silent":
+                        silentRelics.add((String) relic.child("name").getValue());
+                        break;
+                    case "Defect":
+                        defectRelics.add((String) relic.child("name").getValue());
+                        break;
+                }
             }
 
-            Log.d("LisValueListener", "length relics: " + relics.size());
-            sharedData.setRelics(relics);
+            sharedData.setAnyRelics(anyRelics);
+            sharedData.setIroncladRelics(ironcladRelics);
+            sharedData.setSilentRelics(silentRelics);
+            sharedData.setDefectRelics(defectRelics);
 
+            ///////////////// KEYWORDS ////////////////////
             ArrayList<String> keywords = new ArrayList<>();
             DataSnapshot keywordsSnapshot = dataSnapshot.child("Keywords");
             for (DataSnapshot keyword: keywordsSnapshot.getChildren()) {
@@ -87,6 +128,7 @@ public class InfoHelper {
             Log.d("LisValueListener", "length keywords: " + keywords.size());
             sharedData.setKeywords(keywords);
 
+            ///////////////// EVENTS ////////////////////
             ArrayList<String> events = new ArrayList<>();
             DataSnapshot eventsSnapshot = dataSnapshot.child("Events");
             for (DataSnapshot event: eventsSnapshot.getChildren()) {
@@ -96,6 +138,7 @@ public class InfoHelper {
             Log.d("LisValueListener", "length events: " + events.size());
             sharedData.setEvents(events);
 
+            ///////////////// POTIONS ////////////////////
             ArrayList<String> potions = new ArrayList<>();
             DataSnapshot potionsSnapshot = dataSnapshot.child("Potions");
             for (DataSnapshot potion: potionsSnapshot.getChildren()) {

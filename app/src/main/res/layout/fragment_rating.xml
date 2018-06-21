@@ -2,8 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ratingFragment">
+    android:layout_height="match_parent">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -11,7 +10,5 @@
         android:id="@+id/ratingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:numStars="10"
-        android:scaleX="0.5"
-        android:stepSize="0.5" />
+        android:numStars="5"/>
 </FrameLayout>

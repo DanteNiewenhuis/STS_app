@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,19 +25,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import e.dante.sts.GlobalFunctions;
 import e.dante.sts.Globals;
-import e.dante.sts.InfoFragment;
-import e.dante.sts.InfoHelper;
-import e.dante.sts.InputFragment;
 import e.dante.sts.R;
 import e.dante.sts.RatingFragment;
 
-public class CardDetailFragment extends Fragment implements CardHelper.SingleCallback,
-        InfoHelper.Callback {
+public class CardDetailFragment extends Fragment implements CardHelper.SingleCallback {
     private DatabaseReference mDatabase;
     private String name;
     private FirebaseUser mUser;
@@ -50,8 +44,6 @@ public class CardDetailFragment extends Fragment implements CardHelper.SingleCal
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
-
-        gFunctions = new GlobalFunctions(this);
     }
 
     @Override
@@ -66,34 +58,23 @@ public class CardDetailFragment extends Fragment implements CardHelper.SingleCal
         // Inflate the layout for this fragment
         myView = inflater.inflate(R.layout.fragment_card_detail, container, false);
 
+        gFunctions = new GlobalFunctions(getActivity().getSupportFragmentManager());
         new CardHelper().getSingleCard(this, name);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_dropdown_item_1line, Globals.getInstance().getCards());
-
-        ArrayAdapter<String> relicAdapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_dropdown_item_1line, Globals.getInstance().getRelics());
-
-        AutoCompleteTextView cardAutoView = myView.findViewById(R.id.auto_text_cards);
-        cardAutoView.setAdapter(adapter);
-
-        AutoCompleteTextView relicAutoView = myView.findViewById(R.id.auto_text_relics);
-        relicAutoView.setAdapter(relicAdapter);
 
         return myView;
     }
 
     @Override
     public void gotSingleCard(final Card card) {
-        TextView desView = myView.findViewById(R.id.card_description_view);
-        TextView upgradedDesView = myView.findViewById(R.id.card_upgrade_description_view);
-        TextView nameView = myView.findViewById(R.id.card_name_view);
-        TextView nameUpgradeView = myView.findViewById(R.id.card_upgrade_name_view);
-        TextView notesView = myView.findViewById(R.id.card_notes_view);
-        TextView yourScore = myView.findViewById(R.id.your_card_detail_score);
-        TextView averageScore = myView.findViewById(R.id.average_card_detail_score);
+        TextView desView = myView.findViewById(R.id.card_detail_normal_description);
+        TextView upgradedDesView = myView.findViewById(R.id.card_detail_upgrade_description);
+        TextView nameView = myView.findViewById(R.id.card_detail_name_view);
+        TextView nameUpgradeView = myView.findViewById(R.id.card_detail_upgrade_name_view);
+        TextView notesView = myView.findViewById(R.id.card_detail_notes);
+        TextView yourScore = myView.findViewById(R.id.card_detail_your_score);
+        TextView averageScore = myView.findViewById(R.id.card_detail_average_score);
 
-        ImageView cardImgView = myView.findViewById(R.id.card_image_view);
+        ImageView cardImgView = myView.findViewById(R.id.card_detail_image_view);
 
         //TODO implement not being able to vote when not logged in
         desView.setText(gFunctions.makeSpans(card.getDescription()));
@@ -101,15 +82,22 @@ public class CardDetailFragment extends Fragment implements CardHelper.SingleCal
         desView.setMovementMethod(LinkMovementMethod.getInstance());
         upgradedDesView.setMovementMethod(LinkMovementMethod.getInstance());
 
+        getActivity().setTitle(card.getName());
+
         nameView.setText(card.getName());
         nameUpgradeView.setText(card.getName() + "+");
         notesView.setText(card.getYourNote());
-        yourScore.setText(card.getYourScore() + "/10");
-        averageScore.setText(card.getAverageScore() + "/10");
+        yourScore.setText(card.getYourScore() + "/5");
+        averageScore.setText(card.getAverageScore() + "/5");
 
         Picasso.get().load(card.getImgUrl()).into(cardImgView);
 
-        myView.findViewById(R.id.your_card_score_detail_layout).setOnClickListener(new View.OnClickListener() {
+        makeOnClickListeners(card);
+    }
+
+    private void makeOnClickListeners(final Card card) {
+        TextView notesView = myView.findViewById(R.id.card_detail_notes);
+        myView.findViewById(R.id.card_detail_your_score_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onRatingClick(card.getName(), card.getYourScore());
@@ -118,50 +106,71 @@ public class CardDetailFragment extends Fragment implements CardHelper.SingleCal
         notesView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment dialog = new InputFragment();
-                Bundle extra = new Bundle();
-                extra.putString("name", card.getName());
-                extra.putString("oldNote", card.getYourNote());
-                dialog.setArguments(extra);
-                dialog.show(getActivity().getSupportFragmentManager(), "dialog");
+                gFunctions.getNotes("Cards", card.getName(), card.getYourNote());
             }
         });
 
-        myView.findViewById(R.id.cards_add_button).setOnClickListener(new View.OnClickListener() {
+        final List<String> cardList = Globals.getInstance().getCards(card.getHero());
+        for (String s: card.getYourComboCards()) {
+            cardList.remove(s);
+        }
+
+        final List<String> relicList = Globals.getInstance().getRelics(card.getHero());
+        for (String s: card.getYourComboRelics()) {
+            relicList.remove(s);
+        }
+        cardList.remove(name);
+        myView.findViewById(R.id.card_detail_card_add_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AutoCompleteTextView textView = myView.findViewById(R.id.auto_text_cards);
+                AutoCompleteTextView textView = myView.findViewById(R.id.card_detail_cards_auto_text);
                 String selected = textView.getText().toString();
 
-                if (!card.getYourComboCards().contains(selected)) {
+                if (!card.getYourComboCards().contains(selected) &&
+                        cardList.contains(selected)) {
                     mDatabase.child("Combos").child("Cards").child(name).child("Cards").child(mUser.getUid()).child(selected).setValue(1);
                     mDatabase.child("Combos").child("Cards").child(selected).child("Cards").child(mUser.getUid()).child(name).setValue(1);
                     InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(myView.getWindowToken(), 0);
+                    textView.setText("");
                 }
             }
         });
 
-        myView.findViewById(R.id.relics_add_button).setOnClickListener(new View.OnClickListener() {
+        myView.findViewById(R.id.card_detail_relic_add_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AutoCompleteTextView textView = myView.findViewById(R.id.auto_text_relics);
+                AutoCompleteTextView textView = myView.findViewById(R.id.card_detail_relics_auto_text);
                 String selected = textView.getText().toString();
 
-                if (!card.getYourComboCards().contains(selected)) {
+                if (!card.getYourComboRelics().contains(selected) &&
+                        relicList.contains(selected)) {
                     mDatabase.child("Combos").child("Cards").child(name).child("Relics").child(mUser.getUid()).child(selected).setValue(1);
                     mDatabase.child("Combos").child("Relics").child(selected).child("Cards").child(mUser.getUid()).child(name).setValue(1);
                     InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(myView.getWindowToken(), 0);
+                    textView.setText("");
                 }
             }
         });
 
-        ListView comboCardsView = myView.findViewById(R.id.combo_cards_list);
+        ListView comboCardsView = myView.findViewById(R.id.card_detail_combo_cards_list);
         comboCardsView.setAdapter(new ComboAdapter(getContext(), R.layout.item_combo, card.getYourComboCards(), "Cards"));
 
-        ListView comboRelicsView = myView.findViewById(R.id.combo_relics_list);
+        ListView comboRelicsView = myView.findViewById(R.id.card_detail_combo_relics_list);
         comboRelicsView.setAdapter(new ComboAdapter(getContext(), R.layout.item_combo, card.getYourComboRelics(), "Relics"));
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_dropdown_item_1line, cardList);
+
+        ArrayAdapter<String> relicAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_dropdown_item_1line, relicList);
+
+        AutoCompleteTextView cardsAutoView = myView.findViewById(R.id.card_detail_cards_auto_text);
+        cardsAutoView.setAdapter(adapter);
+
+        AutoCompleteTextView relicsAutoView = myView.findViewById(R.id.card_detail_relics_auto_text);
+        relicsAutoView.setAdapter(relicAdapter);
     }
 
     private class ComboAdapter extends ArrayAdapter<String> {
@@ -189,6 +198,12 @@ public class CardDetailFragment extends Fragment implements CardHelper.SingleCal
             TextView nameView = convertView.findViewById(R.id.combo_name_view);
             nameView.setText(comboName);
 
+            nameView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    gFunctions.getInfo(comboName, type);
+                }
+            });
             convertView.findViewById(R.id.combo_delete_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -210,32 +225,9 @@ public class CardDetailFragment extends Fragment implements CardHelper.SingleCal
         DialogFragment dialog = new RatingFragment();
         Bundle extra = new Bundle();
         extra.putString("name", name);
+        extra.putString("type", "Cards");
         extra.putFloat("score", score);
         dialog.setArguments(extra);
         dialog.show(getActivity().getSupportFragmentManager(), "dialog");
-    }
-
-    public void gotSpan(int viewId, SpannableString ss) {
-        TextView textView = myView.findViewById(viewId);
-        textView.setText(ss);
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
-    }
-
-    @Override
-    public void gotInfo(String name, String type, String des) {
-        DialogFragment dialog = new InfoFragment();
-        Bundle extra = new Bundle();
-        extra.putSerializable("name", name);
-        extra.putSerializable("type", type);
-        extra.putSerializable("des", des);
-        dialog.setArguments(extra);
-        dialog.show(getActivity().getSupportFragmentManager(), "dialog");
-
-    }
-
-    @Override
-    public void gotInfoError(String message) {
-        Toast toast = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
-        toast.show();
     }
 }

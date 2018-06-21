@@ -22,7 +22,7 @@ public class EventsHelper {
     public void getEvents(Callback activity) {
         this.activity = activity;
 
-        Query query = mDatabase.child("Events");
+        Query query = mDatabase.child("Events").orderByChild("act");
         query.addValueEventListener(new eventsValueListener());
     }
 

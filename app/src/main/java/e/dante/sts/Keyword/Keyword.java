@@ -4,15 +4,11 @@ import java.io.Serializable;
 
 public class Keyword implements Serializable {
     private String name;
+    private String type;
     private String description;
 
     public Keyword() {
 
-    }
-
-    public Keyword(String name, String description) {
-        this.name = name;
-        this.description = description;
     }
 
     public String getName() {
@@ -29,5 +25,13 @@ public class Keyword implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

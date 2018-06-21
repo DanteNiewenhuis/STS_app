@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import e.dante.sts.MainActivity;
 import e.dante.sts.R;
 import e.dante.sts.RatingFragment;
 
@@ -40,6 +43,8 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.fragment_cards, container, false);
+
+        getActivity().setTitle("Cards");
 
         ArrayList<Card> items = new ArrayList<>();
         recyclerView = myView.findViewById(R.id.card_recycle_view);
@@ -63,6 +68,7 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
         myView.findViewById(R.id.radio_type).setOnClickListener(new OnCheckBoxClickListener());
 
         // create the search onclicklistener
+        //TODO make the searchbar an autocompletetextinput
         myView.findViewById(R.id.options_button).setOnClickListener(new OptionsButtonClickListener());
         EditText searchView = myView.findViewById(R.id.search_input);
         searchView.setOnEditorActionListener(new EditText.OnEditorActionListener() {
@@ -186,6 +192,8 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
                 Log.d("OptionsButton::onClick", "VISIBLE");
                 myView.findViewById(R.id.options_layout).setVisibility(View.GONE);
                 myView.findViewById(R.id.search_layout).setVisibility(View.GONE);
+                ImageView button = myView.findViewById(R.id.options_button);
+                button.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
                 return;
             }
 
@@ -193,6 +201,8 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
                 Log.d("OptionsButton::onClick", "GONE");
                 myView.findViewById(R.id.options_layout).setVisibility(View.VISIBLE);
                 myView.findViewById(R.id.search_layout).setVisibility(View.VISIBLE);
+                ImageView button = myView.findViewById(R.id.options_button);
+                button.setImageResource(R.drawable.ic_arrow_drop_up_black_24dp);
             }
         }
     }
@@ -218,6 +228,7 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
         DialogFragment dialog = new RatingFragment();
         Bundle extra = new Bundle();
         extra.putString("name", item.getName());
+        extra.putString("type", "Cards");
         extra.putFloat("score", item.getYourScore());
         dialog.setArguments(extra);
         dialog.show(fragmentManager, "dialog");

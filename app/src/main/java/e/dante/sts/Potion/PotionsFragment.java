@@ -28,6 +28,8 @@ public class PotionsFragment extends Fragment implements PotionHelper.Callback {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.fragment_potion, container, false);
 
+        getActivity().setTitle("Potions");
+
         new PotionHelper().getPotions(this);
 
         return myView;

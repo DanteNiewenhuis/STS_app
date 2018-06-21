@@ -4,14 +4,9 @@ public class Potion {
     private String imgUrl;
     private String name;
     private String description;
+    private String rarity;
 
     public Potion() {
-    }
-
-    public Potion(String imgUrl, String name, String description) {
-        this.imgUrl = imgUrl;
-        this.name = name;
-        this.description = description;
     }
 
     public String getImgUrl() {
@@ -36,5 +31,13 @@ public class Potion {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getRarity() {
+        return rarity;
+    }
+
+    public void setRarity(String rarity) {
+        this.rarity = rarity;
     }
 }

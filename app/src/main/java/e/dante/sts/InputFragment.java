@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class InputFragment extends DialogFragment {
     private String name;
     private String oldNote;
+    private String type;
     private DatabaseReference mDatabase;
     private FirebaseUser mUser;
 
@@ -35,6 +36,7 @@ public class InputFragment extends DialogFragment {
         super.setArguments(args);
         name = args.getString("name");
         oldNote = args.getString("oldNote");
+        type = args.getString("type");
     }
 
     @Override
@@ -49,7 +51,7 @@ public class InputFragment extends DialogFragment {
             public void onClick(View view) {
                 TextView textView = myView.findViewById(R.id.note_input_view);
                 String input = textView.getText().toString();
-                mDatabase.child("Cards").child(name).child("notes").child(mUser.getUid())
+                mDatabase.child(type).child(name).child("notes").child(mUser.getUid())
                         .setValue(input);
                 dismiss();
             }

@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class RatingFragment extends DialogFragment {
     private String name;
     private float score;
+    private String type;
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
@@ -31,6 +32,7 @@ public class RatingFragment extends DialogFragment {
         super.setArguments(args);
         name = args.getString("name");
         score = args.getFloat("score");
+        type = args.getString("type");
     }
 
     @Override
@@ -43,7 +45,7 @@ public class RatingFragment extends DialogFragment {
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
-                mDatabase.child("Cards").child(name).child("scores").child(mUser.getUid()).setValue(v);
+                mDatabase.child(type).child(name).child("scores").child(mUser.getUid()).setValue(v);
             }
         });
         return myView;

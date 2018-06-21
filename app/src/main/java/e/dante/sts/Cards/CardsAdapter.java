@@ -39,7 +39,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
         ViewGroup.LayoutParams p = view.getLayoutParams();
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 
-        p.width = displayMetrics.widthPixels / 3;
+        p.width = (displayMetrics.widthPixels - 10) / 3;
         p.height = p.height * p.width/100;
 
         view.setLayoutParams(p);
@@ -55,17 +55,17 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
         Picasso.get().load(card.getImgUrl() + "scale-to-width-down/200").into(holder.mImage);
 
         if ((card.getYourScore() % 1) == 0) {
-            holder.mYourScore.setText((int) card.getYourScore() + "/10");
+            holder.mYourScore.setText((int) card.getYourScore() + "/5");
         }
         else {
-            holder.mYourScore.setText(card.getYourScore() + "/10");
+            holder.mYourScore.setText(card.getYourScore() + "/5");
         }
 
         if ((card.getAverageScore() % 1) == 0) {
-            holder.mAverageScore.setText((int) card.getAverageScore() + "/10");
+            holder.mAverageScore.setText((int) card.getAverageScore() + "/5");
         }
         else {
-            holder.mAverageScore.setText(card.getAverageScore() + "/10");
+            holder.mAverageScore.setText(card.getAverageScore() + "/5");
         }
     }
 

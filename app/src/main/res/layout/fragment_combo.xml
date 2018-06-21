@@ -4,32 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ComboFragment">
+    tools:context=".Combos.ComboFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <ListView
-        android:id="@+id/combo_card_list"
+    <ExpandableListView
+        android:id="@+id/combo_cards_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible" />
+        android:layout_height="match_parent" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <Spinner
-            android:id="@+id/combo_options_dropdown"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <Button
-            android:id="@+id/combo_option_add"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Add" />
-    </LinearLayout>
 </LinearLayout>

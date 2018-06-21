@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -40,6 +41,8 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.fragment_relics, container, false);
+
+        getActivity().setTitle("Relics");
 
         ArrayList<Relic> items = new ArrayList<>();
         recyclerView = myView.findViewById(R.id.relic_recycle_view);
@@ -187,6 +190,8 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
                 Log.d("OptionsButton::onClick", "VISIBLE");
                 myView.findViewById(R.id.options_layout).setVisibility(View.GONE);
                 myView.findViewById(R.id.search_layout).setVisibility(View.GONE);
+                ImageView button = myView.findViewById(R.id.options_button);
+                button.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
                 return;
             }
 
@@ -194,6 +199,8 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
                 Log.d("OptionsButton::onClick", "GONE");
                 myView.findViewById(R.id.options_layout).setVisibility(View.VISIBLE);
                 myView.findViewById(R.id.search_layout).setVisibility(View.VISIBLE);
+                ImageView button = myView.findViewById(R.id.options_button);
+                button.setImageResource(R.drawable.ic_arrow_drop_up_black_24dp);
             }
         }
     }
@@ -219,6 +226,7 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
         DialogFragment dialog = new RatingFragment();
         Bundle extra = new Bundle();
         extra.putString("name", item.getName());
+        extra.putString("type", "Relics");
         extra.putFloat("score", item.getYourScore());
         dialog.setArguments(extra);
         dialog.show(fragmentManager, "dialog");

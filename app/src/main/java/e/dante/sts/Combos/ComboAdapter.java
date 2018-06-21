@@ -1,12 +1,8 @@
-package e.dante.sts.Event;
+package e.dante.sts.Combos;
 
-import android.support.v4.app.FragmentManager;
 import android.content.Context;
-import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.text.Html;
+import android.support.v4.app.FragmentManager;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,18 +11,17 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import e.dante.sts.Event.Event;
 import e.dante.sts.GlobalFunctions;
 import e.dante.sts.R;
 
-public class EventListAdapter extends BaseExpandableListAdapter{
+public class ComboAdapter extends BaseExpandableListAdapter {
     private Context context;
-    private ArrayList<Event> dataChild;
-    private GlobalFunctions gFunctions;
+    private ArrayList<Combo> dataChild;
 
-    public EventListAdapter(Context context, FragmentManager fragmentManager, ArrayList<Event> dataChild) {
+    public ComboAdapter(Context context, ArrayList<Combo> dataChild) {
         this.context = context;
         this.dataChild = dataChild;
-        this.gFunctions = new GlobalFunctions(fragmentManager);
     }
 
     @Override
@@ -71,19 +66,9 @@ public class EventListAdapter extends BaseExpandableListAdapter{
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        Event event = (Event) getGroup(groupPosition);
+        Combo combo = (Combo) getGroup(groupPosition);
         if (convertView == null) {
-            convertView = LayoutInflater.from(this.context).inflate(R.layout.event_group, parent, false);
-        }
-
-        TextView name = convertView.findViewById(R.id.event_name_view);
-        TextView act = convertView.findViewById(R.id.event_act_view);
-        name.setText(event.getName());
-        if (event.getAct() == 4) {
-            act.setText("Any Act");
-        }
-        else {
-            act.setText("Act " + Integer.toString(event.getAct()));
+            convertView = LayoutInflater.from(this.context).inflate(R.layout.combo_group, parent, false);
         }
 
         return convertView;
@@ -91,19 +76,13 @@ public class EventListAdapter extends BaseExpandableListAdapter{
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        Event event = (Event) getChild(groupPosition, childPosition);
+        Combo combo = (Combo) getChild(groupPosition, childPosition);
         if (convertView == null) {
-            convertView = LayoutInflater.from(this.context).inflate(R.layout.event_child, parent, false);
+            convertView = LayoutInflater.from(this.context).inflate(R.layout.combo_child, parent, false);
         }
-
-        TextView options = convertView.findViewById(R.id.event_options_view);
-//        options.setText(gFunctions.makeBold(event.getOptions()
-//                .replaceAll(" \\[", "\n["), "[", "]"));
-
-//        options.setText(gFunctions.makeSpans(Html.fromHtml(gFunctions.parseHTML(event.getOptions()))));
-        options.setMovementMethod(LinkMovementMethod.getInstance());
 
 
         return convertView;
     }
+
 }

@@ -22,6 +22,8 @@ public class KeywordsFragment extends Fragment implements KeywordHelper.Callback
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.fragment_keywords, container, false);
 
+        getActivity().setTitle("Keywords");
+
         new KeywordHelper().getKeywords(this);
 
         return myView;
