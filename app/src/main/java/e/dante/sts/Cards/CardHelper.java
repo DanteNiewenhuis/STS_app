@@ -14,20 +14,24 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import e.dante.sts.GlobalFunctions;
+
 public class CardHelper {
     private Callback activity;
     private SingleCallback singleActivity;
     private DatabaseReference mDatabase;
     private String name;
+    private GlobalFunctions gFunctions;
 
     public CardHelper() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        gFunctions = new GlobalFunctions();
     }
 
     public void getCards(Callback activity) {
         this.activity = activity;
 
-        DatabaseReference reference = mDatabase.child("Cards");
+        DatabaseReference reference = mDatabase;
         Query query = reference.orderByChild("name");
         query.addValueEventListener(new cardValueListener());
     }
@@ -60,30 +64,43 @@ public class CardHelper {
 
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             FirebaseUser mUser = mAuth.getCurrentUser();
-            for (DataSnapshot dataChild : dataSnapshot.getChildren()) {
+            DataSnapshot cardsSnapshot = dataSnapshot.child("Cards");
+            DataSnapshot opinionsSnapshot = dataSnapshot.child("Opinions").child("Cards");
+            for (DataSnapshot dataChild : cardsSnapshot.getChildren()) {
                 Card item = dataChild.getValue(Card.class);
                 Log.d("onDataChangedSingle", "name: " + item.getName());
 
-                if (dataChild.hasChild("scores")) {
-                    DataSnapshot score = dataChild.child("scores");
-
-
-                    if ((mUser != null) && (score.hasChild(mUser.getUid()))) {
-                        float rating = Float.parseFloat(score.child(mUser.getUid()).getValue().toString());
-                        item.setYourScore(rating);
-                    }
+                if (opinionsSnapshot.hasChild(gFunctions.name_to_dName(item.getName()))) {
+                    DataSnapshot cardOpinionsSnapshot = opinionsSnapshot.child(gFunctions.name_to_dName(item.getName()));
 
                     int counter = 0;
                     float total = 0;
-                    for (DataSnapshot user_score : score.getChildren()) {
-                        total += Float.parseFloat(user_score.getValue().toString());
-                        counter++;
+                    for (DataSnapshot user_opinion : cardOpinionsSnapshot.getChildren()) {
+                        if (user_opinion.hasChild("score")) {
+                            total += Float.parseFloat(user_opinion.child("score").getValue().toString());
+                            counter++;
+                        }
                     }
 
+                    if (cardOpinionsSnapshot.hasChild(mUser.getUid())) {
+                        cardOpinionsSnapshot = cardOpinionsSnapshot.child(mUser.getUid());
+
+                        if (cardOpinionsSnapshot.hasChild("score")) {
+                            item.setYourScore(Float.parseFloat(cardOpinionsSnapshot.child("score").getValue().toString()));
+                        }
+                    }
+
+                    if (counter == 0) {
+                        counter = 1;
+                    }
                     item.setAverageScore(total / counter);
                 }
+
                 cards.add(item);
             }
+
+
+
 
             activity.gotCards(cards);
         }
@@ -102,65 +119,64 @@ public class CardHelper {
             FirebaseUser mUser = mAuth.getCurrentUser();
 
             DataSnapshot cardSnapshot = dataSnapshot.child("Cards").child(name);
-            DataSnapshot comboSnapshot = dataSnapshot.child("Combos");
             Card item = cardSnapshot.getValue(Card.class);
-            if (cardSnapshot.hasChild("scores")) {
-                DataSnapshot score = cardSnapshot.child("scores");
 
-
-                if ((mUser != null) && (score.hasChild(mUser.getUid()))) {
-                    float rating = Float.parseFloat(score.child(mUser.getUid()).getValue().toString());
-                    item.setYourScore(rating);
-                }
-
-                int counter = 0;
-                float total = 0;
-                for (DataSnapshot user_score : score.getChildren()) {
-                    total += Float.parseFloat(user_score.getValue().toString());
-                    counter++;
-                }
-
-                item.setAverageScore(total / counter);
-            }
-
-
-            if (cardSnapshot.hasChild("notes")) {
-                Log.d("Detail Notes", "init");
-                DataSnapshot notes = cardSnapshot.child("notes");
-
-
-                if ((mUser != null) && (notes.hasChild(mUser.getUid()))) {
-                    String note = (String) notes.child(mUser.getUid()).getValue();
-                    Log.d("onDataChange Detail", "note: " + note);
-                    item.setYourNote(note);
-                    Log.d("onDataChange Detail", "note: " + item.getYourNote());
-                }
-            }
-
+            DataSnapshot opinionSnapshot = dataSnapshot.child("Opinions");
             ArrayList<String> comboCards = new ArrayList<>();
             ArrayList<String> comboRelics = new ArrayList<>();
-            comboSnapshot = comboSnapshot.child("Cards");
-            if (comboSnapshot.hasChild(name)) {
-                DataSnapshot cardCombo = comboSnapshot.child(name);
-                if (cardCombo.hasChild("Cards")) {
-                    DataSnapshot cardComboCards = cardCombo.child("Cards");
 
-                    if ((mUser != null) && (cardComboCards.hasChild(mUser.getUid()))) {
-                        Log.d("CardHelper", "got combo card in UID");
-                        for (DataSnapshot card : cardComboCards.child(mUser.getUid()).getChildren()) {
-                            Log.d("CardHelper", "got combo card" + card.getKey());
-                            comboCards.add(card.getKey());
+            if (opinionSnapshot.hasChild("Cards")) {
+                opinionSnapshot = opinionSnapshot.child("Cards");
+
+                if (opinionSnapshot.hasChild(gFunctions.name_to_dName(item.getName()))) {
+                    opinionSnapshot = opinionSnapshot.child(gFunctions.name_to_dName(item.getName()));
+                    Log.d("CardHelper", "name found");
+
+                    int counter = 0;
+                    float total = 0;
+                    for (DataSnapshot user_opinion : opinionSnapshot.getChildren()) {
+                        if (user_opinion.hasChild("score")) {
+                            total += Float.parseFloat(user_opinion.child("score").getValue().toString());
+                            counter++;
                         }
                     }
-                }
-                if (cardCombo.hasChild("Relics")) {
-                    DataSnapshot cardComboRelics = cardCombo.child("Relics");
 
-                    if ((mUser != null) && (cardComboRelics.hasChild(mUser.getUid()))) {
-                        Log.d("CardHelper", "got combo card in UID");
-                        for (DataSnapshot relic : cardComboRelics.child(mUser.getUid()).getChildren()) {
-                            Log.d("CardHelper", "got combo card" + relic.getKey());
-                            comboRelics.add(relic.getKey());
+                    if (counter == 0) {
+                        counter = 1;
+                    }
+                    item.setAverageScore(total / counter);
+
+                    if ((mUser != null) && (opinionSnapshot.hasChild(mUser.getUid()))) {
+                        Log.d("CardHelper", "user found");
+                        opinionSnapshot = opinionSnapshot.child(mUser.getUid());
+
+                        if (opinionSnapshot.hasChild("score")) {
+                            item.setYourScore(Float.parseFloat(opinionSnapshot.child("score").getValue().toString()));
+                        }
+
+                        if (opinionSnapshot.hasChild("note")) {
+                            Log.d("CardHelper", "note found");
+                            item.setYourNote((String) opinionSnapshot.child("note").getValue());
+                        }
+
+                        if (opinionSnapshot.hasChild("Combos")) {
+                            DataSnapshot comboSnapshot = opinionSnapshot.child("Combos");
+
+                            if (comboSnapshot.hasChild("Cards")) {
+                                Log.d("CardHelper", "combo card found");
+                                DataSnapshot comboCardSnapshot = comboSnapshot.child("Cards");
+                                for (DataSnapshot comboCard : comboCardSnapshot.getChildren()) {
+                                    comboCards.add(comboCard.getKey());
+                                }
+                            }
+
+                            if (comboSnapshot.hasChild("Relics")) {
+                                Log.d("CardHelper", "combo relic found");
+                                DataSnapshot comboRelicSnapshot = comboSnapshot.child("Relics");
+                                for (DataSnapshot comboRelic : comboRelicSnapshot.getChildren()) {
+                                    comboRelics.add(comboRelic.getKey());
+                                }
+                            }
                         }
                     }
                 }

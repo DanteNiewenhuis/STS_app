@@ -27,6 +27,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import e.dante.sts.Combos.ComboFragment;
 import e.dante.sts.GlobalFunctions;
 import e.dante.sts.Globals;
 import e.dante.sts.R;
@@ -128,8 +129,10 @@ public class CardDetailFragment extends Fragment implements CardHelper.SingleCal
 
                 if (!card.getYourComboCards().contains(selected) &&
                         cardList.contains(selected)) {
-                    mDatabase.child("Combos").child("Cards").child(name).child("Cards").child(mUser.getUid()).child(selected).setValue(1);
-                    mDatabase.child("Combos").child("Cards").child(selected).child("Cards").child(mUser.getUid()).child(name).setValue(1);
+                    mDatabase.child("Opinions").child("Cards").child(name).child(mUser.getUid())
+                            .child("Combos").child("Cards").child(selected).setValue(1);
+                    mDatabase.child("Opinions").child("Cards").child(selected).child(mUser.getUid())
+                            .child("Combos").child("Cards").child(name).setValue(1);
                     InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(myView.getWindowToken(), 0);
                     textView.setText("");
@@ -145,8 +148,10 @@ public class CardDetailFragment extends Fragment implements CardHelper.SingleCal
 
                 if (!card.getYourComboRelics().contains(selected) &&
                         relicList.contains(selected)) {
-                    mDatabase.child("Combos").child("Cards").child(name).child("Relics").child(mUser.getUid()).child(selected).setValue(1);
-                    mDatabase.child("Combos").child("Relics").child(selected).child("Cards").child(mUser.getUid()).child(name).setValue(1);
+                    mDatabase.child("Opinions").child("Cards").child(name).child(mUser.getUid())
+                            .child("Combos").child("Relics").child(selected).setValue(1);
+                    mDatabase.child("Opinions").child("Relics").child(selected).child(mUser.getUid())
+                            .child("Combos").child("Cards").child(name).setValue(1);
                     InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(myView.getWindowToken(), 0);
                     textView.setText("");
@@ -171,6 +176,19 @@ public class CardDetailFragment extends Fragment implements CardHelper.SingleCal
 
         AutoCompleteTextView relicsAutoView = myView.findViewById(R.id.card_detail_relics_auto_text);
         relicsAutoView.setAdapter(relicAdapter);
+
+        myView.findViewById(R.id.card_detail_other_opinions).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ComboFragment fragment = new ComboFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("name", card.getName());
+                bundle.putString("type", "Cards");
+                fragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+            }
+        });
     }
 
     private class ComboAdapter extends ArrayAdapter<String> {
@@ -207,8 +225,10 @@ public class CardDetailFragment extends Fragment implements CardHelper.SingleCal
             convertView.findViewById(R.id.combo_delete_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mDatabase.child("Combos").child("Cards").child(name).child(type).child(mUser.getUid()).child(comboName).setValue(null);
-                    mDatabase.child("Combos").child(type).child(comboName).child("Cards").child(mUser.getUid()).child(name).setValue(null);
+                    mDatabase.child("Opinions").child("Cards").child(name).child(mUser.getUid())
+                            .child("Combos").child(type).child(comboName).setValue(null);
+                    mDatabase.child("Opinions").child(type).child(comboName).child(mUser.getUid())
+                            .child("Combos").child("Cards").child(name).setValue(null);
                 }
             });
             return convertView;

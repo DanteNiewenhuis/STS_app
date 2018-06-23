@@ -51,8 +51,8 @@ public class InputFragment extends DialogFragment {
             public void onClick(View view) {
                 TextView textView = myView.findViewById(R.id.note_input_view);
                 String input = textView.getText().toString();
-                mDatabase.child(type).child(name).child("notes").child(mUser.getUid())
-                        .setValue(input);
+                mDatabase.child("Opinions").child(type).child(name).child(mUser.getUid())
+                        .child("note").setValue(input);
                 dismiss();
             }
         });

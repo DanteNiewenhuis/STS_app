@@ -2,11 +2,7 @@ package e.dante.sts.Event;
 
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
-import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,8 +96,10 @@ public class EventListAdapter extends BaseExpandableListAdapter{
 //        options.setText(gFunctions.makeBold(event.getOptions()
 //                .replaceAll(" \\[", "\n["), "[", "]"));
 
-//        options.setText(gFunctions.makeSpans(Html.fromHtml(gFunctions.parseHTML(event.getOptions()))));
-        options.setMovementMethod(LinkMovementMethod.getInstance());
+        //TODO make clickable
+        String text = gFunctions.parseHTML(event.getOptions());
+        options.setText(Html.fromHtml(text));
+//        options.setMovementMethod(LinkMovementMethod.getInstance());
 
 
         return convertView;

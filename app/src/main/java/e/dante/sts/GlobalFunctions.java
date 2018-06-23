@@ -12,6 +12,8 @@ import android.view.View;
 public class GlobalFunctions implements InfoHelper.Callback{
     private FragmentManager fragmentManager;
 
+    public GlobalFunctions(){}
+
     public GlobalFunctions(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
     }
@@ -21,7 +23,7 @@ public class GlobalFunctions implements InfoHelper.Callback{
     }
 
     public SpannableString makeSpans(String input) {
-        Log.d("makeSpans", "intput: " + input);
+        Log.d("makeSpans", "input: " + input);
         SpannableString ss = new SpannableString(input);
 
         int endIndex;
@@ -135,5 +137,25 @@ public class GlobalFunctions implements InfoHelper.Callback{
     @Override
     public void gotInfoError(String message) {
 
+    }
+
+    public String dName_to_name(String s) {
+        s = s.replaceAll("_p_", "\\.");
+        s = s.replaceAll("_d_", "\\$");
+        s = s.replaceAll("_l_", "\\[");
+        s = s.replaceAll("_r_", "]");
+        s = s.replaceAll("_h_", "#");
+
+        return s;
+    }
+
+    public String name_to_dName(String s) {
+        s = s.replaceAll("\\.", "_p_");
+        s = s.replaceAll("\\$", "_d_");
+        s = s.replaceAll("\\[", "_l_");
+        s = s.replaceAll("]", "_r_");
+        s = s.replaceAll("#", "_h_");
+
+        return s;
     }
 }

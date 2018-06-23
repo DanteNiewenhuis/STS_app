@@ -23,11 +23,13 @@ import e.dante.sts.Relics.Relic;
 
 public class DataScraper extends AsyncTask<Void, Void, Void> {
     private DatabaseReference mDatabase;
+    private GlobalFunctions globalFunctions;
 
     @Override
     protected Void doInBackground(Void... voids) {
         Log.d("Scraper", "init");
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        globalFunctions = new GlobalFunctions();
 //        getCards();
 //        getRelics();
 //        getPotions();
@@ -121,7 +123,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
                             card.setUpgradeDescription(divs.get(6).text());
                         }
 
-                        cardId = Globals.getInstance().name_to_dName(cardId);
+                        cardId = globalFunctions.name_to_dName(cardId);
                         mDatabase.child("Cards").child(cardId).setValue(card);
                         mDatabase.child("Cards").child(cardId).child("yourScore").setValue(null);
                         mDatabase.child("Cards").child(cardId).child("averageScore").setValue(null);
@@ -156,7 +158,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
                     relic.setRarity(cols.get(2).text().split(" ")[0]);
                     relic.setDescription(cols.get(3).text());
 
-                    relicId = Globals.getInstance().name_to_dName(relic.getName());
+                    relicId = globalFunctions.name_to_dName(relic.getName());
                     Log.d("RelicScraper", "relic: " + relicId);
                     String url2 = "http://slay-the-spire.wikia.com/wiki/" + relicId.replaceAll(" ", "_");;
                     Document doc2 = Jsoup.connect(url2).get();
@@ -206,7 +208,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
                     potion.setRarity(cols.get(2).text());
                     potion.setDescription(cols.get(3).text());
 
-                    potionId = Globals.getInstance().name_to_dName(potion.getName());
+                    potionId = globalFunctions.name_to_dName(potion.getName());
                     mDatabase.child("Potions").child(potionId).setValue(potion);
                 }
             }
@@ -240,7 +242,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
                     }
                 }
 
-                keywordId = Globals.getInstance().name_to_dName(name);
+                keywordId = globalFunctions.name_to_dName(name);
                 mDatabase.child("Keywords").child(keywordId).child("name").setValue(name);
                 mDatabase.child("Keywords").child(keywordId).child("description").setValue(des);
             }
@@ -276,7 +278,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
                         Element div2 = doc2.getElementById("mw-content-text");
                         event.setOptions(div2.html());
 
-                    eventId = Globals.getInstance().name_to_dName(event.getName());
+                    eventId = globalFunctions.name_to_dName(event.getName());
                     mDatabase.child("Events").child(eventId).setValue(event);
                 }
             }

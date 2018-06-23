@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.Spinner;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,6 +33,7 @@ public class ComboFragment extends DialogFragment implements ComboHelper.ListCal
     private DatabaseReference mDatabase;
     private FirebaseUser mUser;
     private String type;
+    private View myView;
 
     public ComboFragment() {
         // Required empty public constructor
@@ -52,7 +55,7 @@ public class ComboFragment extends DialogFragment implements ComboHelper.ListCal
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View myView = inflater.inflate(R.layout.fragment_combo, container, false);
+        myView = inflater.inflate(R.layout.fragment_combo, container, false);
 
         new ComboHelper().getComboList(this, name, type);
         return myView;
@@ -60,6 +63,12 @@ public class ComboFragment extends DialogFragment implements ComboHelper.ListCal
 
     @Override
     public void gotComboList(ArrayList<Combo> combos) {
+        Log.d("gotComboList", "list size: " + combos.size());
+        ExpandableListView listView = myView.findViewById(R.id.combo_exp_list_view);
+
+        ExpandableListAdapter listAdapter = new ComboListAdapter(getContext(), combos);
+
+        listView.setAdapter(listAdapter);
 
     }
 }

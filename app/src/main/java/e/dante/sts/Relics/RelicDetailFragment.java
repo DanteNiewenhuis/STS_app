@@ -26,6 +26,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import e.dante.sts.Combos.ComboFragment;
 import e.dante.sts.GlobalFunctions;
 import e.dante.sts.Globals;
 import e.dante.sts.InfoFragment;
@@ -68,10 +69,8 @@ public class RelicDetailFragment extends Fragment implements RelicHelper.SingleC
 
     @Override
     public void gotSingleRelic(final Relic relic) {
-//        TextView desView = myView.findViewById(R.id.relic_detail_normal_description);
-//        TextView upgradedDesView = myView.findViewById(R.id.relic_detail_upgrade_description);
+        TextView desView = myView.findViewById(R.id.relic_detail_descrition);
         TextView nameView = myView.findViewById(R.id.relic_detail_name_view);
-        TextView nameUpgradeView = myView.findViewById(R.id.relic_detail_upgrade_name_view);
         TextView notesView = myView.findViewById(R.id.relic_detail_notes);
         TextView yourScore = myView.findViewById(R.id.relic_detail_your_score);
         TextView averageScore = myView.findViewById(R.id.relic_detail_average_score);
@@ -79,9 +78,7 @@ public class RelicDetailFragment extends Fragment implements RelicHelper.SingleC
         ImageView relicImgView = myView.findViewById(R.id.relic_detail_image_view);
 
         //TODO implement not being able to vote when not logged in
-//        desView.setText(gFunctions.makeSpans(relic.getDescription()));
-//        desView.setMovementMethod(LinkMovementMethod.getInstance());
-//        upgradedDesView.setMovementMethod(LinkMovementMethod.getInstance());
+        desView.setText(gFunctions.makeSpans(relic.getDescription()));
 
         getActivity().setTitle(relic.getName());
 
@@ -123,8 +120,10 @@ public class RelicDetailFragment extends Fragment implements RelicHelper.SingleC
                 String selected = textView.getText().toString();
 
                 if (cardList.contains(selected)) {
-                    mDatabase.child("Combos").child("Relics").child(name).child("Cards").child(mUser.getUid()).child(selected).setValue(1);
-                    mDatabase.child("Combos").child("Cards").child(selected).child("Relics").child(mUser.getUid()).child(name).setValue(1);
+                    mDatabase.child("Opinions").child("Relics").child(name).child(mUser.getUid())
+                            .child("Combos").child("Cards").child(selected).setValue(1);
+                    mDatabase.child("Opinions").child("Cards").child(selected).child(mUser.getUid())
+                            .child("Combos").child("Relics").child(name).setValue(1);
                     InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(myView.getWindowToken(), 0);
                     textView.setText("");
@@ -139,8 +138,10 @@ public class RelicDetailFragment extends Fragment implements RelicHelper.SingleC
                 String selected = textView.getText().toString();
 
                 if (relicList.contains(selected)) {
-                    mDatabase.child("Combos").child("Relics").child(name).child("Relics").child(mUser.getUid()).child(selected).setValue(1);
-                    mDatabase.child("Combos").child("Relics").child(selected).child("Relics").child(mUser.getUid()).child(name).setValue(1);
+                    mDatabase.child("Opinions").child("Relics").child(name).child(mUser.getUid())
+                            .child("Combos").child("Relics").child(selected).setValue(1);
+                    mDatabase.child("Opinions").child("Relics").child(selected).child(mUser.getUid())
+                            .child("Combos").child("Relics").child(name).setValue(1);
                     InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(myView.getWindowToken(), 0);
                     textView.setText("");
@@ -167,6 +168,19 @@ public class RelicDetailFragment extends Fragment implements RelicHelper.SingleC
 
         AutoCompleteTextView relicsAutoView = myView.findViewById(R.id.relic_detail_relics_auto_text);
         relicsAutoView.setAdapter(relicAdapter);
+
+        myView.findViewById(R.id.relic_detail_other_opinions).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ComboFragment fragment = new ComboFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("name", relic.getName());
+                bundle.putString("type", "Relics");
+                fragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+            }
+        });
     }
 
     private class ComboAdapter extends ArrayAdapter<String> {
@@ -197,8 +211,10 @@ public class RelicDetailFragment extends Fragment implements RelicHelper.SingleC
             convertView.findViewById(R.id.combo_delete_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mDatabase.child("Combos").child("Relics").child(name).child(type).child(mUser.getUid()).child(comboName).setValue(null);
-                    mDatabase.child("Combos").child(type).child(comboName).child("Relics").child(mUser.getUid()).child(name).setValue(null);
+                    mDatabase.child("Opinions").child("Cards").child(name).child(mUser.getUid())
+                            .child("Combos").child(type).child(comboName).setValue(null);
+                    mDatabase.child("Opinions").child(type).child(comboName).child(mUser.getUid())
+                            .child("Combos").child("Cards").child(name).setValue(null);
                 }
             });
             return convertView;

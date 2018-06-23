@@ -1,6 +1,7 @@
 package e.dante.sts.Combos;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,6 +20,7 @@ public class ComboHelper {
     private Callback activity;
     private ListCallback listActivity;
     private DatabaseReference mDatabase;
+    private String type;
     private String type1;
     private String type2;
     private String name;
@@ -50,10 +52,12 @@ public class ComboHelper {
     public void getComboList(ListCallback activity, String name, String type) {
         this.listActivity = activity;
         this.name = name;
-        this.type1 = type;
+        this.type = type;
 
+        Log.d("getComboList", "name: " + name);
+        Log.d("getComboList", "type: " + type);
         Query query = mDatabase;
-        query.addValueEventListener(new CombosValueListener());
+        query.addValueEventListener(new ComboListValueListener());
     }
 
     private class CombosValueListener implements ValueEventListener {
@@ -83,19 +87,55 @@ public class ComboHelper {
     private class ComboListValueListener implements ValueEventListener {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            ArrayList<String> combos = new ArrayList<>();
+            ArrayList<Combo> combos = new ArrayList<>();
 
-            if (mUser != null) {
-                DataSnapshot userCombos = dataSnapshot.child(mUser.getUid());
+            DataSnapshot opinionSnapshot = dataSnapshot.child("Opinions");
+            if(opinionSnapshot.child(type).hasChild(name)) {
+                DataSnapshot comboSnapshot = opinionSnapshot.child(type).child(name);
 
-                for (DataSnapshot combo: userCombos.getChildren()) {
-                    if (Integer.parseInt(combo.getValue().toString()) == 1) {
-                        combos.add(combo.getKey());
+                Log.d("getComboList", "got type_name");
+                for (DataSnapshot playerOpinion: comboSnapshot.getChildren()) {
+                    Combo item = new Combo();
+                    item.setUserId(playerOpinion.getKey());
+                    Log.d("getComboList", "got player: " + playerOpinion.getKey());
+                    if (playerOpinion.hasChild("note")) {
+                        Log.d("getComboList", "got note");
+                        item.setNote((String) playerOpinion.child("note").getValue());
                     }
+                    else {
+                        item.setNote("No notes");
+                    }
+
+                    if (playerOpinion.hasChild("Combos")) {
+                        Log.d("getComboList", "got Combos");
+                        DataSnapshot playerCombos = playerOpinion.child("Combos");
+                        ArrayList<String> comboCards = new ArrayList<>();
+                        ArrayList<String> comboRelics = new ArrayList<>();
+
+                        if (playerCombos.hasChild("Cards")) {
+                            Log.d("getComboList", "got Cards");
+                            DataSnapshot cardComboSnapshot = playerCombos.child("Cards");
+                            for (DataSnapshot card: cardComboSnapshot.getChildren()) {
+                                comboCards.add(card.getKey());
+                            }
+                        }
+
+                        if (playerCombos.hasChild("Relics")) {
+                            Log.d("getComboList", "got Relics");
+                            DataSnapshot relicComboSnapshot = playerCombos.child("Relics");
+                            for (DataSnapshot relic: relicComboSnapshot.getChildren()) {
+                                comboRelics.add(relic.getKey());
+                            }
+                        }
+
+                        item.setComboCards(comboCards);
+                        item.setComboRelics(comboRelics);
+                    }
+                    combos.add(item);
                 }
             }
 
-            activity.gotCombos(name, type1, type2, combos);
+            listActivity.gotComboList(combos);
         }
 
         @Override

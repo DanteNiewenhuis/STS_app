@@ -12,6 +12,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class RelicHelper {
@@ -101,7 +102,6 @@ public class RelicHelper {
             FirebaseUser mUser = mAuth.getCurrentUser();
 
             DataSnapshot relicSnapshot = dataSnapshot.child("Relics").child(name);
-            DataSnapshot comboSnapshot = dataSnapshot.child("Combos");
             Relic item = relicSnapshot.getValue(Relic.class);
             if (relicSnapshot.hasChild("scores")) {
                 DataSnapshot score = relicSnapshot.child("scores");
@@ -122,47 +122,49 @@ public class RelicHelper {
                 item.setAverageScore(total / counter);
             }
 
-
-            if (relicSnapshot.hasChild("notes")) {
-                Log.d("Detail Notes", "init");
-                DataSnapshot notes = relicSnapshot.child("notes");
-
-
-                if ((mUser != null) && (notes.hasChild(mUser.getUid()))) {
-                    String note = (String) notes.child(mUser.getUid()).getValue();
-                    Log.d("onDataChange Detail", "note: " + note);
-                    item.setYourNote(note);
-                    Log.d("onDataChange Detail", "note: " + item.getYourNote());
-                }
-            }
-
-            ArrayList<String> comboRelics = new ArrayList<>();
+            DataSnapshot opinionSnapshot = dataSnapshot.child("Opinions");
             ArrayList<String> comboCards = new ArrayList<>();
+            ArrayList<String> comboRelics = new ArrayList<>();
 
-            comboSnapshot = comboSnapshot.child("Relics");
-            if (comboSnapshot.hasChild(name)) {
-                DataSnapshot relicCombo = comboSnapshot.child(name);
+            if (opinionSnapshot.hasChild("Relics")) {
+                opinionSnapshot = opinionSnapshot.child("Relics");
 
-                if (relicCombo.hasChild("Relics")) {
-                    DataSnapshot relicComboRelics = relicCombo.child("Relics");
+                if (opinionSnapshot.hasChild(item.getName())) {
+                    opinionSnapshot = opinionSnapshot.child(item.getName());
+                    Log.d("CardHelper", "name found");
 
-                    if ((mUser != null) && (relicComboRelics.hasChild(mUser.getUid()))) {
-                        for (DataSnapshot relic : relicComboRelics.child(mUser.getUid()).getChildren()) {
-                            comboRelics.add(relic.getKey());
+                    if ((mUser != null) && (opinionSnapshot.hasChild(mUser.getUid()))) {
+                        Log.d("CardHelper", "user found");
+                        opinionSnapshot = opinionSnapshot.child(mUser.getUid());
+
+                        if (opinionSnapshot.hasChild("note")) {
+                            Log.d("CardHelper", "note found");
+                            item.setYourNote((String) opinionSnapshot.child("note").getValue());
                         }
-                    }
-                }
 
-                if (relicCombo.hasChild("Cards")) {
-                    DataSnapshot relicComboCards = relicCombo.child("Cards");
+                        if (opinionSnapshot.hasChild("Combos")) {
+                            DataSnapshot comboSnapshot = opinionSnapshot.child("Combos");
 
-                    if ((mUser != null) && (relicComboCards.hasChild(mUser.getUid()))) {
-                        for (DataSnapshot card : relicComboCards.child(mUser.getUid()).getChildren()) {
-                            comboCards.add(card.getKey());
+                            if (comboSnapshot.hasChild("Cards")) {
+                                Log.d("CardHelper", "combo card found");
+                                DataSnapshot comboCardSnapshot = comboSnapshot.child("Cards");
+                                for (DataSnapshot comboCard : comboCardSnapshot.getChildren()) {
+                                    comboCards.add(comboCard.getKey());
+                                }
+                            }
+
+                            if (comboSnapshot.hasChild("Relics")) {
+                                Log.d("CardHelper", "combo relic found");
+                                DataSnapshot comboRelicSnapshot = comboSnapshot.child("Relics");
+                                for (DataSnapshot comboRelic : comboRelicSnapshot.getChildren()) {
+                                    comboRelics.add(comboRelic.getKey());
+                                }
+                            }
                         }
                     }
                 }
             }
+
 
             item.setYourComboRelics(comboRelics);
             item.setYourComboCards(comboCards);

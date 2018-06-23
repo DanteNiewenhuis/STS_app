@@ -45,7 +45,8 @@ public class RatingFragment extends DialogFragment {
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
-                mDatabase.child(type).child(name).child("scores").child(mUser.getUid()).setValue(v);
+                mDatabase.child("Opinions").child(type).child(name).child(mUser.getUid()).child("score").setValue(v);
+                dismiss();
             }
         });
         return myView;

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public class Combo {
     private String userId;
     private ArrayList<String> comboCards;
+    private ArrayList<String> comboRelics;
+    private String note;
     private String score;
 
     public Combo() {
@@ -32,5 +34,21 @@ public class Combo {
 
     public void setScore(String score) {
         this.score = score;
+    }
+
+    public ArrayList<String> getComboRelics() {
+        return comboRelics;
+    }
+
+    public void setComboRelics(ArrayList<String> comboRelics) {
+        this.comboRelics = comboRelics;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

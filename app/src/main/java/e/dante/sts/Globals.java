@@ -180,24 +180,4 @@ public class Globals {
     public void setAnyRelics(List<String> anyRelics) {
         this.anyRelics = anyRelics;
     }
-
-    public String name_to_dName(String s) {
-        s = s.replaceAll("\\.", "_p_");
-        s = s.replaceAll("\\$", "_d_");
-        s = s.replaceAll("\\[", "_l_");
-        s = s.replaceAll("]", "_r_");
-        s = s.replaceAll("#", "_h_");
-
-        return s;
-    }
-
-    public String dName_to_name(String s) {
-        s = s.replaceAll("_p_", "\\.");
-        s = s.replaceAll("_d_", "\\$");
-        s = s.replaceAll("_l_", "\\[");
-        s = s.replaceAll("_r_", "]");
-        s = s.replaceAll("_h_", "#");
-
-        return s;
-    }
 }
