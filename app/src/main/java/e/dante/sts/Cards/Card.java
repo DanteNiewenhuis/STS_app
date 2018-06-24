@@ -19,7 +19,7 @@ public class Card implements Serializable {
     private float yourScore;
     private float averageScore;
 
-    public Card() { }
+    public Card() {}
 
     public String getName() {
         return name;

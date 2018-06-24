@@ -82,7 +82,7 @@ public class CardHelper {
                         }
                     }
 
-                    if (cardOpinionsSnapshot.hasChild(mUser.getUid())) {
+                    if ((mUser != null) && (cardOpinionsSnapshot.hasChild(mUser.getUid()))) {
                         cardOpinionsSnapshot = cardOpinionsSnapshot.child(mUser.getUid());
 
                         if (cardOpinionsSnapshot.hasChild("score")) {

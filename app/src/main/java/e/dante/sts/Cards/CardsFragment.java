@@ -8,10 +8,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -26,8 +29,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-
-import e.dante.sts.MainActivity;
 import e.dante.sts.R;
 import e.dante.sts.RatingFragment;
 
@@ -38,10 +39,12 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
     private FragmentManager fragmentManager;
     private CardsAdapter adapter;
     private RecyclerView recyclerView;
+    private String searchFilter = "";
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         myView = inflater.inflate(R.layout.fragment_cards, container, false);
 
         getActivity().setTitle("Cards");
@@ -68,22 +71,33 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
         myView.findViewById(R.id.radio_type).setOnClickListener(new OnCheckBoxClickListener());
 
         // create the search onclicklistener
-        //TODO make the searchbar an autocompletetextinput
         myView.findViewById(R.id.options_button).setOnClickListener(new OptionsButtonClickListener());
-        EditText searchView = myView.findViewById(R.id.search_input);
-        searchView.setOnEditorActionListener(new EditText.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                makeList();
-                InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-
-                return true;
-            }
-        });
 
         fragmentManager = getFragmentManager();
         return myView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_search, menu);
+        MenuItem item = menu.findItem(R.id.menu_search);
+        SearchView searchView = (SearchView) item.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchFilter = newText;
+                makeList();
+                return false;
+            }
+        });
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -94,6 +108,7 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
         makeList();
     }
 
+    //TODO try to cut this into two parts, one for the search and one for the filter
     private void makeList() {
         Log.d("makeList", "init");
         filteredCards = filterArrayList();
@@ -167,11 +182,7 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
     }
 
     private boolean matchesText(Card item) {
-        EditText searchView = myView.findViewById(R.id.search_input);
-
-        String searchText = searchView.getText().toString();
-
-        String[] splitText = searchText.split("\\s+");
+        String[] splitText = searchFilter.split("\\s+");
 
         for (String word: splitText) {
             word = word.toLowerCase();
@@ -191,7 +202,6 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
             if (myView.findViewById(R.id.options_layout).getVisibility() == View.VISIBLE) {
                 Log.d("OptionsButton::onClick", "VISIBLE");
                 myView.findViewById(R.id.options_layout).setVisibility(View.GONE);
-                myView.findViewById(R.id.search_layout).setVisibility(View.GONE);
                 ImageView button = myView.findViewById(R.id.options_button);
                 button.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
                 return;
@@ -200,7 +210,6 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
             if (myView.findViewById(R.id.options_layout).getVisibility() == View.GONE) {
                 Log.d("OptionsButton::onClick", "GONE");
                 myView.findViewById(R.id.options_layout).setVisibility(View.VISIBLE);
-                myView.findViewById(R.id.search_layout).setVisibility(View.VISIBLE);
                 ImageView button = myView.findViewById(R.id.options_button);
                 button.setImageResource(R.drawable.ic_arrow_drop_up_black_24dp);
             }

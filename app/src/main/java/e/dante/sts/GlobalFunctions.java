@@ -1,8 +1,10 @@
 package e.dante.sts;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ClickableSpan;
@@ -157,5 +159,14 @@ public class GlobalFunctions implements InfoHelper.Callback{
         s = s.replaceAll("#", "_h_");
 
         return s;
+    }
+
+    @SuppressWarnings("deprecation")
+    public Spanned fromHtml(String source) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return makeSpans(Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY));
+        } else {
+            return makeSpans(Html.fromHtml(source));
+        }
     }
 }

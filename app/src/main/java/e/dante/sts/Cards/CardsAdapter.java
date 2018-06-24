@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -22,12 +24,14 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
     private LayoutInflater mInflater;
     private ArrayList<Card> cards;
     private ItemClickListener mClickListener;
+    private FirebaseUser mUser;
 
     CardsAdapter(Context context, ArrayList<Card> data) {
 //        Log.d("CardAdapter", "Constructor");
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.cards = data;
+        this.mUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     // inflates the cell layout from xml when needed
@@ -39,8 +43,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
         ViewGroup.LayoutParams p = view.getLayoutParams();
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 
-        p.width = (displayMetrics.widthPixels - 10) / 3;
-        p.height = p.height * p.width/100;
+        p.width = (displayMetrics.widthPixels - 30) / 3;
 
         view.setLayoutParams(p);
 
@@ -54,18 +57,28 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
         Card card = cards.get(position);
         Picasso.get().load(card.getImgUrl() + "scale-to-width-down/200").into(holder.mImage);
 
-        if ((card.getYourScore() % 1) == 0) {
-            holder.mYourScore.setText((int) card.getYourScore() + "/5");
-        }
-        else {
-            holder.mYourScore.setText(card.getYourScore() + "/5");
-        }
+        if (mUser != null) {
+            if (card.getYourScore() == 0.0) {
+                holder.mYourScore.setText("Vote Now");
+                holder.mStarImage.setImageResource(R.drawable.star_empty);
+            }
+            else if ((card.getYourScore() % 1) == 0) {
+                holder.mYourScore.setText((int) card.getYourScore() + "/5");
+                holder.mStarImage.setImageResource(R.drawable.star);
+            } else {
+                holder.mYourScore.setText(card.getYourScore() + "/5");
+                holder.mStarImage.setImageResource(R.drawable.star);
+            }
 
-        if ((card.getAverageScore() % 1) == 0) {
-            holder.mAverageScore.setText((int) card.getAverageScore() + "/5");
+            if ((card.getAverageScore() % 1) == 0) {
+                holder.mAverageScore.setText((int) card.getAverageScore() + "/5");
+            } else {
+                holder.mAverageScore.setText(card.getAverageScore() + "/5");
+            }
         }
         else {
-            holder.mAverageScore.setText(card.getAverageScore() + "/5");
+            holder.mYourScore.setText("Log In");
+            holder.mStarImage.setImageResource(R.drawable.star_empty);
         }
     }
 
@@ -80,6 +93,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
         TextView mYourScore;
         TextView mAverageScore;
         ImageView mImage;
+        ImageView mStarImage;
         LinearLayout mStar;
 
         CardViewHolder(View itemView) {
@@ -91,13 +105,16 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
             mAverageScore = itemView.findViewById(R.id.average_card_item_score);
             mStar = itemView.findViewById(R.id.your_card_item_score_layout);
 
+            mStarImage = itemView.findViewById(R.id.your_card_item_star);
             //TODO implement not being able to vote when not logged in
-            mStar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mClickListener.onRatingClick(view, getAdapterPosition());
-                }
-            });
+            if (mUser != null) {
+                mStar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mClickListener.onRatingClick(view, getAdapterPosition());
+                    }
+                });
+            }
         }
 
         @Override

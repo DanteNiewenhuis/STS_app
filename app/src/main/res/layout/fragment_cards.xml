@@ -1,27 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorSecondaryLight"
     android:orientation="vertical"
     tools:context=".Cards.CardsFragment">
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/search_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/backgroundGray"
-        android:visibility="gone">
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/search_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8sp"
-            android:hint="@android:string/search_go"
-            android:textSize="12sp" />
-    </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
         android:id="@+id/options_layout"
