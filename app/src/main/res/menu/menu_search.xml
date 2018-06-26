@@ -1,10 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_search"
+        android:background="@color/colorSecondaryLight"
+        android:closeIcon="@drawable/ic_close_white_24dp"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:textColor="@color/TextOnSecondary"
+        android:title="Search"
         app:actionViewClass="android.support.v7.widget.SearchView"
-        app:showAsAction="collapseActionView|ifRoom"
-        android:icon="@drawable/ic_search_black_24dp"
-        android:title="Search"/>
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_filter"
+        android:icon="@drawable/ic_filter_list_white_24dp"
+        android:title="Filter"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_sort"
+        android:icon="@drawable/ic_sort_white_24dp"
+        android:textColor="@color/TextOnSecondary"
+        android:title="Sort"
+        app:showAsAction="always">
+        <menu
+            android:title="Sort">
+            <item
+                android:id="@+id/menu_sort_reverse"
+                android:title="Reverse"
+                app:actionLayout="@layout/switch_item"
+                app:showAsAction="never" />
+            <group
+                android:id="@+id/menu_sort_group"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/menu_sort_name"
+                    android:title="Name"
+                    android:checked="true"/>
+                <item
+                    android:id="@+id/menu_sort_color"
+                    android:title="Color"/>
+                <item
+                    android:id="@+id/menu_sort_type"
+                    android:title="Type"/>
+            </group>
+        </menu>
+    </item>
+
 </menu>

@@ -72,8 +72,8 @@ public class CardDetailFragment extends Fragment implements CardHelper.SingleCal
         TextView nameView = myView.findViewById(R.id.card_detail_name_view);
         TextView nameUpgradeView = myView.findViewById(R.id.card_detail_upgrade_name_view);
         TextView notesView = myView.findViewById(R.id.card_detail_notes);
-        TextView yourScore = myView.findViewById(R.id.card_detail_your_score);
-        TextView averageScore = myView.findViewById(R.id.card_detail_average_score);
+        TextView yourScore = myView.findViewById(R.id.card_detail_your_score_view);
+        TextView averageScore = myView.findViewById(R.id.card_detail_average_score_view);
 
         ImageView cardImgView = myView.findViewById(R.id.card_detail_image_view);
 

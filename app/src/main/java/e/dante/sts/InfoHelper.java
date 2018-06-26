@@ -67,7 +67,6 @@ public class InfoHelper {
 
             DataSnapshot cardsSnapshot = dataSnapshot.child("Cards");
             for (DataSnapshot card: cardsSnapshot.getChildren()) {
-                Log.d("DataSnapshot", "card: " + card.child("name").getValue());
                 switch (card.child("hero").getValue().toString()) {
                     case "Neutral":
                         anyCards.add((String) card.child("name").getValue());
@@ -125,7 +124,6 @@ public class InfoHelper {
                 keywords.add((String) keyword.child("name").getValue());
             }
 
-            Log.d("LisValueListener", "length keywords: " + keywords.size());
             sharedData.setKeywords(keywords);
 
             ///////////////// EVENTS ////////////////////
@@ -135,7 +133,6 @@ public class InfoHelper {
                 events.add((String) event.child("name").getValue());
             }
 
-            Log.d("LisValueListener", "length events: " + events.size());
             sharedData.setEvents(events);
 
             ///////////////// POTIONS ////////////////////
@@ -145,7 +142,6 @@ public class InfoHelper {
                 potions.add((String) potion.child("name").getValue());
             }
 
-            Log.d("LisValueListener", "length potions: " + potions.size());
             sharedData.setPotions(potions);
         }
 

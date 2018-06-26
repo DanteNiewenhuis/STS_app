@@ -88,7 +88,7 @@ public class GlobalFunctions implements InfoHelper.Callback{
         for (int startIndex = html.indexOf("<figure");
              startIndex >= 0;
              startIndex = html.indexOf("<figure")) {
-            endIndex = html.indexOf("figure>", startIndex);;
+            endIndex = html.indexOf("figure>", startIndex);
             if (endIndex == -1) {
                 Log.d("makeBold", "break");
                 break;
@@ -100,7 +100,7 @@ public class GlobalFunctions implements InfoHelper.Callback{
         for (int startIndex = html.indexOf("<span class=\"editsection");
              startIndex >= 0;
              startIndex = html.indexOf("<span class=\"editsection")) {
-            endIndex = html.indexOf("span>", startIndex);;
+            endIndex = html.indexOf("span>", startIndex);
             if (endIndex == -1) {
                 Log.d("makeBold", "break");
                 break;

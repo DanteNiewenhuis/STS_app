@@ -4,15 +4,14 @@ package e.dante.sts;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -25,6 +24,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import e.dante.sts.Cards.CardDetailTapped;
+import e.dante.sts.Cards.CardOpinionFragment;
 import e.dante.sts.Cards.CardsFragment;
 import e.dante.sts.Event.EventsFragment;
 import e.dante.sts.Keyword.KeywordsFragment;
@@ -272,9 +273,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            Fragment f = fragmentManager.findFragmentById(R.id.content_frame);
+            if (f instanceof CardsFragment) {
+                if (((CardsFragment) f).onBackPressed()) {
+                    return;
+                }
+            }
+
             super.onBackPressed();
         }
     }
@@ -314,6 +323,9 @@ public class MainActivity extends AppCompatActivity
                     .addToBackStack(null).commit();
         } else if (id == R.id.nav_events) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new EventsFragment())
+                    .addToBackStack(null).commit();
+        } else if (id == R.id.nav_test) {
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new CardDetailTapped())
                     .addToBackStack(null).commit();
         } else if (id == R.id.nav_database) {
             new DataScraper().execute();

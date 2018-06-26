@@ -3,9 +3,13 @@ package e.dante.sts.Cards;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.Group;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -15,12 +19,14 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -39,7 +45,13 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
     private FragmentManager fragmentManager;
     private CardsAdapter adapter;
     private RecyclerView recyclerView;
+    private ArrayList<String> colorList;
+    private ArrayList<String> costList;
+
     private String searchFilter = "";
+    private String sortMethod = "Name";
+    private boolean reverseCheck = false;
+    private SearchView searchView;
 
     @Nullable
     @Override
@@ -60,44 +72,107 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
 
         new CardHelper().getCards(this);
 
-        // init all clicklisteners so the layout is remade when clicked
-        myView.findViewById(R.id.checkbox_silent_cards).setOnClickListener(new OnCheckBoxClickListener());
-        myView.findViewById(R.id.checkbox_ironclad_cards).setOnClickListener(new OnCheckBoxClickListener());
-        myView.findViewById(R.id.checkbox_defect_cards).setOnClickListener(new OnCheckBoxClickListener());
-        myView.findViewById(R.id.checkbox_neutral_cards).setOnClickListener(new OnCheckBoxClickListener());
-        myView.findViewById(R.id.reverse_check).setOnClickListener(new OnCheckBoxClickListener());
-        myView.findViewById(R.id.radio_name).setOnClickListener(new OnCheckBoxClickListener());
-        myView.findViewById(R.id.radio_class).setOnClickListener(new OnCheckBoxClickListener());
-        myView.findViewById(R.id.radio_type).setOnClickListener(new OnCheckBoxClickListener());
+        myView.findViewById(R.id.checkbox_ironclad_cards).setOnClickListener(new CheckBoxlistener("Color"));
+        myView.findViewById(R.id.checkbox_silent_cards).setOnClickListener(new CheckBoxlistener("Color"));
+        myView.findViewById(R.id.checkbox_defect_cards).setOnClickListener(new CheckBoxlistener("Color"));
+        myView.findViewById(R.id.checkbox_neutral_cards).setOnClickListener(new CheckBoxlistener("Color"));
 
-        // create the search onclicklistener
-        myView.findViewById(R.id.options_button).setOnClickListener(new OptionsButtonClickListener());
+        myView.findViewById(R.id.checkbox_cost_0).setOnClickListener(new CheckBoxlistener("Cost"));
+        myView.findViewById(R.id.checkbox_cost_1).setOnClickListener(new CheckBoxlistener("Cost"));
+        myView.findViewById(R.id.checkbox_cost_2).setOnClickListener(new CheckBoxlistener("Cost"));
+        myView.findViewById(R.id.checkbox_cost_3).setOnClickListener(new CheckBoxlistener("Cost"));
+        myView.findViewById(R.id.checkbox_cost_X).setOnClickListener(new CheckBoxlistener("Cost"));
+
+        colorList = new ArrayList<>();
+        colorList.add("Ironclad");
+        colorList.add("silent");
+        colorList.add("Defect");
+        colorList.add("Colorless");
+
+        costList = new ArrayList<>();
+        costList.add("0");
+        costList.add("1");
+        costList.add("2");
+        costList.add("3");
+        costList.add("X");
 
         fragmentManager = getFragmentManager();
         return myView;
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getGroupId() == R.id.menu_sort_group) {
+            item.setChecked(!item.isChecked());
+            sortMethod = item.getTitle().toString();
+        }
+
+        makeList();
+        return false;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_search, menu);
         MenuItem item = menu.findItem(R.id.menu_search);
-        SearchView searchView = (SearchView) item.getActionView();
+        searchView = (SearchView) item.getActionView();
+        MenuItem filterButton = menu.findItem(R.id.menu_filter);
+
+        MenuItem reverseItem = menu.findItem(R.id.menu_sort_reverse);
+        reverseItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                menuItem.setChecked(!menuItem.isChecked());
+                reverseCheck = menuItem.isChecked();
+
+                makeList();
+                return false;
+            }
+        });
+
+        filterButton.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                LinearLayout filterLayout = myView.findViewById(R.id.filter_layout);
+
+                if (filterLayout.getVisibility() == View.GONE) {
+                    filterLayout.setVisibility(View.VISIBLE);
+                    return true;
+                }
+                if (filterLayout.getVisibility() == View.VISIBLE) {
+                    filterLayout.setVisibility(View.GONE);
+                    return true;
+                }
+
+                return true;
+            }
+        });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 searchFilter = newText;
                 makeList();
-                return false;
+                return true;
             }
         });
 
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    public boolean onBackPressed() {
+        if (searchView != null & !searchView.isIconified()) {
+            searchView.setIconified(true);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     @Override
@@ -133,12 +208,12 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
             }
         }
 
-        // get the chosen sort method and sort accordingly
-        RadioGroup sortGroup = myView.findViewById(R.id.sort_group);
-        RadioButton checked = myView.findViewById(sortGroup.getCheckedRadioButtonId());
-        final String sortMethod = checked.getText().toString();
 
-        Collections.sort(result, new Comparator<Card>() {
+        return sortList(result);
+    }
+
+    private ArrayList<Card> sortList(ArrayList<Card> cards) {
+        Collections.sort(cards, new Comparator<Card>() {
             @Override
             public int compare(Card card, Card t1) {
                 switch (sortMethod) {
@@ -153,32 +228,27 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
             }
         });
 
-        // reverse the arraylist if needed
-        CheckBox reverseCheck = myView.findViewById(R.id.reverse_check);
-        if (reverseCheck.isChecked()) {
-            Collections.reverse(result);
+        if (reverseCheck) {
+            Collections.reverse(cards);
         }
 
-        return result;
+        return cards;
     }
 
     private Boolean filterMatch(Card item) {
-        CheckBox silentCheck = myView.findViewById(R.id.checkbox_silent_cards);
-        CheckBox ironcladCheck = myView.findViewById(R.id.checkbox_ironclad_cards);
-        CheckBox defectCheck = myView.findViewById(R.id.checkbox_defect_cards);
-        CheckBox neutralCheck = myView.findViewById(R.id.checkbox_neutral_cards);
-
         if (!matchesText(item)) {
             return false;
         }
 
-        ArrayList<String> colorList = new ArrayList<>();
-        if (silentCheck.isChecked()) colorList.add("Silent");
-        if (ironcladCheck.isChecked()) colorList.add("Ironclad");
-        if (defectCheck.isChecked()) colorList.add("Defect");
-        if (neutralCheck.isChecked()) colorList.add("Neutral");
+        if (!colorList.contains(item.getHero())) {
+            return false;
+        }
 
-        return (colorList.contains(item.getHero()));
+        if (!costList.contains(item.getCost())) {
+            return false;
+        }
+
+        return true;
     }
 
     private boolean matchesText(Card item) {
@@ -195,39 +265,11 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
         return true;
     }
 
-    private class OptionsButtonClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            Log.d("OptionsButton::onClick", "init");
-            if (myView.findViewById(R.id.options_layout).getVisibility() == View.VISIBLE) {
-                Log.d("OptionsButton::onClick", "VISIBLE");
-                myView.findViewById(R.id.options_layout).setVisibility(View.GONE);
-                ImageView button = myView.findViewById(R.id.options_button);
-                button.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
-                return;
-            }
-
-            if (myView.findViewById(R.id.options_layout).getVisibility() == View.GONE) {
-                Log.d("OptionsButton::onClick", "GONE");
-                myView.findViewById(R.id.options_layout).setVisibility(View.VISIBLE);
-                ImageView button = myView.findViewById(R.id.options_button);
-                button.setImageResource(R.drawable.ic_arrow_drop_up_black_24dp);
-            }
-        }
-    }
-
-    private class OnCheckBoxClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            makeList();
-        }
-    }
-
     public void onItemClick(View view, int position) {
         String name = adapter.getItem(position).getName();
         Bundle bundle = new Bundle();
         bundle.putString("name", name);
-        CardDetailFragment fragment = new CardDetailFragment();
+        CardDetailTapped fragment = new CardDetailTapped();
         fragment.setArguments(bundle);
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack("tag").commit();
     }
@@ -241,5 +283,37 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
         extra.putFloat("score", item.getYourScore());
         dialog.setArguments(extra);
         dialog.show(fragmentManager, "dialog");
+    }
+
+    private class CheckBoxlistener implements View.OnClickListener {
+        private String type;
+
+        public CheckBoxlistener(String type) {
+            this.type = type;
+        }
+
+        @Override
+        public void onClick(View view) {
+            CheckBox c = (CheckBox) view;
+            if (c.isChecked()) {
+                if (type.equals("Color")) {
+                    colorList.add(c.getText().toString());
+                }
+                if (type.equals("Cost")) {
+                    costList.add(c.getText().toString());
+                }
+            }
+
+            else {
+                if (type.equals("Color")) {
+                    colorList.remove(c.getText().toString());
+                }
+                if (type.equals("Cost")) {
+                    costList.remove(c.getText().toString());
+                }
+            }
+
+            makeList();
+        }
     }
 }

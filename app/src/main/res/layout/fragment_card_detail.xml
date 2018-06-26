@@ -65,7 +65,7 @@
                 app:srcCompat="@drawable/ratingstars" />
 
             <TextView
-                android:id="@+id/card_detail_your_score"
+                android:id="@+id/card_detail_your_score_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="7/10"
@@ -94,7 +94,7 @@
                 app:srcCompat="@drawable/ratingstars" />
 
             <TextView
-                android:id="@+id/card_detail_average_score"
+                android:id="@+id/card_detail_average_score_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="7/10"
@@ -374,7 +374,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:background="@color/colorPrimaryColor"
+        android:background="@color/colorPrimary"
         android:padding="5dp"
         android:text="See Other Opinions"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"

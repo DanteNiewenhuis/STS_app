@@ -68,10 +68,10 @@ public class CardHelper {
             DataSnapshot opinionsSnapshot = dataSnapshot.child("Opinions").child("Cards");
             for (DataSnapshot dataChild : cardsSnapshot.getChildren()) {
                 Card item = dataChild.getValue(Card.class);
-                Log.d("onDataChangedSingle", "name: " + item.getName());
 
                 if (opinionsSnapshot.hasChild(gFunctions.name_to_dName(item.getName()))) {
-                    DataSnapshot cardOpinionsSnapshot = opinionsSnapshot.child(gFunctions.name_to_dName(item.getName()));
+                    DataSnapshot cardOpinionsSnapshot = opinionsSnapshot.child(gFunctions
+                            .name_to_dName(item.getName()));
 
                     int counter = 0;
                     float total = 0;
@@ -86,7 +86,8 @@ public class CardHelper {
                         cardOpinionsSnapshot = cardOpinionsSnapshot.child(mUser.getUid());
 
                         if (cardOpinionsSnapshot.hasChild("score")) {
-                            item.setYourScore(Float.parseFloat(cardOpinionsSnapshot.child("score").getValue().toString()));
+                            item.setYourScore(Float.parseFloat(cardOpinionsSnapshot.child("score")
+                                    .getValue().toString()));
                         }
                     }
 
@@ -107,7 +108,6 @@ public class CardHelper {
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
-            Log.d("ERRORORROROORR", "cards");
             activity.gotCardsError(databaseError.getMessage());
         }
     }
@@ -125,12 +125,14 @@ public class CardHelper {
             ArrayList<String> comboCards = new ArrayList<>();
             ArrayList<String> comboRelics = new ArrayList<>();
 
+            ArrayList<String> antiComboCards = new ArrayList<>();
+            ArrayList<String> antiComboRelics = new ArrayList<>();
+
             if (opinionSnapshot.hasChild("Cards")) {
                 opinionSnapshot = opinionSnapshot.child("Cards");
 
                 if (opinionSnapshot.hasChild(gFunctions.name_to_dName(item.getName()))) {
                     opinionSnapshot = opinionSnapshot.child(gFunctions.name_to_dName(item.getName()));
-                    Log.d("CardHelper", "name found");
 
                     int counter = 0;
                     float total = 0;
@@ -147,15 +149,14 @@ public class CardHelper {
                     item.setAverageScore(total / counter);
 
                     if ((mUser != null) && (opinionSnapshot.hasChild(mUser.getUid()))) {
-                        Log.d("CardHelper", "user found");
                         opinionSnapshot = opinionSnapshot.child(mUser.getUid());
 
                         if (opinionSnapshot.hasChild("score")) {
-                            item.setYourScore(Float.parseFloat(opinionSnapshot.child("score").getValue().toString()));
+                            item.setYourScore(Float.parseFloat(opinionSnapshot.child("score")
+                                    .getValue().toString()));
                         }
 
                         if (opinionSnapshot.hasChild("note")) {
-                            Log.d("CardHelper", "note found");
                             item.setYourNote((String) opinionSnapshot.child("note").getValue());
                         }
 
@@ -163,7 +164,6 @@ public class CardHelper {
                             DataSnapshot comboSnapshot = opinionSnapshot.child("Combos");
 
                             if (comboSnapshot.hasChild("Cards")) {
-                                Log.d("CardHelper", "combo card found");
                                 DataSnapshot comboCardSnapshot = comboSnapshot.child("Cards");
                                 for (DataSnapshot comboCard : comboCardSnapshot.getChildren()) {
                                     comboCards.add(comboCard.getKey());
@@ -171,10 +171,27 @@ public class CardHelper {
                             }
 
                             if (comboSnapshot.hasChild("Relics")) {
-                                Log.d("CardHelper", "combo relic found");
                                 DataSnapshot comboRelicSnapshot = comboSnapshot.child("Relics");
                                 for (DataSnapshot comboRelic : comboRelicSnapshot.getChildren()) {
                                     comboRelics.add(comboRelic.getKey());
+                                }
+                            }
+                        }
+
+                        if (opinionSnapshot.hasChild("AntiCombos")) {
+                            DataSnapshot antiComboSnapshot = opinionSnapshot.child("Anti_Combos");
+
+                            if (antiComboSnapshot.hasChild("Cards")) {
+                                DataSnapshot antiComboCardSnapshot = antiComboSnapshot.child("Cards");
+                                for (DataSnapshot antiComboCard : antiComboCardSnapshot.getChildren()) {
+                                    antiComboCards.add(antiComboCard.getKey());
+                                }
+                            }
+
+                            if (antiComboSnapshot.hasChild("Relics")) {
+                                DataSnapshot antiComboRelicSnapshot = antiComboSnapshot.child("Relics");
+                                for (DataSnapshot antiComboRelic : antiComboRelicSnapshot.getChildren()) {
+                                    antiComboRelics.add(antiComboRelic.getKey());
                                 }
                             }
                         }
@@ -184,12 +201,14 @@ public class CardHelper {
 
             item.setYourComboCards(comboCards);
             item.setYourComboRelics(comboRelics);
+
+            item.setYourAntiComboCards(antiComboCards);
+            item.setYourAntiComboRelics(antiComboRelics);
             singleActivity.gotSingleCard(item);
         }
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
-            Log.d("ERRORORROROORR", "cards");
             singleActivity.gotSingleCardError(databaseError.getMessage());
         }
     }

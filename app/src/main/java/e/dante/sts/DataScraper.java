@@ -160,7 +160,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
 
                     relicId = globalFunctions.name_to_dName(relic.getName());
                     Log.d("RelicScraper", "relic: " + relicId);
-                    String url2 = "http://slay-the-spire.wikia.com/wiki/" + relicId.replaceAll(" ", "_");;
+                    String url2 = "http://slay-the-spire.wikia.com/wiki/" + relicId.replaceAll(" ", "_");
                     Document doc2 = Jsoup.connect(url2).get();
 
                     Element div = doc2.getElementById("mw-content-text");
