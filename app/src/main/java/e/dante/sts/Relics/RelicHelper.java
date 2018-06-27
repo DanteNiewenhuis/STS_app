@@ -15,27 +15,34 @@ import com.google.firebase.database.ValueEventListener;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import e.dante.sts.GlobalFunctions;
+
 public class RelicHelper {
     private Callback activity;
     private SingleCallback singleActivity;
     private DatabaseReference mDatabase;
     private String name;
+    private GlobalFunctions gFunctions;
 
     public RelicHelper() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        gFunctions = new GlobalFunctions();
     }
 
     public void getRelics(Callback activity) {
         this.activity = activity;
 
         DatabaseReference reference = mDatabase.child("Relics");
-        Query query = reference.orderByChild("Rarity");
+        Query query = reference.orderByChild("name");
         query.addValueEventListener(new relicValueListener());
     }
 
     public void getSingleRelic(SingleCallback activity, String name) {
         this.singleActivity = activity;
         this.name = name;
+
+
+        Log.d("getSingleRelic", "name: " + name);
 
         DatabaseReference reference = mDatabase;
         Query query = reference.orderByChild("name");
@@ -63,7 +70,6 @@ public class RelicHelper {
             FirebaseUser mUser = mAuth.getCurrentUser();
             for (DataSnapshot dataChild : dataSnapshot.getChildren()) {
                 Relic item = dataChild.getValue(Relic.class);
-                Log.d("onDataChangedSingle", "name: " + item.getName());
 
                 if (dataChild.hasChild("scores")) {
                     DataSnapshot score = dataChild.child("scores");
@@ -101,44 +107,45 @@ public class RelicHelper {
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             FirebaseUser mUser = mAuth.getCurrentUser();
 
-            DataSnapshot relicSnapshot = dataSnapshot.child("Relics").child(name);
-            Relic item = relicSnapshot.getValue(Relic.class);
-            if (relicSnapshot.hasChild("scores")) {
-                DataSnapshot score = relicSnapshot.child("scores");
-
-
-                if ((mUser != null) && (score.hasChild(mUser.getUid()))) {
-                    float rating = Float.parseFloat(score.child(mUser.getUid()).getValue().toString());
-                    item.setYourScore(rating);
-                }
-
-                int counter = 0;
-                float total = 0;
-                for (DataSnapshot user_score : score.getChildren()) {
-                    total += Float.parseFloat(user_score.getValue().toString());
-                    counter++;
-                }
-
-                item.setAverageScore(total / counter);
-            }
+            DataSnapshot cardSnapshot = dataSnapshot.child("Relics").child(name);
+            Relic item = cardSnapshot.getValue(Relic.class);
 
             DataSnapshot opinionSnapshot = dataSnapshot.child("Opinions");
             ArrayList<String> comboCards = new ArrayList<>();
             ArrayList<String> comboRelics = new ArrayList<>();
 
+            ArrayList<String> antiComboCards = new ArrayList<>();
+            ArrayList<String> antiComboRelics = new ArrayList<>();
+
             if (opinionSnapshot.hasChild("Relics")) {
                 opinionSnapshot = opinionSnapshot.child("Relics");
 
-                if (opinionSnapshot.hasChild(item.getName())) {
-                    opinionSnapshot = opinionSnapshot.child(item.getName());
-                    Log.d("CardHelper", "name found");
+                if (opinionSnapshot.hasChild(gFunctions.name_to_dName(item.getName()))) {
+                    opinionSnapshot = opinionSnapshot.child(gFunctions.name_to_dName(item.getName()));
+
+                    int counter = 0;
+                    float total = 0;
+                    for (DataSnapshot user_opinion : opinionSnapshot.getChildren()) {
+                        if (user_opinion.hasChild("score")) {
+                            total += Float.parseFloat(user_opinion.child("score").getValue().toString());
+                            counter++;
+                        }
+                    }
+
+                    if (counter == 0) {
+                        counter = 1;
+                    }
+                    item.setAverageScore(total / counter);
 
                     if ((mUser != null) && (opinionSnapshot.hasChild(mUser.getUid()))) {
-                        Log.d("CardHelper", "user found");
                         opinionSnapshot = opinionSnapshot.child(mUser.getUid());
 
+                        if (opinionSnapshot.hasChild("score")) {
+                            item.setYourScore(Float.parseFloat(opinionSnapshot.child("score")
+                                    .getValue().toString()));
+                        }
+
                         if (opinionSnapshot.hasChild("note")) {
-                            Log.d("CardHelper", "note found");
                             item.setYourNote((String) opinionSnapshot.child("note").getValue());
                         }
 
@@ -146,7 +153,6 @@ public class RelicHelper {
                             DataSnapshot comboSnapshot = opinionSnapshot.child("Combos");
 
                             if (comboSnapshot.hasChild("Cards")) {
-                                Log.d("CardHelper", "combo card found");
                                 DataSnapshot comboCardSnapshot = comboSnapshot.child("Cards");
                                 for (DataSnapshot comboCard : comboCardSnapshot.getChildren()) {
                                     comboCards.add(comboCard.getKey());
@@ -154,10 +160,27 @@ public class RelicHelper {
                             }
 
                             if (comboSnapshot.hasChild("Relics")) {
-                                Log.d("CardHelper", "combo relic found");
                                 DataSnapshot comboRelicSnapshot = comboSnapshot.child("Relics");
                                 for (DataSnapshot comboRelic : comboRelicSnapshot.getChildren()) {
                                     comboRelics.add(comboRelic.getKey());
+                                }
+                            }
+                        }
+
+                        if (opinionSnapshot.hasChild("Anti_Combos")) {
+                            DataSnapshot antiComboSnapshot = opinionSnapshot.child("Anti_Combos");
+
+                            if (antiComboSnapshot.hasChild("Cards")) {
+                                DataSnapshot antiComboCardSnapshot = antiComboSnapshot.child("Cards");
+                                for (DataSnapshot antiComboCard : antiComboCardSnapshot.getChildren()) {
+                                    antiComboCards.add(antiComboCard.getKey());
+                                }
+                            }
+
+                            if (antiComboSnapshot.hasChild("Relics")) {
+                                DataSnapshot antiComboRelicSnapshot = antiComboSnapshot.child("Relics");
+                                for (DataSnapshot antiComboRelic : antiComboRelicSnapshot.getChildren()) {
+                                    antiComboRelics.add(antiComboRelic.getKey());
                                 }
                             }
                         }
@@ -165,15 +188,17 @@ public class RelicHelper {
                 }
             }
 
-
-            item.setYourComboRelics(comboRelics);
             item.setYourComboCards(comboCards);
+            item.setYourComboRelics(comboRelics);
+
+            item.setYourAntiComboCards(antiComboCards);
+            item.setYourAntiComboRelics(antiComboRelics);
+
             singleActivity.gotSingleRelic(item);
         }
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
-            Log.d("ERRORORROROORR", "relics");
             singleActivity.gotSingleRelicError(databaseError.getMessage());
         }
     }

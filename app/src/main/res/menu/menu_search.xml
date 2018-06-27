@@ -42,6 +42,13 @@
                 <item
                     android:id="@+id/menu_sort_type"
                     android:title="Type"/>
+                <item
+                    android:id="@+id/menu_sort_cost"
+                    android:title="Cost"/>
+                <item
+                    android:id="@+id/menu_sort_rarity"
+                    android:title="Rarity"/>
+
             </group>
         </menu>
     </item>

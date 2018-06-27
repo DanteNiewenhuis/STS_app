@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,12 +41,13 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
     public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.item_card, parent, false);
 
-//        ViewGroup.LayoutParams p = view.getLayoutParams();
-//        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-//
-//        p.width = (displayMetrics.widthPixels - 30) / 3;
-//
-//        view.setLayoutParams(p);
+        ViewGroup.LayoutParams p = view.getLayoutParams();
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+
+        float density  = displayMetrics.density;
+        p.width = Math.round((displayMetrics.widthPixels - (30 * density)) / 3);
+
+        view.setLayoutParams(p);
 
         return new CardViewHolder(view);
     }

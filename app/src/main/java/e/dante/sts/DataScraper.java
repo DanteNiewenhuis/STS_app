@@ -31,9 +31,11 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         globalFunctions = new GlobalFunctions();
 //        getCards();
+        getCurses();
+        getStatuses();
 //        getRelics();
 //        getPotions();
-        getKeywords();
+//        getKeywords();
 //        getEvents();
 
         //TODO EXTRA: add enemies to the database
@@ -70,46 +72,35 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
                         card.setHero(links.get(s).substring(0, links.get(s).length() - 6));
 
                         card.setName(cols.get(0).text());
+
+                        String link = cols.get(0).select("a").get(0).attr("abs:href");
                         cardId = card.getName();
-                        if (cardId.equals("J.A.X")) {
-                            cardId = "J.A.X.";
-                            card.setName(cardId);
-                        }
-                        if (cardId.equals("Strike")) {
-                            if (card.getHero().equals("Ironclad")) {
-                                cardId = cardId + "_(Ironclad)";
-                            }
-                            if (card.getHero().equals("Silent")) {
-                                cardId = cardId + "_(Silent)";
-                            }
-                            if (card.getHero().equals("Defect")) {
-                                cardId = cardId + "_(Defect)";
-                            }
-                        }
-                        if (cardId.equals("Defend")) {
-                            if (card.getHero().equals("Ironclad")) {
-                                cardId = cardId + "_(Ironclad)";
-                            }
-                            if (card.getHero().equals("Silent")) {
-                                cardId = cardId + "_(Silent)";
-                            }
-                            if (card.getHero().equals("Defect")) {
-                                cardId = cardId + "_(Defect)";
-                            }
+
+                        if(link.equals("http://slay-the-spire.wikia.com/wiki/Defend")) {
+                            link += "_(" + links.get(s).substring(0, links.get(s).length() - 6) + ")";
                         }
 
-                        String imgUrl = cols.get(1).select("a").attr("href");
-                        card.setImgUrl(imgUrl.substring(0, imgUrl.indexOf("latest")) + "latest/");
+                        if(link.equals("http://slay-the-spire.wikia.com/wiki/Strike")) {
+                            link += "_(" + links.get(s).substring(0, links.get(s).length() - 6) + ")";
+                        }
+
                         card.setRarity(cols.get(2).text());
                         card.setType(cols.get(3).text());
 
                         Log.d("Scraper", "cardId: " + cardId);
-                        String url2 = "http://slay-the-spire.wikia.com/wiki/" + cardId.replaceAll(" ", "_");
-                        Document doc2 = Jsoup.connect(url2).get();
+                        Log.d("Scraper", "link: " + link);
+                        String url2 = "http://slay-the-spire.wikia.com/wiki/" +
+                                cardId.replaceAll(" ", "_");
+                        Document doc2 = Jsoup.connect(link).get();
 
                         //TODO scrape upgraded and normal description and cost from here!!!
                         Element div = doc2.getElementById("mw-content-text");
                         Elements divs = div.select("div.pi-data-value");
+
+                        String imgUrl = div.select("figure").get(0).select("a")
+                                .attr("href");
+                        card.setImgUrl(imgUrl.substring(0, imgUrl.indexOf("latest")) + "latest/");
+
                         if (cardId.equals("Doppelganger")) {
                             card.setCost("X");
                             card.setDescription(divs.get(3).text());
@@ -134,6 +125,102 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
             } catch (IOException e) {
                 Log.d("ERROR", e.getMessage());
             }
+        }
+    }
+
+    private void getCurses() {
+        try {
+            Document doc = Jsoup.connect("http://slay-the-spire.wikia.com/wiki/Neutral_cards").get();
+
+            Element table = doc.select("table").get(1);
+            Elements rows = table.select("tr");
+
+            for (int i = 1; i < rows.size(); i++) {
+                Element row = rows.get(i);
+                Elements cols = row.select("td");
+
+                if (cols.size() > 0) {
+                    Card card = new Card();
+                    card.setHero("Curse");
+
+                    card.setName(cols.get(0).text());
+
+                    String link = cols.get(0).select("a").get(0).attr("abs:href");
+                    Document doc2 = Jsoup.connect(link).get();
+
+                    //TODO scrape upgraded and normal description and cost from here!!!
+                    Element div = doc2.getElementById("mw-content-text");
+                    Elements divs = div.select("div.pi-data-value");
+
+                    String imgUrl = div.select("figure").get(0).select("a")
+                            .attr("href");
+                    card.setImgUrl(imgUrl.substring(0, imgUrl.indexOf("latest")) + "latest/");
+
+                    card.setCost("U");
+                    card.setRarity(divs.get(2).text());
+                    card.setCost(divs.get(3).text());
+                    card.setDescription(divs.get(4).text());
+                    card.setUpgradeCost(null);
+                    card.setUpgradeDescription(null);
+
+                    String cardId = globalFunctions.name_to_dName(card.getName());
+                    mDatabase.child("Cards").child(cardId).setValue(card);
+                    mDatabase.child("Cards").child(cardId).child("yourScore").setValue(null);
+                    mDatabase.child("Cards").child(cardId).child("averageScore").setValue(null);
+                    mDatabase.child("Cards").child(cardId).child("notes").setValue(null);
+                }
+            }
+
+        } catch (IOException e) {
+            Log.d("ERROR", e.getMessage());
+        }
+    }
+
+    private void getStatuses() {
+        try {
+            Document doc = Jsoup.connect("http://slay-the-spire.wikia.com/wiki/Neutral_cards").get();
+
+            Element table = doc.select("table").get(2);
+            Elements rows = table.select("tr");
+
+            for (int i = 1; i < rows.size(); i++) {
+                Element row = rows.get(i);
+                Elements cols = row.select("td");
+
+                if (cols.size() > 0) {
+                    Card card = new Card();
+                    card.setHero("Status");
+
+                    card.setName(cols.get(0).text());
+
+                    String link = cols.get(0).select("a").get(0).attr("abs:href");
+                    Log.d("Status", "Link: " + link);
+                    Document doc2 = Jsoup.connect(link).get();
+
+                    //TODO scrape upgraded and normal description and cost from here!!!
+                    Element div = doc2.getElementById("mw-content-text");
+                    Elements divs = div.select("div.pi-data-value");
+
+                    String imgUrl = div.select("figure").get(0).select("a")
+                            .attr("href");
+                    card.setImgUrl(imgUrl.substring(0, imgUrl.indexOf("latest")) + "latest/");
+
+                    card.setRarity(divs.get(2).text());
+                    card.setCost(divs.get(3).text());
+                    card.setDescription(divs.get(4).text());
+                    card.setUpgradeCost(null);
+                    card.setUpgradeDescription(null);
+
+                    String cardId = globalFunctions.name_to_dName(card.getName());
+                    mDatabase.child("Cards").child(cardId).setValue(card);
+                    mDatabase.child("Cards").child(cardId).child("yourScore").setValue(null);
+                    mDatabase.child("Cards").child(cardId).child("averageScore").setValue(null);
+                    mDatabase.child("Cards").child(cardId).child("notes").setValue(null);
+                }
+            }
+
+        } catch (IOException e) {
+            Log.d("ERROR", e.getMessage());
         }
     }
 

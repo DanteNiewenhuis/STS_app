@@ -1,74 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
     tools:context=".Cards.CardsFragment">
 
     <LinearLayout
-        android:id="@+id/options_layout"
+        android:id="@+id/filter_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/cardview_light_background"
         android:baselineAligned="false"
         android:orientation="horizontal"
+        android:padding="10dp"
         android:visibility="gone">
 
         <LinearLayout
-            android:id="@+id/sort_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8sp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Sort"
-                android:textColor="@android:color/black"
-                android:textStyle="bold" />
-
-            <CheckBox
-                android:id="@+id/reverse_check"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Reverse" />
-
-            <RadioGroup
-                android:id="@+id/sort_group"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:checkedButton="@+id/radio_class">
-
-                <RadioButton
-                    android:id="@+id/radio_class"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Class" />
-
-                <RadioButton
-                    android:id="@+id/radio_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Name" />
-
-                <RadioButton
-                    android:id="@+id/radio_rarity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Rarity" />
-
-            </RadioGroup>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/filter_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="8sp"
@@ -79,7 +29,7 @@
                 android:id="@+id/textView6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Filter"
+                android:text="Color"
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
 
@@ -88,38 +38,82 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Red Relics" />
+                android:text="Red Cards" />
 
             <CheckBox
                 android:id="@+id/checkbox_silent_relics"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Green Relics" />
+                android:text="Green Cards" />
 
             <CheckBox
                 android:id="@+id/checkbox_defect_relics"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Defect Relics" />
+                android:text="Defect Cards" />
 
             <CheckBox
                 android:id="@+id/checkbox_neutral_relics"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Any Relics" />
+                android:text="Neutral Cards" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8sp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cost"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/checkbox_cost_0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="0" />
+
+            <CheckBox
+                android:id="@+id/checkbox_cost_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="1" />
+
+            <CheckBox
+                android:id="@+id/checkbox_cost_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="2" />
+
+            <CheckBox
+                android:id="@+id/checkbox_cost_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="3" />
+
+            <CheckBox
+                android:id="@+id/checkbox_cost_X"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="X" />
+        </LinearLayout>
+
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/options_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#959595"
-        android:src="@drawable/ic_arrow_drop_down_black_24dp" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/relic_recycle_view"
         android:layout_width="wrap_content"

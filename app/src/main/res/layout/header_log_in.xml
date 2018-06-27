@@ -15,16 +15,18 @@
         app:layout_constraintBottom_toTopOf="@+id/mail_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+        <!--app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout"-->
 
         <EditText
             android:id="@+id/mail_log_in"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:foregroundTint="@color/colorSecondaryDark"
             android:hint="@string/hint_email"
             android:inputType="textEmailAddress"
             android:textColor="@color/TextOnSecondary"
-            />
+            android:textColorLink="@color/colorSecondaryDark" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -46,7 +48,8 @@
             android:hint="@string/hint_password"
             android:inputType="textPassword"
             android:textColor="@color/TextOnSecondary"
-            android:textColorHint="@color/colorSecondaryDark" />
+            android:textColorHint="@color/colorSecondaryDark"
+            android:textColorLink="@color/colorSecondaryDark" />
     </android.support.design.widget.TextInputLayout>
 
     <Button
@@ -56,7 +59,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/rounded_button_light"
-        android:minHeight="30dp"
+        android:minHeight="@dimen/navigation_button_height"
         android:text="Sign Up"
         android:textAllCaps="false"
         android:textColor="@color/TextOnSecondary"

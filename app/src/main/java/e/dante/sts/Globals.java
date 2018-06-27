@@ -50,7 +50,9 @@ public class Globals {
         ArrayList<String> result = new ArrayList<>(anyCards);
 
         switch (kind) {
-            case "IronClad":
+            case "Neutral":
+            case "Any": return getCards();
+            case "Ironclad":
                 result.addAll(ironcladCards);
                 break;
             case "Silent":
@@ -78,8 +80,9 @@ public class Globals {
         ArrayList<String> result = new ArrayList<>(anyRelics);
 
         switch (kind) {
+            case "Neutral":
             case "Any": return getRelics();
-            case "IronClad":
+            case "Ironclad":
                 result.addAll(ironcladRelics);
                 break;
             case "Silent":

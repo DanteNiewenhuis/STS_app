@@ -29,7 +29,7 @@ public class InfoFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View myView = inflater.inflate(R.layout.fragment_info, container, false);
+        View myView = inflater.inflate(R.layout.dialogfragment_info, container, false);
         TextView infoView = myView.findViewById(R.id.info_name_view);
         TextView typeView = myView.findViewById(R.id.info_type_view);
         TextView desView = myView.findViewById(R.id.info_des_view);

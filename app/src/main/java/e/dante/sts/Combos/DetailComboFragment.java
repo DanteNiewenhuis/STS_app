@@ -27,7 +27,7 @@ import e.dante.sts.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ComboFragment extends DialogFragment implements ComboHelper.ListCallback{
+public class DetailComboFragment extends DialogFragment implements ComboHelper.ListCallback{
     private String name;
     private List<String> comboCards;
     private DatabaseReference mDatabase;
@@ -35,7 +35,7 @@ public class ComboFragment extends DialogFragment implements ComboHelper.ListCal
     private String type;
     private View myView;
 
-    public ComboFragment() {
+    public DetailComboFragment() {
         // Required empty public constructor
     }
 

@@ -16,7 +16,11 @@ public class Relic implements Serializable {
     private List<String> yourComboCards;
     private List<String> yourComboRelics;
 
+    private List<String> yourAntiComboCards;
+    private List<String> yourAntiComboRelics;
+
     public Relic() {
+        this.yourNote = "";
     }
 
     public String getName() {
@@ -105,5 +109,21 @@ public class Relic implements Serializable {
 
     public void setYourComboRelics(List<String> yourComboRelics) {
         this.yourComboRelics = yourComboRelics;
+    }
+
+    public List<String> getYourAntiComboCards() {
+        return yourAntiComboCards;
+    }
+
+    public void setYourAntiComboCards(List<String> yourAntiComboCards) {
+        this.yourAntiComboCards = yourAntiComboCards;
+    }
+
+    public List<String> getYourAntiComboRelics() {
+        return yourAntiComboRelics;
+    }
+
+    public void setYourAntiComboRelics(List<String> yourAntiComboRelics) {
+        this.yourAntiComboRelics = yourAntiComboRelics;
     }
 }

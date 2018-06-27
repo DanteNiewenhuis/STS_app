@@ -37,14 +37,13 @@ public class RelicsAdapter extends RecyclerView.Adapter<RelicsAdapter.RelicViewH
     public RelicViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.item_relic, parent, false);
 
-        ViewGroup.LayoutParams p = view.findViewById(R.id.relic_grid_item_image).getLayoutParams();
+        ViewGroup.LayoutParams p = view.getLayoutParams();
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 
-        p.width = displayMetrics.widthPixels / 3;
-        p.height = (int) ((float) 80/73 * p.width);
+        float density  = displayMetrics.density;
+        p.width = Math.round((displayMetrics.widthPixels - (30 * density)) / 3);
 
-        Log.d("RELICSIZE", "width: " + p.width + " height: " + p.height);
-        view.findViewById(R.id.relic_grid_item_image).setLayoutParams(p);
+        view.setLayoutParams(p);
 
         return new RelicViewHolder(view);
     }
