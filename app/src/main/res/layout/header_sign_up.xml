@@ -2,13 +2,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/nav_header_height"
+    android:layout_height="300dp"
     android:background="@color/colorPrimaryLight">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/display_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/name_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <EditText
+            android:id="@+id/display_sign_up"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:hint="Name"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/TextOnSecondary"
+            android:textColorHint="@color/colorSecondaryDark"
+            android:textSize="11sp" />
+    </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/name_layout"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="59dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -24,7 +48,8 @@
             android:hint="@string/hint_email"
             android:inputType="textEmailAddress"
             android:textColor="@color/TextOnSecondary"
-            android:textColorHint="@color/colorSecondaryDark" />
+            android:textColorHint="@color/colorSecondaryDark"
+            android:textSize="11sp" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -46,16 +71,16 @@
             android:hint="@string/hint_password"
             android:inputType="textPassword"
             android:textColor="@color/TextOnSecondary"
-            android:textColorHint="@color/colorSecondaryDark" />
+            android:textColorHint="@color/colorSecondaryDark"
+            android:textSize="11sp" />
     </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
         android:id="@+id/button_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginStart="5dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
         android:gravity="start"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -87,5 +112,17 @@
             android:textSize="11sp" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Sign Up"
+        android:textColor="@color/TextOnSecondary"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/display_layout"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

@@ -1,6 +1,5 @@
 package e.dante.sts.Relics;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -10,26 +9,21 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import e.dante.sts.Detail.DetailTapped;
 import e.dante.sts.R;
 import e.dante.sts.RatingFragment;
 
@@ -40,14 +34,19 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
     private FragmentManager fragmentManager;
     private RelicsAdapter adapter;
     private RecyclerView recyclerView;
+    private ArrayList<String> colorList;
+
     private String searchFilter = "";
+    private String sortMethod = "Name";
+    private boolean reverseCheck = false;
+    private SearchView searchView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         myView = inflater.inflate(R.layout.fragment_relics, container, false);
 
-        setHasOptionsMenu(true);
         getActivity().setTitle("Relics");
 
         ArrayList<Relic> items = new ArrayList<>();
@@ -61,45 +60,102 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
 
         new RelicHelper().getRelics(this);
 
-        // init all clicklisteners so the layout is remade when clicked
-        //TODO init filter and sort options
-        myView.findViewById(R.id.checkbox_silent_relics).setOnClickListener(new e.dante.sts.Relics.RelicsFragment.OnCheckBoxClickListener());
-        myView.findViewById(R.id.checkbox_ironclad_relics).setOnClickListener(new e.dante.sts.Relics.RelicsFragment.OnCheckBoxClickListener());
-        myView.findViewById(R.id.checkbox_defect_relics).setOnClickListener(new e.dante.sts.Relics.RelicsFragment.OnCheckBoxClickListener());
-        myView.findViewById(R.id.checkbox_neutral_relics).setOnClickListener(new e.dante.sts.Relics.RelicsFragment.OnCheckBoxClickListener());
-        myView.findViewById(R.id.reverse_check).setOnClickListener(new e.dante.sts.Relics.RelicsFragment.OnCheckBoxClickListener());
-        myView.findViewById(R.id.radio_name).setOnClickListener(new e.dante.sts.Relics.RelicsFragment.OnCheckBoxClickListener());
-        myView.findViewById(R.id.radio_class).setOnClickListener(new e.dante.sts.Relics.RelicsFragment.OnCheckBoxClickListener());
-        myView.findViewById(R.id.radio_rarity).setOnClickListener(new e.dante.sts.Relics.RelicsFragment.OnCheckBoxClickListener());
+        myView.findViewById(R.id.checkbox_ironclad_relics).setOnClickListener(new CheckBoxlistener("Color"));
+        myView.findViewById(R.id.checkbox_silent_relics).setOnClickListener(new CheckBoxlistener("Color"));
+        myView.findViewById(R.id.checkbox_defect_relics).setOnClickListener(new CheckBoxlistener("Color"));
+        myView.findViewById(R.id.checkbox_neutral_relics).setOnClickListener(new CheckBoxlistener("Color"));
 
-        // create the search onclicklistener
-        myView.findViewById(R.id.options_button).setOnClickListener(new e.dante.sts.Relics.RelicsFragment.OptionsButtonClickListener());
+        myView.findViewById(R.id.checkbox_cost_0).setOnClickListener(new CheckBoxlistener("Cost"));
+        myView.findViewById(R.id.checkbox_cost_1).setOnClickListener(new CheckBoxlistener("Cost"));
+        myView.findViewById(R.id.checkbox_cost_2).setOnClickListener(new CheckBoxlistener("Cost"));
+        myView.findViewById(R.id.checkbox_cost_3).setOnClickListener(new CheckBoxlistener("Cost"));
+        myView.findViewById(R.id.checkbox_cost_X).setOnClickListener(new CheckBoxlistener("Cost"));
+
+        colorList = new ArrayList<>();
+        colorList.add("Ironclad");
+        colorList.add("Silent");
+        colorList.add("Defect");
+        colorList.add("Neutral");
+        colorList.add("Curse");
+        colorList.add("Status");
 
         fragmentManager = getFragmentManager();
         return myView;
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getGroupId() == R.id.menu_sort_group) {
+            item.setChecked(!item.isChecked());
+            sortMethod = item.getTitle().toString();
+        }
+
+        makeList();
+        return false;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_search, menu);
         MenuItem item = menu.findItem(R.id.menu_search);
-        SearchView searchView = (SearchView) item.getActionView();
+        searchView = (SearchView) item.getActionView();
+        MenuItem filterButton = menu.findItem(R.id.menu_filter);
+
+        MenuItem reverseItem = menu.findItem(R.id.menu_sort_reverse);
+        reverseItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                menuItem.setChecked(!menuItem.isChecked());
+                reverseCheck = menuItem.isChecked();
+
+                makeList();
+                return false;
+            }
+        });
+
+        filterButton.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                LinearLayout filterLayout = myView.findViewById(R.id.filter_layout);
+
+                if (filterLayout.getVisibility() == View.GONE) {
+                    filterLayout.setVisibility(View.VISIBLE);
+                    return true;
+                }
+                if (filterLayout.getVisibility() == View.VISIBLE) {
+                    filterLayout.setVisibility(View.GONE);
+                    return true;
+                }
+
+                return true;
+            }
+        });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 searchFilter = newText;
                 makeList();
-                return false;
+                return true;
             }
         });
 
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    public boolean onBackPressed() {
+        if (searchView != null & !searchView.isIconified()) {
+            searchView.setIconified(true);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     @Override
@@ -110,6 +166,7 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
         makeList();
     }
 
+    //TODO try to cut this into two parts, one for the search and one for the filter
     private void makeList() {
         Log.d("makeList", "init");
         filteredRelics = filterArrayList();
@@ -134,16 +191,16 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
             }
         }
 
-        // get the chosen sort method and sort accordingly
-        RadioGroup sortGroup = myView.findViewById(R.id.sort_group);
-        RadioButton checked = myView.findViewById(sortGroup.getCheckedRadioButtonId());
-        final String sortMethod = checked.getText().toString();
 
-        Collections.sort(result, new Comparator<Relic>() {
+        return sortList(result);
+    }
+
+    private ArrayList<Relic> sortList(ArrayList<Relic> relics) {
+        Collections.sort(relics, new Comparator<Relic>() {
             @Override
             public int compare(Relic relic, Relic t1) {
                 switch (sortMethod) {
-                    case "Class":
+                    case "Color":
                         return relic.getHero().compareTo(t1.getHero());
                     case "Name":
                         return relic.getName().compareTo(t1.getName());
@@ -154,32 +211,23 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
             }
         });
 
-        // reverse the arraylist if needed
-        CheckBox reverseCheck = myView.findViewById(R.id.reverse_check);
-        if (reverseCheck.isChecked()) {
-            Collections.reverse(result);
+        if (reverseCheck) {
+            Collections.reverse(relics);
         }
 
-        return result;
+        return relics;
     }
 
     private Boolean filterMatch(Relic item) {
-        CheckBox silentCheck = myView.findViewById(R.id.checkbox_silent_relics);
-        CheckBox ironcladCheck = myView.findViewById(R.id.checkbox_ironclad_relics);
-        CheckBox defectCheck = myView.findViewById(R.id.checkbox_defect_relics);
-        CheckBox anyCheck = myView.findViewById(R.id.checkbox_neutral_relics);
-
         if (!matchesText(item)) {
             return false;
         }
 
-        ArrayList<String> colorList = new ArrayList<>();
-        if (silentCheck.isChecked()) colorList.add("Silent");
-        if (ironcladCheck.isChecked()) colorList.add("Ironclad");
-        if (defectCheck.isChecked()) colorList.add("Defect");
-        if (anyCheck.isChecked()) colorList.add("Any");
+        if (!colorList.contains(item.getHero())) {
+            return false;
+        }
 
-        return (colorList.contains(item.getHero()));
+        return true;
     }
 
     private boolean matchesText(Relic item) {
@@ -187,7 +235,8 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
 
         for (String word: splitText) {
             word = word.toLowerCase();
-            if (!((item.getName().toLowerCase().contains(word)) || (item.getDescription().toLowerCase().contains(word)))){
+            if (!((item.getName().toLowerCase().contains(word)) ||
+                    (item.getDescription().toLowerCase().contains(word)))){
                 return false;
             }
         }
@@ -195,39 +244,13 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
         return true;
     }
 
-    private class OptionsButtonClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            Log.d("OptionsButton::onClick", "init");
-            if (myView.findViewById(R.id.options_layout).getVisibility() == View.VISIBLE) {
-                Log.d("OptionsButton::onClick", "VISIBLE");
-                myView.findViewById(R.id.options_layout).setVisibility(View.GONE);
-                ImageView button = myView.findViewById(R.id.options_button);
-                button.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
-                return;
-            }
-
-            if (myView.findViewById(R.id.options_layout).getVisibility() == View.GONE) {
-                Log.d("OptionsButton::onClick", "GONE");
-                myView.findViewById(R.id.options_layout).setVisibility(View.VISIBLE);
-                ImageView button = myView.findViewById(R.id.options_button);
-                button.setImageResource(R.drawable.ic_arrow_drop_up_black_24dp);
-            }
-        }
-    }
-
-    private class OnCheckBoxClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            makeList();
-        }
-    }
-
     public void onItemClick(View view, int position) {
+        Log.d("RelicsFragment", "onItemClick");
         String name = adapter.getItem(position).getName();
         Bundle bundle = new Bundle();
         bundle.putString("name", name);
-        RelicDetailFragment fragment = new RelicDetailFragment();
+        bundle.putString("type", "Relics");
+        DetailTapped fragment = new DetailTapped();
         fragment.setArguments(bundle);
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack("tag").commit();
     }
@@ -241,5 +264,31 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
         extra.putFloat("score", item.getYourScore());
         dialog.setArguments(extra);
         dialog.show(fragmentManager, "dialog");
+    }
+
+    private class CheckBoxlistener implements View.OnClickListener {
+        private String type;
+
+        CheckBoxlistener(String type) {
+            this.type = type;
+        }
+
+        @Override
+        public void onClick(View view) {
+            CheckBox c = (CheckBox) view;
+            if (c.isChecked()) {
+                if (type.equals("Color")) {
+                    colorList.add(c.getText().toString());
+                }
+            }
+
+            else {
+                if (type.equals("Color")) {
+                    colorList.remove(c.getText().toString());
+                }
+            }
+
+            makeList();
+        }
     }
 }

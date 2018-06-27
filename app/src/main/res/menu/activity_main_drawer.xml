@@ -6,36 +6,29 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_cards"
-            android:icon="@drawable/ic_menu_cards"
+            android:icon="@drawable/ic_sim_card_black_24dp"
             android:title="Cards" />
         <item
             android:id="@+id/nav_relics"
-            android:icon="@drawable/ic_menu_relics"
+            android:icon="@drawable/ic_relic_black_24dp"
             android:title="Relics" />
         <item
-            android:id="@+id/nav_keywords"
-            android:icon="@drawable/ic_menu_keywords"
-            android:title="Keywords" />\
-        <item
             android:id="@+id/nav_potions"
-            android:icon="@drawable/ic_menu_potions"
+            android:icon="@drawable/ic_local_drink_black_24dp"
             android:title="Potions" />
         <item
+            android:id="@+id/nav_keywords"
+            android:icon="@drawable/ic_vpn_key_black_24dp"
+            android:title="Keywords" />\
+        <item
             android:id="@+id/nav_events"
-            android:icon="@drawable/ic_menu_events"
+            android:icon="@drawable/ic_event_note_black_24dp"
             android:title="Events" />
         <item
-            android:id="@+id/nav_test"
-            android:icon="@drawable/ic_menu_events"
-            android:title="Test" />
-        <item
             android:id="@+id/nav_database"
-            android:icon="@drawable/ic_menu_events"
-            android:title="Database" />
-        <item
-            android:id="@+id/nav_report_bug"
-            android:icon="@drawable/ic_menu_events"
-            android:title="Report Bug" />
+            android:icon="@drawable/ic_book_black_24dp"
+            android:title="Database"
+            android:visible="false"/>
     </group>
 
 </menu>

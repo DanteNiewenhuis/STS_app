@@ -29,17 +29,68 @@ public class GlobalFunctions implements InfoHelper.Callback{
         SpannableString ss = new SpannableString(input);
 
         int endIndex;
-        for (String word : Globals.getInstance().getKeywords()) {
-            Log.d("makeSpans", "word: " + word);
+        for (String word : Globals.getInstance().getCards()) {
             for (int index = input.toLowerCase().indexOf(word.toLowerCase());
-                index >= 0;
-                index = input.toLowerCase().indexOf(word.toLowerCase(), index + 1)) {
+                 index >= 0;
+                 index = input.toLowerCase().indexOf(word.toLowerCase(), index + 1)) {
+                endIndex = input.indexOf(" ", index);
+                if (endIndex == -1) {
+                    endIndex = index + word.length();
+                }
+                ss.setSpan(makeClickableSpan("Cards", word), index, endIndex,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+
+        for (String word : Globals.getInstance().getRelics()) {
+            for (int index = input.toLowerCase().indexOf(word.toLowerCase());
+                 index >= 0;
+                 index = input.toLowerCase().indexOf(word.toLowerCase(), index + 1)) {
+                endIndex = input.indexOf(" ", index);
+                if (endIndex == -1) {
+                    endIndex = index + word.length();
+                }
+                ss.setSpan(makeClickableSpan("Relics", word), index, endIndex,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+
+        for (String word : Globals.getInstance().getPotions()) {
+            for (int index = input.toLowerCase().indexOf(word.toLowerCase());
+                 index >= 0;
+                 index = input.toLowerCase().indexOf(word.toLowerCase(), index + 1)) {
+                endIndex = input.indexOf(" ", index);
+                if (endIndex == -1) {
+                    endIndex = index + word.length();
+                }
+                ss.setSpan(makeClickableSpan("Potions", word), index, endIndex,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+
+        for (String word : Globals.getInstance().getKeywords()) {
+            for (int index = input.toLowerCase().indexOf(word.toLowerCase());
+                 index >= 0;
+                 index = input.toLowerCase().indexOf(word.toLowerCase(), index + 1)) {
                 endIndex = input.indexOf(" ", index);
                 if (endIndex == -1) {
                     endIndex = index + word.length();
                 }
                 ss.setSpan(makeClickableSpan("Keywords", word), index, endIndex,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+
+        for (String word : Globals.getInstance().getEvents()) {
+            for (int index = input.toLowerCase().indexOf(word.toLowerCase());
+                 index >= 0;
+                 index = input.toLowerCase().indexOf(word.toLowerCase(), index + 1)) {
+                endIndex = input.indexOf(" ", index);
+                if (endIndex == -1) {
+                    endIndex = index + word.length();
+                }
+                ss.setSpan(makeClickableSpan("Events", word), index, endIndex,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
 

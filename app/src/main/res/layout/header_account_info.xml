@@ -4,17 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     android:background="@color/colorPrimaryLight"
-    android:fitsSystemWindows="true"
+    android:fitsSystemWindows="false"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:padding="5dp">
+    android:padding="8dp">
 
     <!-- TODO: Update blank fragment layout -->
     <ImageView
         android:id="@+id/nav_header_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:layout_marginBottom="4dp"
         android:src="@android:drawable/sym_def_app_icon" />
 
     <TextView
@@ -24,19 +24,21 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="Android Studio"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@color/TextOnSecondary" />
+        android:textColor="@color/TextOnSecondary"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/nav_header_mail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="android.studio@android.com"
-        android:textColor="@color/TextOnSecondary" />
+        android:textColor="@color/colorSecondaryDark" />
 
     <Button
         android:id="@+id/btn_log_out"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:background="@drawable/rounded_button_light"
         android:minHeight="@dimen/navigation_button_height"
         android:text="Log Out"

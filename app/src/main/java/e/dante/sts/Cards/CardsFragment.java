@@ -1,40 +1,29 @@
 package e.dante.sts.Cards;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.constraint.Group;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import e.dante.sts.Detail.DetailTapped;
 import e.dante.sts.R;
 import e.dante.sts.RatingFragment;
 
@@ -85,9 +74,11 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
 
         colorList = new ArrayList<>();
         colorList.add("Ironclad");
-        colorList.add("silent");
+        colorList.add("Silent");
         colorList.add("Defect");
-        colorList.add("Colorless");
+        colorList.add("Neutral");
+        colorList.add("Curse");
+        colorList.add("Status");
 
         costList = new ArrayList<>();
         costList.add("0");
@@ -95,6 +86,7 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
         costList.add("2");
         costList.add("3");
         costList.add("X");
+        costList.add("Unplayable");
 
         fragmentManager = getFragmentManager();
         return myView;
@@ -223,6 +215,25 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
                         return card.getName().compareTo(t1.getName());
                     case "Type":
                         return card.getType().compareTo(t1.getType());
+                    case "Rarity":
+                        Log.d("compare", "winner is: " + card.getRarity().compareTo(t1.getRarity()));
+                        return card.getRarity().compareTo(t1.getRarity());
+                    case "Cost":
+                        ArrayList<String> costSortList  = new ArrayList<>();
+                        costSortList.add("0");
+                        costSortList.add("1");
+                        costSortList.add("2");
+                        costSortList.add("3");
+                        costSortList.add("X");
+                        costSortList.add("Unplayable");
+
+                        if (costSortList.indexOf(card.getCost()) == costSortList.indexOf(t1.getCost())) {
+                            return 0;
+                        }
+                        if (costSortList.indexOf(card.getCost()) < costSortList.indexOf(t1.getCost())) {
+                            return -1;
+                        }
+                        else return 1;
                 }
                 return 0;
             }
@@ -269,7 +280,8 @@ public class CardsFragment extends Fragment implements CardHelper.Callback, Card
         String name = adapter.getItem(position).getName();
         Bundle bundle = new Bundle();
         bundle.putString("name", name);
-        CardDetailTapped fragment = new CardDetailTapped();
+        bundle.putString("type", "Cards");
+        DetailTapped fragment = new DetailTapped();
         fragment.setArguments(bundle);
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack("tag").commit();
     }

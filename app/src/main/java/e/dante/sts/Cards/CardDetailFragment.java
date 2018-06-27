@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import e.dante.sts.Combos.ComboFragment;
+import e.dante.sts.Combos.DetailComboFragment;
 import e.dante.sts.GlobalFunctions;
 import e.dante.sts.Globals;
 import e.dante.sts.R;
@@ -77,7 +78,8 @@ public class CardDetailFragment extends Fragment implements CardHelper.SingleCal
 
         ImageView cardImgView = myView.findViewById(R.id.card_detail_image_view);
 
-        //TODO implement not being able to vote when not logged in
+
+        Log.d("gotSingleCard", "init");
         desView.setText(gFunctions.makeSpans(card.getDescription()));
         upgradedDesView.setText(gFunctions.makeSpans(card.getUpgradeDescription()));
         desView.setMovementMethod(LinkMovementMethod.getInstance());
@@ -180,7 +182,7 @@ public class CardDetailFragment extends Fragment implements CardHelper.SingleCal
         myView.findViewById(R.id.card_detail_other_opinions).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ComboFragment fragment = new ComboFragment();
+                DetailComboFragment fragment = new DetailComboFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("name", card.getName());
                 bundle.putString("type", "Cards");

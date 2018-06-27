@@ -1,6 +1,7 @@
 package e.dante.sts;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -14,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,10 +25,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
-import e.dante.sts.Cards.CardDetailTapped;
-import e.dante.sts.Cards.CardOpinionFragment;
 import e.dante.sts.Cards.CardsFragment;
+import e.dante.sts.Detail.DetailTapped;
 import e.dante.sts.Event.EventsFragment;
 import e.dante.sts.Keyword.KeywordsFragment;
 import e.dante.sts.Potion.PotionsFragment;
@@ -51,7 +53,15 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                InputMethodManager imm = (InputMethodManager) getApplicationContext()
+                        .getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(hView.getWindowToken(), 0);
+                super.onDrawerClosed(drawerView);
+            }
+        };
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -67,13 +77,45 @@ public class MainActivity extends AppCompatActivity
         fragmentManager.beginTransaction().replace(R.id.content_frame, new FirstFragment())
                 .addToBackStack(null).commit();
 
-        if (mUser != null) {
-            viewAccountInfo();
-        } else {
-            viewLogIn();
-        }
+        FirebaseAuth.getInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                mUser = firebaseAuth.getCurrentUser();
+                if (mUser != null) {
+                    // User is signed in
+                    if (mUser.getUid().equals("Fl284IEleCaXsoxwBtNDoBnKtXc2")) {
+                        navigationView.getMenu().findItem(R.id.nav_database).setVisible(true);
+                    }
+
+                    viewAccountInfo();
+                } else {
+                    navigationView.getMenu().findItem(R.id.nav_database).setVisible(false);
+                    // User is signed out
+                    viewLogIn();
+                }
+
+                // reload current fragment
+                resetFragment();
+            }
+        });
 
         new InfoHelper().getLists();
+    }
+
+    // deletes the current fragment and creates a new instance of the same fragment
+    private void resetFragment() {
+        Fragment f = fragmentManager.findFragmentById(R.id.content_frame);
+        if (!(f instanceof FirstFragment)) {
+            fragmentManager.popBackStack();
+        }
+        if (f instanceof CardsFragment) {
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new CardsFragment())
+                    .addToBackStack(null).commit();
+        }
+        if (f instanceof DetailTapped) {
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new DetailTapped())
+                    .addToBackStack(null).commit();
+        }
     }
 
     private void viewLogIn() {
@@ -164,7 +206,7 @@ public class MainActivity extends AppCompatActivity
 
         mUser = mAuth.getCurrentUser();
 
-        nameView.setText(mUser.getUid());
+        nameView.setText(mUser.getDisplayName());
         mailView.setText(mUser.getEmail());
 
         // set onclickListener
@@ -180,9 +222,16 @@ public class MainActivity extends AppCompatActivity
     private void handleSignUp() {
         EditText mail_input = hView.findViewById(R.id.mail_sign_up);
         EditText pass_input = hView.findViewById(R.id.pass_sign_up);
+        EditText display_input = hView.findViewById(R.id.display_sign_up);
 
         String mail = mail_input.getText().toString().trim();
+        final String display = display_input.getText().toString().trim();
         String password = pass_input.getText().toString().trim();
+
+        if (TextUtils.isEmpty(display)) {
+            Toast.makeText(getApplicationContext(), "Enter display name!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if (TextUtils.isEmpty(mail)) {
             Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
@@ -212,10 +261,34 @@ public class MainActivity extends AppCompatActivity
                             Toast.makeText(MainActivity.this, "Authentication failed." + task.getException(),
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            viewAccountInfo();
+                            InputMethodManager imm = (InputMethodManager) getApplicationContext()
+                                    .getSystemService(Activity.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(hView.getWindowToken(), 0);
+                            userProfile(display);
                         }
                     }
                 });
+    }
+
+    private void userProfile(final String display) {
+        mUser = mAuth.getCurrentUser();
+
+        if (mUser != null) {
+            UserProfileChangeRequest profileUpdater = new UserProfileChangeRequest.Builder()
+                    .setDisplayName(display).build();
+
+            mUser.updateProfile(profileUpdater).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isComplete()) {
+                        Toast.makeText(MainActivity.this, "Profile made: " + display,
+                                Toast.LENGTH_SHORT).show();
+                        viewAccountInfo();
+                    }
+                }
+            });
+
+        }
     }
 
     private void handleLogIn() {
@@ -256,8 +329,9 @@ public class MainActivity extends AppCompatActivity
                                 Toast.makeText(MainActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                             }
                         } else {
-//                            InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
-//                            imm.hideSoftInputFromWindow(hView.getWindowToken(), 0);
+                            InputMethodManager imm = (InputMethodManager) getApplicationContext()
+                                    .getSystemService(Activity.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(hView.getWindowToken(), 0);
                             viewAccountInfo();
                         }
                     }
@@ -323,9 +397,6 @@ public class MainActivity extends AppCompatActivity
                     .addToBackStack(null).commit();
         } else if (id == R.id.nav_events) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new EventsFragment())
-                    .addToBackStack(null).commit();
-        } else if (id == R.id.nav_test) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new CardDetailTapped())
                     .addToBackStack(null).commit();
         } else if (id == R.id.nav_database) {
             new DataScraper().execute();

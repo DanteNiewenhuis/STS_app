@@ -3,6 +3,7 @@ package e.dante.sts.Combos;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,10 +66,21 @@ public class ComboAdapter extends ArrayAdapter<String> {
         convertView.findViewById(R.id.combo_delete_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("comboadapter", "X clicked");
+                Log.d("comboadapter", "name: " + name);
+                Log.d("comboadapter", "comboname: " + comboName);
+                Log.d("comboadapter", "type1: " + type1);
+                Log.d("comboadapter", "type2: " + type2);
+                Log.d("comboadapter", "uid: " + mUser.getUid());
+                Log.d("comboadapter", "action: " + action);
                 mDatabase.child("Opinions").child(type1).child(name).child(mUser.getUid())
                         .child(action).child(type2).child(comboName).setValue(null);
                 mDatabase.child("Opinions").child(type2).child(comboName).child(mUser.getUid())
                         .child(action).child(type1).child(name).setValue(null);
+                mDatabase.child("Opinions").child("Cards").child("A Thousand Cuts").child(mUser.getUid())
+                        .child("Combos").child("Cards").child("Bandage Up").setValue(null);
+                mDatabase.child("Opinions").child("Cards").child("Bandage Up").child(mUser.getUid())
+                        .child("Combos").child("Cards").child("A Thousand Cuts").setValue(null);
             }
         });
         return convertView;

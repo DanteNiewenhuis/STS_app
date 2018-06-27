@@ -22,6 +22,7 @@ public class CardHelper {
     private DatabaseReference mDatabase;
     private String name;
     private GlobalFunctions gFunctions;
+    private String activityName;
 
     public CardHelper() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -37,6 +38,7 @@ public class CardHelper {
     }
 
     public void getSingleCard(SingleCallback activity, String name) {
+        Log.d("getSingleCard", "init");
         this.singleActivity = activity;
         this.name = name;
 
@@ -178,7 +180,7 @@ public class CardHelper {
                             }
                         }
 
-                        if (opinionSnapshot.hasChild("AntiCombos")) {
+                        if (opinionSnapshot.hasChild("Anti_Combos")) {
                             DataSnapshot antiComboSnapshot = opinionSnapshot.child("Anti_Combos");
 
                             if (antiComboSnapshot.hasChild("Cards")) {
@@ -204,6 +206,7 @@ public class CardHelper {
 
             item.setYourAntiComboCards(antiComboCards);
             item.setYourAntiComboRelics(antiComboRelics);
+
             singleActivity.gotSingleCard(item);
         }
 

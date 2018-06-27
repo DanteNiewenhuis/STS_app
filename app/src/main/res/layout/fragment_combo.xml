@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Combos.ComboFragment">
+    tools:context=".Combos.DetailComboFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
