@@ -180,9 +180,16 @@ public class MainActivity extends AppCompatActivity
     private void handleSignUp() {
         EditText mail_input = hView.findViewById(R.id.mail_sign_up);
         EditText pass_input = hView.findViewById(R.id.pass_sign_up);
+        EditText display_input = hView.findViewById(R.id.display_sign_up);
 
         String mail = mail_input.getText().toString().trim();
+        String display = display_input.getText().toString().trim();
         String password = pass_input.getText().toString().trim();
+
+        if (TextUtils.isEmpty(display)) {
+            Toast.makeText(getApplicationContext(), "Enter display name!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if (TextUtils.isEmpty(mail)) {
             Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
@@ -323,9 +330,6 @@ public class MainActivity extends AppCompatActivity
                     .addToBackStack(null).commit();
         } else if (id == R.id.nav_events) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new EventsFragment())
-                    .addToBackStack(null).commit();
-        } else if (id == R.id.nav_test) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new CardDetailTapped())
                     .addToBackStack(null).commit();
         } else if (id == R.id.nav_database) {
             new DataScraper().execute();

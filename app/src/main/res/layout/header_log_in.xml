@@ -24,7 +24,8 @@
             android:hint="@string/hint_email"
             android:inputType="textEmailAddress"
             android:textColor="@color/TextOnSecondary"
-            android:textColorHint="@color/colorSecondaryDark" />
+            android:textColorHint="@color/colorSecondaryDark"
+            android:textSize="12sp" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -46,7 +47,8 @@
             android:hint="@string/hint_password"
             android:inputType="textPassword"
             android:textColor="@color/TextOnSecondary"
-            android:textColorHint="@color/colorSecondaryDark" />
+            android:textColorHint="@color/colorSecondaryDark"
+            android:textSize="12sp" />
     </android.support.design.widget.TextInputLayout>
 
     <Button

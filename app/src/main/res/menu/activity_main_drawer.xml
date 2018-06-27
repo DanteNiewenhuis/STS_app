@@ -25,17 +25,9 @@
             android:icon="@drawable/ic_menu_events"
             android:title="Events" />
         <item
-            android:id="@+id/nav_test"
-            android:icon="@drawable/ic_menu_events"
-            android:title="Test" />
-        <item
             android:id="@+id/nav_database"
             android:icon="@drawable/ic_menu_events"
             android:title="Database" />
-        <item
-            android:id="@+id/nav_report_bug"
-            android:icon="@drawable/ic_menu_events"
-            android:title="Report Bug" />
     </group>
 
 </menu>
