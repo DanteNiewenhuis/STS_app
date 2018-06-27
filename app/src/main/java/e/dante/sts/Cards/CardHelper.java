@@ -1,7 +1,6 @@
 package e.dante.sts.Cards;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -14,7 +13,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import e.dante.sts.GlobalFunctions;
+import e.dante.sts.Global.GlobalFunctions;
+
+/*
+    This is the Fragment that gathers all the cards from the firebase database.
+    There is the option to get all the cards in the database or to get a single card.
+ */
 
 public class CardHelper {
     private Callback activity;
@@ -22,13 +26,25 @@ public class CardHelper {
     private DatabaseReference mDatabase;
     private String name;
     private GlobalFunctions gFunctions;
-    private String activityName;
 
+    // constructor
     public CardHelper() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         gFunctions = new GlobalFunctions();
     }
 
+    // Interfaces
+    public interface Callback {
+        void gotCards(ArrayList<Card> cards);
+        void gotCardsError(String message);
+    }
+
+    public interface SingleCallback {
+        void gotSingleCard(Card cards);
+        void gotSingleCardError(String message);
+    }
+
+    // getCards collects all the cards in the database and then calls gotCards
     public void getCards(Callback activity) {
         this.activity = activity;
 
@@ -37,8 +53,8 @@ public class CardHelper {
         query.addValueEventListener(new cardValueListener());
     }
 
+    // getSingleCards collects one specific card from the database and then calls gotCards
     public void getSingleCard(SingleCallback activity, String name) {
-        Log.d("getSingleCard", "init");
         this.singleActivity = activity;
         this.name = name;
 
@@ -47,18 +63,8 @@ public class CardHelper {
         query.addValueEventListener(new singleCardValueListener());
     }
 
-    public interface Callback {
-        void gotCards(ArrayList<Card> cards);
-
-        void gotCardsError(String message);
-    }
-
-    public interface SingleCallback {
-        void gotSingleCard(Card cards);
-
-        void gotSingleCardError(String message);
-    }
-
+    // this value listener collects all the cards from the database and returns them when the
+    // data is changed.
     private class cardValueListener implements ValueEventListener {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -66,15 +72,19 @@ public class CardHelper {
 
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             FirebaseUser mUser = mAuth.getCurrentUser();
+
+            // make snapshots
             DataSnapshot cardsSnapshot = dataSnapshot.child("Cards");
             DataSnapshot opinionsSnapshot = dataSnapshot.child("Opinions").child("Cards");
             for (DataSnapshot dataChild : cardsSnapshot.getChildren()) {
                 Card item = dataChild.getValue(Card.class);
 
+                // get the data of the cards if it is present
                 if (opinionsSnapshot.hasChild(gFunctions.name_to_dName(item.getName()))) {
                     DataSnapshot cardOpinionsSnapshot = opinionsSnapshot.child(gFunctions
                             .name_to_dName(item.getName()));
 
+                    // calculate the average score for the card
                     int counter = 0;
                     float total = 0;
                     for (DataSnapshot user_opinion : cardOpinionsSnapshot.getChildren()) {
@@ -84,6 +94,13 @@ public class CardHelper {
                         }
                     }
 
+                    // set the counter to one if no votes have been collected to prevent deviding by 0
+                    if (counter == 0) {
+                        counter = 1;
+                    }
+                    item.setAverageScore(total / counter);
+
+                    // get the personal score if it is present
                     if ((mUser != null) && (cardOpinionsSnapshot.hasChild(mUser.getUid()))) {
                         cardOpinionsSnapshot = cardOpinionsSnapshot.child(mUser.getUid());
 
@@ -92,18 +109,10 @@ public class CardHelper {
                                     .getValue().toString()));
                         }
                     }
-
-                    if (counter == 0) {
-                        counter = 1;
-                    }
-                    item.setAverageScore(total / counter);
                 }
 
                 cards.add(item);
             }
-
-
-
 
             activity.gotCards(cards);
         }
@@ -123,6 +132,7 @@ public class CardHelper {
             DataSnapshot cardSnapshot = dataSnapshot.child("Cards").child(name);
             Card item = cardSnapshot.getValue(Card.class);
 
+            //create opinion lists
             DataSnapshot opinionSnapshot = dataSnapshot.child("Opinions");
             ArrayList<String> comboCards = new ArrayList<>();
             ArrayList<String> comboRelics = new ArrayList<>();
@@ -130,12 +140,14 @@ public class CardHelper {
             ArrayList<String> antiComboCards = new ArrayList<>();
             ArrayList<String> antiComboRelics = new ArrayList<>();
 
+            // get the opinions off the card when there are any
             if (opinionSnapshot.hasChild("Cards")) {
                 opinionSnapshot = opinionSnapshot.child("Cards");
 
                 if (opinionSnapshot.hasChild(gFunctions.name_to_dName(item.getName()))) {
                     opinionSnapshot = opinionSnapshot.child(gFunctions.name_to_dName(item.getName()));
 
+                    //calculate the average score
                     int counter = 0;
                     float total = 0;
                     for (DataSnapshot user_opinion : opinionSnapshot.getChildren()) {
@@ -145,6 +157,7 @@ public class CardHelper {
                         }
                     }
 
+                    // change the counter to 1 to prevent devision by 0
                     if (counter == 0) {
                         counter = 1;
                     }
@@ -153,15 +166,18 @@ public class CardHelper {
                     if ((mUser != null) && (opinionSnapshot.hasChild(mUser.getUid()))) {
                         opinionSnapshot = opinionSnapshot.child(mUser.getUid());
 
+                        // get the score
                         if (opinionSnapshot.hasChild("score")) {
                             item.setYourScore(Float.parseFloat(opinionSnapshot.child("score")
                                     .getValue().toString()));
                         }
 
+                        // get the note
                         if (opinionSnapshot.hasChild("note")) {
                             item.setYourNote((String) opinionSnapshot.child("note").getValue());
                         }
 
+                        // get the combo cards and relics
                         if (opinionSnapshot.hasChild("Combos")) {
                             DataSnapshot comboSnapshot = opinionSnapshot.child("Combos");
 
@@ -180,6 +196,7 @@ public class CardHelper {
                             }
                         }
 
+                        // get the anti combo cards and relics
                         if (opinionSnapshot.hasChild("Anti_Combos")) {
                             DataSnapshot antiComboSnapshot = opinionSnapshot.child("Anti_Combos");
 

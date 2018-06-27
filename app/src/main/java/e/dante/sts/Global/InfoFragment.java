@@ -1,4 +1,4 @@
-package e.dante.sts;
+package e.dante.sts.Global;
 
 
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import e.dante.sts.R;
 
 public class InfoFragment extends DialogFragment {
     private String name;

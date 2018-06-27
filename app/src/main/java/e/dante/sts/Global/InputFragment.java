@@ -1,4 +1,4 @@
-package e.dante.sts;
+package e.dante.sts.Global;
 
 
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import e.dante.sts.R;
 
 
 /**
@@ -43,7 +45,7 @@ public class InputFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View myView =  inflater.inflate(R.layout.fragment_input, container, false);
+        final View myView = inflater.inflate(R.layout.fragment_input, container, false);
         TextView textView = myView.findViewById(R.id.note_input_view);
         textView.setText(oldNote);
         myView.findViewById(R.id.note_submit_button).setOnClickListener(new View.OnClickListener() {

@@ -11,9 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import e.dante.sts.Combos.DetailComboFragment;
 import e.dante.sts.R;
-import e.dante.sts.Relics.DetailRelicOpinionFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,7 +35,7 @@ public class DetailTapped extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        myView =  inflater.inflate(R.layout.fragment_detail_tapped, container, false);
+        myView = inflater.inflate(R.layout.fragment_detail_tapped, container, false);
 
         if (type.equals("Cards")) {
             cardCreate();

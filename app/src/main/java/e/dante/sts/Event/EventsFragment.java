@@ -2,7 +2,6 @@ package e.dante.sts.Event;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +12,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import e.dante.sts.InfoFragment;
-import e.dante.sts.InfoHelper;
 import e.dante.sts.R;
 
 public class EventsFragment extends Fragment implements EventsHelper.Callback {

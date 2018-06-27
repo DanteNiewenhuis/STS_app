@@ -10,4 +10,5 @@
 
     <color name="TextOnPrimary">#ffffff</color>
     <color name="TextOnSecondary">#000000</color>
+    <color name="gray">#9f9f9f</color>
 </resources>

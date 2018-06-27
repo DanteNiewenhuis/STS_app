@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -67,8 +68,18 @@ public class KeywordListAdapter extends BaseExpandableListAdapter {
             convertView = LayoutInflater.from(this.context).inflate(R.layout.keyword_group, parent, false);
         }
 
-        TextView group = convertView.findViewById(R.id.group_view);
+
+        TextView group = convertView.findViewById(R.id.keyword_name_view);
         group.setText(keyword.getName());
+
+        if (isExpanded) {
+            ((ImageView) convertView.findViewById(R.id.keyword_open_indicator)).setImageResource(R.drawable.ic_arrow_drop_up_black_24dp);
+            group.setTextColor(context.getResources().getColor(R.color.colorSecondary));
+        } else {
+            ((ImageView) convertView.findViewById(R.id.keyword_open_indicator)).setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
+            group.setTextColor(context.getResources().getColor(R.color.TextOnSecondary));
+        }
+
 
         return convertView;
     }

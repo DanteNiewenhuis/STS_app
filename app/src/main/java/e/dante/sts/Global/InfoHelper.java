@@ -1,7 +1,6 @@
-package e.dante.sts;
+package e.dante.sts.Global;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -11,6 +10,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
+import e.dante.sts.Global.Globals;
 
 public class InfoHelper {
     private Callback activity;
@@ -36,6 +37,7 @@ public class InfoHelper {
 
     public interface Callback {
         void gotInfo(String name, String type, String des);
+
         void gotInfoError(String message);
     }
 
@@ -66,7 +68,7 @@ public class InfoHelper {
             ArrayList<String> defectCards = new ArrayList<>();
 
             DataSnapshot cardsSnapshot = dataSnapshot.child("Cards");
-            for (DataSnapshot card: cardsSnapshot.getChildren()) {
+            for (DataSnapshot card : cardsSnapshot.getChildren()) {
                 switch (card.child("hero").getValue().toString()) {
                     case "Neutral":
                         anyCards.add((String) card.child("name").getValue());
@@ -95,7 +97,7 @@ public class InfoHelper {
             ArrayList<String> defectRelics = new ArrayList<>();
 
             DataSnapshot relicsSnapshot = dataSnapshot.child("Relics");
-            for (DataSnapshot relic: relicsSnapshot.getChildren()) {
+            for (DataSnapshot relic : relicsSnapshot.getChildren()) {
                 switch (relic.child("hero").getValue().toString()) {
                     case "Any":
                         anyRelics.add((String) relic.child("name").getValue());
@@ -120,7 +122,7 @@ public class InfoHelper {
             ///////////////// KEYWORDS ////////////////////
             ArrayList<String> keywords = new ArrayList<>();
             DataSnapshot keywordsSnapshot = dataSnapshot.child("Keywords");
-            for (DataSnapshot keyword: keywordsSnapshot.getChildren()) {
+            for (DataSnapshot keyword : keywordsSnapshot.getChildren()) {
                 keywords.add((String) keyword.child("name").getValue());
             }
 
@@ -129,7 +131,7 @@ public class InfoHelper {
             ///////////////// EVENTS ////////////////////
             ArrayList<String> events = new ArrayList<>();
             DataSnapshot eventsSnapshot = dataSnapshot.child("Events");
-            for (DataSnapshot event: eventsSnapshot.getChildren()) {
+            for (DataSnapshot event : eventsSnapshot.getChildren()) {
                 events.add((String) event.child("name").getValue());
             }
 
@@ -138,7 +140,7 @@ public class InfoHelper {
             ///////////////// POTIONS ////////////////////
             ArrayList<String> potions = new ArrayList<>();
             DataSnapshot potionsSnapshot = dataSnapshot.child("Potions");
-            for (DataSnapshot potion: potionsSnapshot.getChildren()) {
+            for (DataSnapshot potion : potionsSnapshot.getChildren()) {
                 potions.add((String) potion.child("name").getValue());
             }
 

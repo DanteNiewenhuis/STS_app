@@ -1,8 +1,6 @@
 package e.dante.sts;
 
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
@@ -18,6 +16,7 @@ import java.util.ArrayList;
 
 import e.dante.sts.Cards.Card;
 import e.dante.sts.Event.Event;
+import e.dante.sts.Global.GlobalFunctions;
 import e.dante.sts.Potion.Potion;
 import e.dante.sts.Relics.Relic;
 
@@ -76,11 +75,11 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
                         String link = cols.get(0).select("a").get(0).attr("abs:href");
                         cardId = card.getName();
 
-                        if(link.equals("http://slay-the-spire.wikia.com/wiki/Defend")) {
+                        if (link.equals("http://slay-the-spire.wikia.com/wiki/Defend")) {
                             link += "_(" + links.get(s).substring(0, links.get(s).length() - 6) + ")";
                         }
 
-                        if(link.equals("http://slay-the-spire.wikia.com/wiki/Strike")) {
+                        if (link.equals("http://slay-the-spire.wikia.com/wiki/Strike")) {
                             link += "_(" + links.get(s).substring(0, links.get(s).length() - 6) + ")";
                         }
 
@@ -106,8 +105,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
                             card.setDescription(divs.get(3).text());
                             card.setUpgradeCost("X");
                             card.setUpgradeDescription(divs.get(4).text());
-                        }
-                        else {
+                        } else {
                             card.setCost(divs.get(3).text());
                             card.setDescription(divs.get(4).text());
                             card.setUpgradeCost(divs.get(5).text());
@@ -255,8 +253,7 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
                     try {
                         Element info = div.select("p").get(0);
                         relic.setInfo(info.text());
-                    }
-                    catch (IndexOutOfBoundsException e) {
+                    } catch (IndexOutOfBoundsException e) {
                         relic.setInfo("");
                     }
                     Element div2 = div.select("div.pi-data-value").get(3);
@@ -361,9 +358,9 @@ public class DataScraper extends AsyncTask<Void, Void, Void> {
                     String link = items.get(j).select("a").get(0).attr("abs:href");
                     Log.d("EVENTSCRAPER", "link: " + link);
 
-                        Document doc2 = Jsoup.connect(link).get();
-                        Element div2 = doc2.getElementById("mw-content-text");
-                        event.setOptions(div2.html());
+                    Document doc2 = Jsoup.connect(link).get();
+                    Element div2 = doc2.getElementById("mw-content-text");
+                    event.setOptions(div2.html());
 
                     eventId = globalFunctions.name_to_dName(event.getName());
                     mDatabase.child("Events").child(eventId).setValue(event);

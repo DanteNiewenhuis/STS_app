@@ -30,6 +30,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import e.dante.sts.Cards.CardsFragment;
 import e.dante.sts.Detail.DetailTapped;
 import e.dante.sts.Event.EventsFragment;
+import e.dante.sts.Global.InfoHelper;
 import e.dante.sts.Keyword.KeywordsFragment;
 import e.dante.sts.Potion.PotionsFragment;
 import e.dante.sts.Relics.RelicsFragment;
@@ -280,7 +281,7 @@ public class MainActivity extends AppCompatActivity
             mUser.updateProfile(profileUpdater).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isComplete()) {
+                    if (task.isComplete()) {
                         Toast.makeText(MainActivity.this, "Profile made: " + display,
                                 Toast.LENGTH_SHORT).show();
                         viewAccountInfo();

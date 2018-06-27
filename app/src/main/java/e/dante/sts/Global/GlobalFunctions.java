@@ -1,4 +1,4 @@
-package e.dante.sts;
+package e.dante.sts.Global;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -11,10 +11,11 @@ import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
 
-public class GlobalFunctions implements InfoHelper.Callback{
+public class GlobalFunctions implements InfoHelper.Callback {
     private FragmentManager fragmentManager;
 
-    public GlobalFunctions(){}
+    public GlobalFunctions() {
+    }
 
     public GlobalFunctions(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
@@ -116,8 +117,8 @@ public class GlobalFunctions implements InfoHelper.Callback{
 
         int endIndex;
         for (int startIndex = input.toLowerCase().indexOf(start.toLowerCase());
-            startIndex >= 0;
-            startIndex = input.toLowerCase().indexOf(start.toLowerCase(), startIndex + 1)) {
+             startIndex >= 0;
+             startIndex = input.toLowerCase().indexOf(start.toLowerCase(), startIndex + 1)) {
             endIndex = input.toLowerCase().indexOf(end.toLowerCase(), startIndex + 1);
             if (endIndex == -1) {
                 Log.d("makeBold", "break");
@@ -126,7 +127,7 @@ public class GlobalFunctions implements InfoHelper.Callback{
             Log.d("makeBold", "startIndex: " + startIndex);
             Log.d("makeBold", "endIndex: " + endIndex);
             ss.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), startIndex, endIndex,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
 
@@ -163,7 +164,7 @@ public class GlobalFunctions implements InfoHelper.Callback{
         return html;
     }
 
-    public void getInfo(String comboName, String type){
+    public void getInfo(String comboName, String type) {
         new InfoHelper().getInfo(this, comboName, type);
     }
 
@@ -176,6 +177,7 @@ public class GlobalFunctions implements InfoHelper.Callback{
         dialog.setArguments(extra);
         dialog.show(fragmentManager, "dialog");
     }
+
     @Override
     public void gotInfo(String name, String type, String des) {
         DialogFragment dialog = new InfoFragment();

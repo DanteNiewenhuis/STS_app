@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 
 import e.dante.sts.R;
 
-public class RelicsAdapter extends RecyclerView.Adapter<RelicsAdapter.RelicViewHolder>{
+public class RelicsAdapter extends RecyclerView.Adapter<RelicsAdapter.RelicViewHolder> {
     private Context context;
     private LayoutInflater mInflater;
     private ArrayList<Relic> relics;
@@ -40,7 +39,7 @@ public class RelicsAdapter extends RecyclerView.Adapter<RelicsAdapter.RelicViewH
         ViewGroup.LayoutParams p = view.getLayoutParams();
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 
-        float density  = displayMetrics.density;
+        float density = displayMetrics.density;
         p.width = Math.round((displayMetrics.widthPixels - (30 * density)) / 3);
 
         view.setLayoutParams(p);
@@ -60,15 +59,13 @@ public class RelicsAdapter extends RecyclerView.Adapter<RelicsAdapter.RelicViewH
 
         if ((relic.getYourScore() % 1) == 0) {
             holder.mYourScore.setText((int) relic.getYourScore() + "/5");
-        }
-        else {
+        } else {
             holder.mYourScore.setText(relic.getYourScore() + "/5");
         }
 
         if ((relic.getAverageScore() % 1) == 0) {
             holder.mAverageScore.setText((int) relic.getAverageScore() + "/5");
-        }
-        else {
+        } else {
             holder.mAverageScore.setText(relic.getAverageScore() + "/5");
         }
     }
@@ -127,6 +124,7 @@ public class RelicsAdapter extends RecyclerView.Adapter<RelicsAdapter.RelicViewH
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
+
         void onRatingClick(View view, int position);
     }
 

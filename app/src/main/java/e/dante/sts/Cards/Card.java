@@ -3,6 +3,10 @@ package e.dante.sts.Cards;
 import java.io.Serializable;
 import java.util.List;
 
+/*
+    This the class where the data of a card is stored.
+ */
+
 public class Card implements Serializable {
     private String name;
     private String hero;
@@ -21,10 +25,12 @@ public class Card implements Serializable {
     private float yourScore;
     private float averageScore;
 
+    // Constructor
     public Card() {
         this.yourNote = "";
     }
 
+    // Getters and Setters
     public String getName() {
         return name;
     }

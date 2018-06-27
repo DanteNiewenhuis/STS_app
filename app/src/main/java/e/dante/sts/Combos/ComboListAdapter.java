@@ -1,30 +1,21 @@
 package e.dante.sts.Combos;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import e.dante.sts.Event.Event;
-import e.dante.sts.GlobalFunctions;
 import e.dante.sts.R;
 
 public class ComboListAdapter extends BaseExpandableListAdapter {
     private Context context;
-    private ArrayList<Combo> dataChild;
+    private ArrayList<Opinion> dataChild;
 
-    public ComboListAdapter(Context context, ArrayList<Combo> dataChild) {
+    public ComboListAdapter(Context context, ArrayList<Opinion> dataChild) {
         this.context = context;
         this.dataChild = dataChild;
     }
@@ -71,66 +62,25 @@ public class ComboListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        Combo combo = (Combo) getGroup(groupPosition);
+        Opinion opinion = (Opinion) getGroup(groupPosition);
         if (convertView == null) {
             convertView = LayoutInflater.from(this.context).inflate(R.layout.combo_child, parent, false);
         }
         TextView nameView = convertView.findViewById(R.id.combo_child_name_view);
-        nameView.setText(combo.getUserId());
+        nameView.setText(opinion.getUserId());
 
         return convertView;
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        Combo combo = (Combo) getChild(groupPosition, childPosition);
+        Opinion opinion = (Opinion) getChild(groupPosition, childPosition);
         if (convertView == null) {
             convertView = LayoutInflater.from(this.context).inflate(R.layout.combo_group, parent, false);
         }
-        TextView noteView = convertView.findViewById(R.id.combo_group_notes_view);
-        noteView.setText(combo.getNote());
-
-        ListView cardListView = convertView.findViewById(R.id.combo_group_card_list_view);
-        cardListView.setAdapter(new ComboAdapter(context, R.layout.item_combo, combo.getComboCards(), "Cards"));
-
-        ListView relicListView = convertView.findViewById(R.id.combo_group_relic_list_view);
-        relicListView.setAdapter(new ComboAdapter(context, R.layout.item_combo, combo.getComboRelics(), "Relics"));
+//        TextView noteView = convertView.findViewById(R.id.combo_group_notes_view);
+//        noteView.setText(opinion.getNote());
 
         return convertView;
-    }
-
-    private class ComboAdapter extends ArrayAdapter<String> {
-        private int resource;
-        private List<String> combos;
-        private String type;
-
-        public ComboAdapter(@NonNull Context context, int resource, @NonNull List<String> objects, String type) {
-            super(context, resource, objects);
-            this.resource = resource;
-            this.combos = objects;
-            this.type = type;
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            if (convertView == null) {
-                convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
-            }
-
-            final String comboName = combos.get(position);
-
-            //TODO make this clickable
-            TextView nameView = convertView.findViewById(R.id.combo_name_view);
-            nameView.setText(comboName);
-
-//            nameView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    gFunctions.getInfo(comboName, type);
-//                }
-//            });
-            return convertView;
-        }
     }
 }

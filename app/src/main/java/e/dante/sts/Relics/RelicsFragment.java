@@ -25,7 +25,7 @@ import java.util.Comparator;
 
 import e.dante.sts.Detail.DetailTapped;
 import e.dante.sts.R;
-import e.dante.sts.RatingFragment;
+import e.dante.sts.Global.RatingFragment;
 
 public class RelicsFragment extends Fragment implements RelicHelper.Callback, RelicsAdapter.ItemClickListener {
     private View myView;
@@ -51,7 +51,7 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
 
         ArrayList<Relic> items = new ArrayList<>();
         recyclerView = myView.findViewById(R.id.relic_recycle_view);
-        recyclerView.setLayoutManager(new GridLayoutManager(this.getContext(),3));
+        recyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 3));
 
         adapter = new RelicsAdapter(getContext(), items);
         adapter.setClickListener(this);
@@ -152,8 +152,7 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
         if (searchView != null & !searchView.isIconified()) {
             searchView.setIconified(true);
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -233,10 +232,10 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
     private boolean matchesText(Relic item) {
         String[] splitText = searchFilter.split("\\s+");
 
-        for (String word: splitText) {
+        for (String word : splitText) {
             word = word.toLowerCase();
             if (!((item.getName().toLowerCase().contains(word)) ||
-                    (item.getDescription().toLowerCase().contains(word)))){
+                    (item.getDescription().toLowerCase().contains(word)))) {
                 return false;
             }
         }
@@ -280,9 +279,7 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
                 if (type.equals("Color")) {
                     colorList.add(c.getText().toString());
                 }
-            }
-
-            else {
+            } else {
                 if (type.equals("Color")) {
                     colorList.remove(c.getText().toString());
                 }

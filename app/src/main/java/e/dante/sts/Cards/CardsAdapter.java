@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +19,19 @@ import java.util.ArrayList;
 
 import e.dante.sts.R;
 
-public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHolder>{
+/*
+    This is the adaptor that created the grid of cards in the cardfragment
+ */
+
+public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHolder> {
     private Context context;
     private LayoutInflater mInflater;
     private ArrayList<Card> cards;
     private ItemClickListener mClickListener;
     private FirebaseUser mUser;
 
+    // Constructor
     CardsAdapter(Context context, ArrayList<Card> data) {
-//        Log.d("CardAdapter", "Constructor");
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.cards = data;
@@ -44,7 +47,9 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
         ViewGroup.LayoutParams p = view.getLayoutParams();
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 
-        float density  = displayMetrics.density;
+        float density = displayMetrics.density;
+
+        // calculate the appropiate width of the cards for the phone
         p.width = Math.round((displayMetrics.widthPixels - (30 * density)) / 3);
 
         view.setLayoutParams(p);
@@ -52,19 +57,19 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
         return new CardViewHolder(view);
     }
 
-    // binds the data to the textview in each cell
+    // binds the data to the Views in each cell
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
-//        Log.d("CardAdapter", "onBindViewHolder");
         Card card = cards.get(position);
         Picasso.get().load(card.getImgUrl() + "scale-to-width-down/200").into(holder.mImage);
 
+        // set the users score if a user is logged in
+        // print the Log In message otherwise
         if (mUser != null) {
             if (card.getYourScore() == 0.0) {
                 holder.mYourScore.setText("Vote Now");
                 holder.mStarImage.setImageResource(R.drawable.star_empty);
-            }
-            else if ((card.getYourScore() % 1) == 0) {
+            } else if ((card.getYourScore() % 1) == 0) {
                 holder.mYourScore.setText((int) card.getYourScore() + "/5");
                 holder.mStarImage.setImageResource(R.drawable.star);
             } else {
@@ -77,8 +82,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
             } else {
                 holder.mAverageScore.setText(card.getAverageScore() + "/5");
             }
-        }
-        else {
+        } else {
             holder.mYourScore.setText("Log In");
             holder.mStarImage.setImageResource(R.drawable.star_empty);
         }
@@ -100,7 +104,6 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
 
         CardViewHolder(View itemView) {
             super(itemView);
-//            Log.d("CardAdapter", "ViewHolder");
             mImage = itemView.findViewById(R.id.card_grid_item_image);
             mImage.setOnClickListener(this);
             mYourScore = itemView.findViewById(R.id.your_card_item_score);
@@ -108,6 +111,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
             mStar = itemView.findViewById(R.id.your_card_item_score_layout);
 
             mStarImage = itemView.findViewById(R.id.your_card_item_star);
+
             //TODO implement not being able to vote when not logged in
             if (mUser != null) {
                 mStar.setOnClickListener(new View.OnClickListener() {
@@ -138,9 +142,11 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
+
         void onRatingClick(View view, int position);
     }
 
+    // update the data that is used to make the grid of cards to the new data.
     public void updateList(ArrayList<Card> cards) {
         this.cards = cards;
         notifyDataSetChanged();

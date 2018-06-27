@@ -25,8 +25,8 @@ import java.util.List;
 import e.dante.sts.Cards.Card;
 import e.dante.sts.Cards.CardHelper;
 import e.dante.sts.Combos.ComboAdapter;
-import e.dante.sts.GlobalFunctions;
-import e.dante.sts.Globals;
+import e.dante.sts.Global.GlobalFunctions;
+import e.dante.sts.Global.Globals;
 import e.dante.sts.R;
 
 /**
@@ -88,11 +88,11 @@ public class DetailCardOpinionFragment extends Fragment implements CardHelper.Si
         final List<String> comboCards = Globals.getInstance().getCards(card.getHero());
         final List<String> antiComboCards = Globals.getInstance().getCards(card.getHero());
 
-        for (String s: card.getYourComboCards()) {
+        for (String s : card.getYourComboCards()) {
             comboCards.remove(s);
             antiComboCards.remove(s);
         }
-        for (String s: card.getYourAntiComboCards()) {
+        for (String s : card.getYourAntiComboCards()) {
             comboCards.remove(s);
             antiComboCards.remove(s);
         }
@@ -102,11 +102,11 @@ public class DetailCardOpinionFragment extends Fragment implements CardHelper.Si
 
         final List<String> comboRelics = Globals.getInstance().getRelics(card.getHero());
         final List<String> antiComboRelics = Globals.getInstance().getRelics(card.getHero());
-        for (String s: card.getYourComboRelics()) {
+        for (String s : card.getYourComboRelics()) {
             comboRelics.remove(s);
             antiComboRelics.remove(s);
         }
-        for (String s: card.getYourAntiComboRelics()) {
+        for (String s : card.getYourAntiComboRelics()) {
             comboRelics.remove(s);
             antiComboRelics.remove(s);
         }
@@ -120,27 +120,28 @@ public class DetailCardOpinionFragment extends Fragment implements CardHelper.Si
     public void gotSingleCardError(String message) {
 
     }
+
     public void makeLists(final Card card) {
         ListView comboCardsView = myView.findViewById(R.id.opinions_combo_cards_list);
         comboCardsView.setAdapter(new ComboAdapter(context, R.layout.item_combo,
-                card.getYourComboCards(), name,"Cards", "Cards","Combos"));
+                card.getYourComboCards(), name, "Cards", "Cards", "Combos"));
 
         ListView comboRelicsView = myView.findViewById(R.id.opinions_combo_relics_list);
         comboRelicsView.setAdapter(new ComboAdapter(context, R.layout.item_combo,
-                card.getYourComboRelics(), name,"Cards", "Relics","Combos"));
+                card.getYourComboRelics(), name, "Cards", "Relics", "Combos"));
 
         ListView antiComboCardsView = myView.findViewById(R.id.opinions_anti_combo_cards_list);
         antiComboCardsView.setAdapter(new ComboAdapter(context, R.layout.item_combo,
-                card.getYourAntiComboCards(), name,"Cards", "Cards","Anti_Combos"));
+                card.getYourAntiComboCards(), name, "Cards", "Cards", "Anti_Combos"));
 
         ListView antiComboRelicsView = myView.findViewById(R.id.opinions_anti_combo_relics_list);
         antiComboRelicsView.setAdapter(new ComboAdapter(context, R.layout.item_combo,
-                card.getYourAntiComboRelics(), name,"Cards", "Relics","Anti_Combos"));
+                card.getYourAntiComboRelics(), name, "Cards", "Relics", "Anti_Combos"));
     }
 
     public void makeAutoCompleteText(final List<String> comboCards,
-                                 final List<String> comboRelics, final List<String> antiComboCards,
-                                 final List<String> antiComboRelics) {
+                                     final List<String> comboRelics, final List<String> antiComboCards,
+                                     final List<String> antiComboRelics) {
 
         ArrayAdapter<String> comboCardAdapter = new ArrayAdapter<>(context,
                 android.R.layout.simple_dropdown_item_1line, comboCards);

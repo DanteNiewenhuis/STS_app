@@ -12,10 +12,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-import e.dante.sts.GlobalFunctions;
+import e.dante.sts.Global.GlobalFunctions;
 
 public class RelicHelper {
     private Callback activity;

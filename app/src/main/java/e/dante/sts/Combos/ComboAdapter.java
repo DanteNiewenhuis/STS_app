@@ -19,6 +19,10 @@ import java.util.List;
 
 import e.dante.sts.R;
 
+/*
+    create a list of combo cards/relics
+ */
+
 public class ComboAdapter extends ArrayAdapter<String> {
     private int resource;
     private List<String> combos;
@@ -63,24 +67,14 @@ public class ComboAdapter extends ArrayAdapter<String> {
 //            }
 //        });
 
+        // delete the combo/anticombo from the database if the button is clicked
         convertView.findViewById(R.id.combo_delete_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("comboadapter", "X clicked");
-                Log.d("comboadapter", "name: " + name);
-                Log.d("comboadapter", "comboname: " + comboName);
-                Log.d("comboadapter", "type1: " + type1);
-                Log.d("comboadapter", "type2: " + type2);
-                Log.d("comboadapter", "uid: " + mUser.getUid());
-                Log.d("comboadapter", "action: " + action);
                 mDatabase.child("Opinions").child(type1).child(name).child(mUser.getUid())
                         .child(action).child(type2).child(comboName).setValue(null);
                 mDatabase.child("Opinions").child(type2).child(comboName).child(mUser.getUid())
                         .child(action).child(type1).child(name).setValue(null);
-                mDatabase.child("Opinions").child("Cards").child("A Thousand Cuts").child(mUser.getUid())
-                        .child("Combos").child("Cards").child("Bandage Up").setValue(null);
-                mDatabase.child("Opinions").child("Cards").child("Bandage Up").child(mUser.getUid())
-                        .child("Combos").child("Cards").child("A Thousand Cuts").setValue(null);
             }
         });
         return convertView;

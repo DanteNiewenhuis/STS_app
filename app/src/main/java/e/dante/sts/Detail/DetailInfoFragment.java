@@ -18,7 +18,7 @@ import com.squareup.picasso.Picasso;
 
 import e.dante.sts.Cards.Card;
 import e.dante.sts.Cards.CardHelper;
-import e.dante.sts.GlobalFunctions;
+import e.dante.sts.Global.GlobalFunctions;
 import e.dante.sts.R;
 import e.dante.sts.Relics.Relic;
 import e.dante.sts.Relics.RelicHelper;
@@ -49,7 +49,7 @@ public class DetailInfoFragment extends Fragment implements CardHelper.SingleCal
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        myView =  inflater.inflate(R.layout.fragment_info, container, false);
+        myView = inflater.inflate(R.layout.fragment_info, container, false);
 
         gFunctions = new GlobalFunctions(getActivity().getSupportFragmentManager());
 

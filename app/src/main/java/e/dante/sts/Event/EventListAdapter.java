@@ -1,21 +1,21 @@
 package e.dante.sts.Event;
 
-import android.support.v4.app.FragmentManager;
 import android.content.Context;
-import android.text.Html;
+import android.support.v4.app.FragmentManager;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import e.dante.sts.GlobalFunctions;
+import e.dante.sts.Global.GlobalFunctions;
 import e.dante.sts.R;
 
-public class EventListAdapter extends BaseExpandableListAdapter{
+public class EventListAdapter extends BaseExpandableListAdapter {
     private Context context;
     private ArrayList<Event> dataChild;
     private GlobalFunctions gFunctions;
@@ -75,11 +75,22 @@ public class EventListAdapter extends BaseExpandableListAdapter{
 
         TextView name = convertView.findViewById(R.id.event_name_view);
         TextView act = convertView.findViewById(R.id.event_act_view);
+
+        if (isExpanded) {
+            ((ImageView) convertView.findViewById(R.id.events_open_indicator)).setImageResource(R.drawable.ic_arrow_drop_up_black_24dp);
+            name.setTextColor(context.getResources().getColor(R.color.colorSecondary));
+            act.setTextColor(context.getResources().getColor(R.color.colorSecondary));
+        } else {
+            ((ImageView) convertView.findViewById(R.id.events_open_indicator)).setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
+            name.setTextColor(context.getResources().getColor(R.color.TextOnSecondary));
+            act.setTextColor(context.getResources().getColor(R.color.TextOnSecondary));
+        }
+
+
         name.setText(event.getName());
         if (event.getAct() == 4) {
-            act.setText("Any Act");
-        }
-        else {
+            act.setText("Act X");
+        } else {
             act.setText("Act " + Integer.toString(event.getAct()));
         }
 

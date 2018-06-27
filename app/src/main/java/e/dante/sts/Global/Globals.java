@@ -1,4 +1,4 @@
-package e.dante.sts;
+package e.dante.sts.Global;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +51,8 @@ public class Globals {
 
         switch (kind) {
             case "Neutral":
-            case "Any": return getCards();
+            case "Any":
+                return getCards();
             case "Ironclad":
                 result.addAll(ironcladCards);
                 break;
@@ -81,7 +82,8 @@ public class Globals {
 
         switch (kind) {
             case "Neutral":
-            case "Any": return getRelics();
+            case "Any":
+                return getRelics();
             case "Ironclad":
                 result.addAll(ironcladRelics);
                 break;
