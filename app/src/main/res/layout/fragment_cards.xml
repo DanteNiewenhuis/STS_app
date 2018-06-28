@@ -38,28 +38,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Red Cards" />
+                android:text="Ironclad" />
 
             <CheckBox
                 android:id="@+id/checkbox_silent_cards"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Green Cards" />
+                android:text="Silent" />
 
             <CheckBox
                 android:id="@+id/checkbox_defect_cards"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Defect Cards" />
+                android:text="Defect" />
 
             <CheckBox
                 android:id="@+id/checkbox_neutral_cards"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Neutral Cards" />
+                android:text="Neutral" />
         </LinearLayout>
 
         <LinearLayout

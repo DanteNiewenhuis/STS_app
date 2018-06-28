@@ -1,4 +1,4 @@
-package e.dante.sts.Combos;
+package e.dante.sts.Opinions;
 
 import java.util.ArrayList;
 
@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 
 public class Opinion {
-    private String userId;
+    private String userName;
     private ArrayList<String> comboCards;
     private ArrayList<String> comboRelics;
     private ArrayList<String> antiComboCards;
@@ -15,14 +15,16 @@ public class Opinion {
     private String note;
     private String score;
 
+    // Constructor
     public Opinion() { }
 
-    public String getUserId() {
-        return userId;
+    // getters and setters
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public ArrayList<String> getComboCards() {

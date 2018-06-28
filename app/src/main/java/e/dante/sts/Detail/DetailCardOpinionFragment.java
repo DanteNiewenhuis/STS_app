@@ -14,6 +14,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,13 +25,14 @@ import java.util.List;
 
 import e.dante.sts.Cards.Card;
 import e.dante.sts.Cards.CardHelper;
-import e.dante.sts.Combos.ComboAdapter;
+import e.dante.sts.Opinions.OpinionAdapter;
 import e.dante.sts.Global.GlobalFunctions;
 import e.dante.sts.Global.Globals;
 import e.dante.sts.R;
 
-/**
- * A simple {@link Fragment} subclass.
+/*
+    This is the personal opinion page for the card which is placed as the second page in the
+    detailtapped. In this page u can change your note, your combos and anticombos.
  */
 public class DetailCardOpinionFragment extends Fragment implements CardHelper.SingleCallback {
     private View myView;
@@ -64,6 +66,7 @@ public class DetailCardOpinionFragment extends Fragment implements CardHelper.Si
     }
 
     @Override
+    // get the context of the parent activity
     public void onAttach(Context context) {
         super.onAttach(context);
 
@@ -72,6 +75,7 @@ public class DetailCardOpinionFragment extends Fragment implements CardHelper.Si
 
     @Override
     public void gotSingleCard(final Card card) {
+        // show the note made by the user
         TextView notesView = myView.findViewById(R.id.opinions_notes_text_view);
         Button notesButton = myView.findViewById(R.id.opinions_notes_button);
 
@@ -85,63 +89,63 @@ public class DetailCardOpinionFragment extends Fragment implements CardHelper.Si
             }
         });
 
+        // create a list of possible combocards that a user can chose from
         final List<String> comboCards = Globals.getInstance().getCards(card.getHero());
-        final List<String> antiComboCards = Globals.getInstance().getCards(card.getHero());
 
         for (String s : card.getYourComboCards()) {
             comboCards.remove(s);
-            antiComboCards.remove(s);
         }
         for (String s : card.getYourAntiComboCards()) {
             comboCards.remove(s);
-            antiComboCards.remove(s);
         }
 
         comboCards.remove(card.getName());
-        antiComboCards.remove(card.getName());
 
+        // create a list of possible comborelics that a user can chose from
         final List<String> comboRelics = Globals.getInstance().getRelics(card.getHero());
-        final List<String> antiComboRelics = Globals.getInstance().getRelics(card.getHero());
         for (String s : card.getYourComboRelics()) {
             comboRelics.remove(s);
-            antiComboRelics.remove(s);
         }
         for (String s : card.getYourAntiComboRelics()) {
             comboRelics.remove(s);
-            antiComboRelics.remove(s);
         }
 
-        makeAddListeners(card, comboCards, comboRelics, antiComboCards, antiComboRelics);
-        makeAutoCompleteText(comboCards, comboRelics, antiComboCards, antiComboRelics);
+        makeAddListeners(comboCards, comboRelics);
+        makeAutoCompleteText(comboCards, comboRelics);
         makeLists(card);
     }
 
     @Override
     public void gotSingleCardError(String message) {
-
+        Toast.makeText(this.getContext(), "Error: " + message, Toast.LENGTH_SHORT).show();
     }
 
+    // make the four lists based on the combo cards and relics
     public void makeLists(final Card card) {
         ListView comboCardsView = myView.findViewById(R.id.opinions_combo_cards_list);
-        comboCardsView.setAdapter(new ComboAdapter(context, R.layout.item_combo,
-                card.getYourComboCards(), name, "Cards", "Cards", "Combos"));
+        comboCardsView.setAdapter(new OpinionAdapter(context, R.layout.item_combo,
+                card.getYourComboCards(), name, "Cards", "Cards", "Combos",
+                getActivity().getSupportFragmentManager()));
 
         ListView comboRelicsView = myView.findViewById(R.id.opinions_combo_relics_list);
-        comboRelicsView.setAdapter(new ComboAdapter(context, R.layout.item_combo,
-                card.getYourComboRelics(), name, "Cards", "Relics", "Combos"));
+        comboRelicsView.setAdapter(new OpinionAdapter(context, R.layout.item_combo,
+                card.getYourComboRelics(), name, "Cards", "Relics", "Combos",
+                getActivity().getSupportFragmentManager()));
 
         ListView antiComboCardsView = myView.findViewById(R.id.opinions_anti_combo_cards_list);
-        antiComboCardsView.setAdapter(new ComboAdapter(context, R.layout.item_combo,
-                card.getYourAntiComboCards(), name, "Cards", "Cards", "Anti_Combos"));
+        antiComboCardsView.setAdapter(new OpinionAdapter(context, R.layout.item_combo,
+                card.getYourAntiComboCards(), name, "Cards", "Cards", "Anti_Combos",
+                getActivity().getSupportFragmentManager()));
 
         ListView antiComboRelicsView = myView.findViewById(R.id.opinions_anti_combo_relics_list);
-        antiComboRelicsView.setAdapter(new ComboAdapter(context, R.layout.item_combo,
-                card.getYourAntiComboRelics(), name, "Cards", "Relics", "Anti_Combos"));
+        antiComboRelicsView.setAdapter(new OpinionAdapter(context, R.layout.item_combo,
+                card.getYourAntiComboRelics(), name, "Cards", "Relics", "Anti_Combos",
+                getActivity().getSupportFragmentManager()));
     }
 
+    // create an adapter for all four autocompletetextviews and apply them.
     public void makeAutoCompleteText(final List<String> comboCards,
-                                     final List<String> comboRelics, final List<String> antiComboCards,
-                                     final List<String> antiComboRelics) {
+                                     final List<String> comboRelics) {
 
         ArrayAdapter<String> comboCardAdapter = new ArrayAdapter<>(context,
                 android.R.layout.simple_dropdown_item_1line, comboCards);
@@ -156,21 +160,22 @@ public class DetailCardOpinionFragment extends Fragment implements CardHelper.Si
         relicsAutoView.setAdapter(comboRelicAdapter);
 
         ArrayAdapter<String> antiComboCardAdapter = new ArrayAdapter<>(context,
-                android.R.layout.simple_dropdown_item_1line, antiComboCards);
+                android.R.layout.simple_dropdown_item_1line, comboCards);
 
         AutoCompleteTextView cardsAntiAutoView = myView.findViewById(R.id.opinions_anti_combo_cards_auto_complete);
         cardsAntiAutoView.setAdapter(antiComboCardAdapter);
 
         ArrayAdapter<String> antiComboRelicAdapter = new ArrayAdapter<>(context,
-                android.R.layout.simple_dropdown_item_1line, antiComboRelics);
+                android.R.layout.simple_dropdown_item_1line, comboRelics);
 
         AutoCompleteTextView relicsAntiAutoView = myView.findViewById(R.id.opinions_anti_combo_relics_auto_complete);
         relicsAntiAutoView.setAdapter(antiComboRelicAdapter);
     }
 
-    public void makeAddListeners(final Card card, final List<String> comboCards,
-                                 final List<String> comboRelics, final List<String> antiComboCards,
-                                 final List<String> antiComboRelics) {
+    // add listeners to all the buttons that add the cards to the dataset.
+    // make sure the the combo is placed in the database for both cards/relics
+    public void makeAddListeners(final List<String> comboCards,
+                                 final List<String> comboRelics) {
 
         myView.findViewById(R.id.opinions_combo_cards_add_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,8 +183,7 @@ public class DetailCardOpinionFragment extends Fragment implements CardHelper.Si
                 AutoCompleteTextView textView = myView.findViewById(R.id.opinions_combo_cards_auto_complete);
                 String selected = textView.getText().toString();
 
-                if (!card.getYourComboCards().contains(selected) &&
-                        comboCards.contains(selected)) {
+                if (comboCards.contains(selected)) {
                     InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(myView.getWindowToken(), 0);
                     textView.setText("");
@@ -197,8 +201,7 @@ public class DetailCardOpinionFragment extends Fragment implements CardHelper.Si
                 AutoCompleteTextView textView = myView.findViewById(R.id.opinions_combo_relics_auto_complete);
                 String selected = textView.getText().toString();
 
-                if (!card.getYourComboCards().contains(selected) &&
-                        comboRelics.contains(selected)) {
+                if (comboRelics.contains(selected)) {
                     InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(myView.getWindowToken(), 0);
                     textView.setText("");
@@ -216,8 +219,7 @@ public class DetailCardOpinionFragment extends Fragment implements CardHelper.Si
                 AutoCompleteTextView textView = myView.findViewById(R.id.opinions_anti_combo_cards_auto_complete);
                 String selected = textView.getText().toString();
 
-                if (!card.getYourComboCards().contains(selected) &&
-                        antiComboCards.contains(selected)) {
+                if (comboCards.contains(selected)) {
                     InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(myView.getWindowToken(), 0);
                     textView.setText("");
@@ -235,8 +237,7 @@ public class DetailCardOpinionFragment extends Fragment implements CardHelper.Si
                 AutoCompleteTextView textView = myView.findViewById(R.id.opinions_anti_combo_relics_auto_complete);
                 String selected = textView.getText().toString();
 
-                if (!card.getYourComboCards().contains(selected) &&
-                        antiComboRelics.contains(selected)) {
+                if (comboRelics.contains(selected)) {
                     InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(myView.getWindowToken(), 0);
                     textView.setText("");

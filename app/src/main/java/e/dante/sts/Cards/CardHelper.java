@@ -94,6 +94,7 @@ public class CardHelper {
                         }
                     }
 
+                    item.setVoteCount(counter);
                     // set the counter to one if no votes have been collected to prevent deviding by 0
                     if (counter == 0) {
                         counter = 1;
@@ -157,6 +158,7 @@ public class CardHelper {
                         }
                     }
 
+                    item.setVoteCount(counter);
                     // change the counter to 1 to prevent devision by 0
                     if (counter == 0) {
                         counter = 1;

@@ -29,7 +29,7 @@
                 android:text="3/5"
                 android:textColor="@color/TextOnSecondary"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/keyword_open_indicator"
+                app:layout_constraintEnd_toStartOf="@+id/opinion_open_indicator"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
@@ -58,7 +58,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/keyword_open_indicator"
+                android:id="@+id/opinion_open_indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"

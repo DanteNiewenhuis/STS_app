@@ -7,13 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
-/**
- * A simple {@link Fragment} subclass.
+/*
+    a simple opening fragment
  */
 public class FirstFragment extends Fragment {
-    //TODO make a better starting screen
-
     public FirstFragment() {
         // Required empty public constructor
     }

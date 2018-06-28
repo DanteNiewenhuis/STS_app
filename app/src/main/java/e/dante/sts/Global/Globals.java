@@ -2,7 +2,9 @@ package e.dante.sts.Global;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+    a class with global variables in it
+ */
 public class Globals {
 
 

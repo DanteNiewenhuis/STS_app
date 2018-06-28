@@ -1,5 +1,7 @@
 package e.dante.sts.Potion;
-
+/*
+    This the class where the data of a Potion is stored.
+ */
 public class Potion {
     private String imgUrl;
     private String name;

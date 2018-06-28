@@ -37,6 +37,7 @@ public class PotionsFragment extends Fragment implements PotionHelper.Callback {
 
     @Override
     public void gotPotions(ArrayList<Potion> potions) {
+        // create adapter and apply it to the listview
         ListView list_view = myView.findViewById(R.id.potion_list_view);
         list_view.setAdapter(new PotionsAdapter(getContext(), R.layout.item_potion, potions));
     }
@@ -47,11 +48,12 @@ public class PotionsFragment extends Fragment implements PotionHelper.Callback {
         toast.show();
     }
 
+    // simple adapter to create a list of potions
     private class PotionsAdapter extends ArrayAdapter<Potion> {
         private int resource;
         private ArrayList<Potion> potions;
 
-        public PotionsAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Potion> objects) {
+        PotionsAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Potion> objects) {
             super(context, resource, objects);
             this.resource = resource;
             this.potions = objects;

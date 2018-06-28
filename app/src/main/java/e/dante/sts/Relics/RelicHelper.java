@@ -14,8 +14,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import e.dante.sts.Cards.Card;
 import e.dante.sts.Global.GlobalFunctions;
-
+/*
+    This the class that interacts with the dataset to get all the Relics.
+ */
 public class RelicHelper {
     private Callback activity;
     private SingleCallback singleActivity;
@@ -31,7 +34,7 @@ public class RelicHelper {
     public void getRelics(Callback activity) {
         this.activity = activity;
 
-        DatabaseReference reference = mDatabase.child("Relics");
+        DatabaseReference reference = mDatabase;
         Query query = reference.orderByChild("name");
         query.addValueEventListener(new relicValueListener());
     }
@@ -39,9 +42,6 @@ public class RelicHelper {
     public void getSingleRelic(SingleCallback activity, String name) {
         this.singleActivity = activity;
         this.name = name;
-
-
-        Log.d("getSingleRelic", "name: " + name);
 
         DatabaseReference reference = mDatabase;
         Query query = reference.orderByChild("name");
@@ -64,30 +64,49 @@ public class RelicHelper {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             ArrayList<Relic> relics = new ArrayList<>();
-
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             FirebaseUser mUser = mAuth.getCurrentUser();
-            for (DataSnapshot dataChild : dataSnapshot.getChildren()) {
+
+            // make snapshots
+            DataSnapshot relicsSnapshot = dataSnapshot.child("Relics");
+            DataSnapshot opinionsSnapshot = dataSnapshot.child("Opinions").child("Relics");
+            for (DataSnapshot dataChild : relicsSnapshot.getChildren()) {
                 Relic item = dataChild.getValue(Relic.class);
 
-                if (dataChild.hasChild("scores")) {
-                    DataSnapshot score = dataChild.child("scores");
+                // get the data of the cards if it is present
+                if (opinionsSnapshot.hasChild(gFunctions.name_to_dName(item.getName()))) {
+                    DataSnapshot cardOpinionsSnapshot = opinionsSnapshot.child(gFunctions
+                            .name_to_dName(item.getName()));
 
-
-                    if ((mUser != null) && (score.hasChild(mUser.getUid()))) {
-                        float rating = Float.parseFloat(score.child(mUser.getUid()).getValue().toString());
-                        item.setYourScore(rating);
-                    }
-
+                    // calculate the average score for the card
                     int counter = 0;
                     float total = 0;
-                    for (DataSnapshot user_score : score.getChildren()) {
-                        total += Float.parseFloat(user_score.getValue().toString());
-                        counter++;
+                    for (DataSnapshot user_opinion : cardOpinionsSnapshot.getChildren()) {
+                        if (user_opinion.hasChild("score")) {
+                            total += Float.parseFloat(user_opinion.child("score").getValue().toString());
+                            counter++;
+                        }
                     }
 
+
+                    item.setVoteCount(counter);
+                    // set the counter to one if no votes have been collected to prevent deviding by 0
+                    if (counter == 0) {
+                        counter = 1;
+                    }
                     item.setAverageScore(total / counter);
+
+                    // get the personal score if it is present
+                    if ((mUser != null) && (cardOpinionsSnapshot.hasChild(mUser.getUid()))) {
+                        cardOpinionsSnapshot = cardOpinionsSnapshot.child(mUser.getUid());
+
+                        if (cardOpinionsSnapshot.hasChild("score")) {
+                            item.setYourScore(Float.parseFloat(cardOpinionsSnapshot.child("score")
+                                    .getValue().toString()));
+                        }
+                    }
                 }
+
                 relics.add(item);
             }
 
@@ -131,6 +150,7 @@ public class RelicHelper {
                         }
                     }
 
+                    item.setVoteCount(counter);
                     if (counter == 0) {
                         counter = 1;
                     }

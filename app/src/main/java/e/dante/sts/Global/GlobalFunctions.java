@@ -10,6 +10,11 @@ import android.text.Spanned;
 import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+
+/*
+    class with functions that are used in multiple places in the app
+ */
 
 public class GlobalFunctions implements InfoHelper.Callback {
     private FragmentManager fragmentManager;
@@ -25,11 +30,13 @@ public class GlobalFunctions implements InfoHelper.Callback {
         return makeSpans(ss.toString());
     }
 
+    // make spans if certain words are found in the input string
     public SpannableString makeSpans(String input) {
         Log.d("makeSpans", "input: " + input);
         SpannableString ss = new SpannableString(input);
 
         int endIndex;
+        // check for cards
         for (String word : Globals.getInstance().getCards()) {
             for (int index = input.toLowerCase().indexOf(word.toLowerCase());
                  index >= 0;
@@ -43,6 +50,7 @@ public class GlobalFunctions implements InfoHelper.Callback {
             }
         }
 
+        // check for relics
         for (String word : Globals.getInstance().getRelics()) {
             for (int index = input.toLowerCase().indexOf(word.toLowerCase());
                  index >= 0;
@@ -56,6 +64,7 @@ public class GlobalFunctions implements InfoHelper.Callback {
             }
         }
 
+        // check for potions
         for (String word : Globals.getInstance().getPotions()) {
             for (int index = input.toLowerCase().indexOf(word.toLowerCase());
                  index >= 0;
@@ -69,6 +78,7 @@ public class GlobalFunctions implements InfoHelper.Callback {
             }
         }
 
+        // check for keywords
         for (String word : Globals.getInstance().getKeywords()) {
             for (int index = input.toLowerCase().indexOf(word.toLowerCase());
                  index >= 0;
@@ -82,6 +92,7 @@ public class GlobalFunctions implements InfoHelper.Callback {
             }
         }
 
+        // check for events
         for (String word : Globals.getInstance().getEvents()) {
             for (int index = input.toLowerCase().indexOf(word.toLowerCase());
                  index >= 0;
@@ -98,21 +109,22 @@ public class GlobalFunctions implements InfoHelper.Callback {
         return ss;
     }
 
+    // make a new clickablespan that links to the infohelper
     private ClickableSpan makeClickableSpan(final String type, final String filter) {
         return new ClickableSpan() {
             @Override
             public void onClick(View view) {
-                Log.d("ClickableSpan", "filter: " + filter);
                 new InfoHelper().getInfo(GlobalFunctions.this, type, filter);
             }
         };
     }
 
-    public SpannableString makeBold(String input, String start, String end) {
-        Log.d("makeBold", "input: " + input);
-        Log.d("makeBold", "start: " + start);
-        Log.d("makeBold", "end: " + end);
+    public void getInfo(String name, String type) {
+        new InfoHelper().getInfo(GlobalFunctions.this, type, name);
+    }
 
+    // make all instances of a word bold in the input
+    public SpannableString makeBold(String input, String start, String end) {
         SpannableString ss = new SpannableString(input);
 
         int endIndex;
@@ -121,11 +133,8 @@ public class GlobalFunctions implements InfoHelper.Callback {
              startIndex = input.toLowerCase().indexOf(start.toLowerCase(), startIndex + 1)) {
             endIndex = input.toLowerCase().indexOf(end.toLowerCase(), startIndex + 1);
             if (endIndex == -1) {
-                Log.d("makeBold", "break");
                 break;
             }
-            Log.d("makeBold", "startIndex: " + startIndex);
-            Log.d("makeBold", "endIndex: " + endIndex);
             ss.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), startIndex, endIndex,
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
@@ -134,6 +143,7 @@ public class GlobalFunctions implements InfoHelper.Callback {
         return ss;
     }
 
+    // parse the HTML to delete all figures
     public String parseHTML(String html) {
 
         int endIndex;
@@ -142,7 +152,6 @@ public class GlobalFunctions implements InfoHelper.Callback {
              startIndex = html.indexOf("<figure")) {
             endIndex = html.indexOf("figure>", startIndex);
             if (endIndex == -1) {
-                Log.d("makeBold", "break");
                 break;
             }
             String sub = html.substring(startIndex, endIndex + 7);
@@ -154,7 +163,17 @@ public class GlobalFunctions implements InfoHelper.Callback {
              startIndex = html.indexOf("<span class=\"editsection")) {
             endIndex = html.indexOf("span>", startIndex);
             if (endIndex == -1) {
-                Log.d("makeBold", "break");
+                break;
+            }
+            String sub = html.substring(startIndex, endIndex + 5);
+            html = html.replace(sub, "");
+        }
+
+        for (int startIndex = html.indexOf("<img");
+             startIndex >= 0;
+             startIndex = html.indexOf("<img")) {
+            endIndex = html.indexOf("img>", startIndex);
+            if (endIndex == -1) {
                 break;
             }
             String sub = html.substring(startIndex, endIndex + 5);
@@ -164,10 +183,7 @@ public class GlobalFunctions implements InfoHelper.Callback {
         return html;
     }
 
-    public void getInfo(String comboName, String type) {
-        new InfoHelper().getInfo(this, comboName, type);
-    }
-
+    // open the notes dialog fragment
     public void getNotes(String type, String name, String oldNote) {
         DialogFragment dialog = new InputFragment();
         Bundle extra = new Bundle();
@@ -179,6 +195,7 @@ public class GlobalFunctions implements InfoHelper.Callback {
     }
 
     @Override
+    // get an info dialogfragment based on the type and the description
     public void gotInfo(String name, String type, String des) {
         DialogFragment dialog = new InfoFragment();
         Bundle extra = new Bundle();
@@ -191,7 +208,7 @@ public class GlobalFunctions implements InfoHelper.Callback {
 
     @Override
     public void gotInfoError(String message) {
-
+        Log.d("Error", message);
     }
 
     public String dName_to_name(String s) {

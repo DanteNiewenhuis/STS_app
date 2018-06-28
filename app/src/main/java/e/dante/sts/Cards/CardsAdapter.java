@@ -112,7 +112,6 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
 
             mStarImage = itemView.findViewById(R.id.your_card_item_star);
 
-            //TODO implement not being able to vote when not logged in
             if (mUser != null) {
                 mStar.setOnClickListener(new View.OnClickListener() {
                     @Override

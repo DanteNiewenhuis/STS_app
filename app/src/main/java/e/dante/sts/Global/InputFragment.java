@@ -16,9 +16,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import e.dante.sts.R;
 
-
-/**
- * A simple {@link Fragment} subclass.
+/*
+    a dialogFragment where a note can be put and that will be pushed to the server when the submit
+    button is clicked
  */
 public class InputFragment extends DialogFragment {
     private String name;
@@ -48,6 +48,8 @@ public class InputFragment extends DialogFragment {
         final View myView = inflater.inflate(R.layout.fragment_input, container, false);
         TextView textView = myView.findViewById(R.id.note_input_view);
         textView.setText(oldNote);
+
+        // push the input to the server
         myView.findViewById(R.id.note_submit_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

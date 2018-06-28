@@ -1,7 +1,9 @@
 package e.dante.sts.Keyword;
 
 import java.io.Serializable;
-
+/*
+    This the class where the data of a Keyword is stored.
+ */
 public class Keyword implements Serializable {
     private String name;
     private String type;

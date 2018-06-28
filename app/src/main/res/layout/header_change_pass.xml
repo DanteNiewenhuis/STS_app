@@ -17,12 +17,12 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <EditText
-            android:id="@+id/mail_reset_pass"
+            android:id="@+id/mail_change_pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
+            android:hint="@string/hint_password"
+            android:inputType="textPassword"
             android:textColor="@color/TextOnSecondary"
             android:textColorHint="@color/colorSecondaryDark" />
     </android.support.design.widget.TextInputLayout>
@@ -42,7 +42,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/btn_submit_reset_pass"
+            android:id="@+id/btn_submit_change_pass"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
@@ -50,12 +50,12 @@
             android:minHeight="@dimen/navigation_button_height"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="Reset Password"
+            android:text="Change Password"
             android:textColor="@android:color/black"
             android:textSize="11sp" />
 
         <Button
-            android:id="@+id/btn_back_to_log_in"
+            android:id="@+id/btn_back_to_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
@@ -74,7 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-        android:text="Reset Password"
+        android:text="Change Password"
         android:textColor="@color/TextOnSecondary"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/mail_layout"

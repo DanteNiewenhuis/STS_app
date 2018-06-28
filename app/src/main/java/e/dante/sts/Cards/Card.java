@@ -24,9 +24,12 @@ public class Card implements Serializable {
     private List<String> yourAntiComboRelics;
     private float yourScore;
     private float averageScore;
+    private int voteCount;
 
     // Constructor
     public Card() {
+        this.description = "";
+        this.upgradeDescription = "";
         this.yourNote = "";
     }
 
@@ -157,5 +160,13 @@ public class Card implements Serializable {
 
     public void setYourAntiComboRelics(List<String> yourAntiComboRelics) {
         this.yourAntiComboRelics = yourAntiComboRelics;
+    }
+
+    public int getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(int voteCount) {
+        this.voteCount = voteCount;
     }
 }

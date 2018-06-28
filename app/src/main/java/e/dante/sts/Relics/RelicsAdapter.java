@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -22,12 +24,14 @@ public class RelicsAdapter extends RecyclerView.Adapter<RelicsAdapter.RelicViewH
     private LayoutInflater mInflater;
     private ArrayList<Relic> relics;
     private e.dante.sts.Relics.RelicsAdapter.ItemClickListener mClickListener;
+    private FirebaseUser mUser;
 
     RelicsAdapter(Context context, ArrayList<Relic> data) {
 //        Log.d("RelicAdapter", "Constructor");
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.relics = data;
+        this.mUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     // inflates the cell layout from xml when needed
@@ -57,16 +61,26 @@ public class RelicsAdapter extends RecyclerView.Adapter<RelicsAdapter.RelicViewH
 
         Picasso.get().load(relic.getImgUrl() + "scale-to-width-down/200").into(holder.mImage);
 
-        if ((relic.getYourScore() % 1) == 0) {
-            holder.mYourScore.setText((int) relic.getYourScore() + "/5");
-        } else {
-            holder.mYourScore.setText(relic.getYourScore() + "/5");
-        }
+        if (mUser != null) {
+            if (relic.getYourScore() == 0.0) {
+                holder.mYourScore.setText("Vote Now");
+                holder.mStarImage.setImageResource(R.drawable.star_empty);
+            } else if ((relic.getYourScore() % 1) == 0) {
+                holder.mYourScore.setText((int) relic.getYourScore() + "/5");
+                holder.mStarImage.setImageResource(R.drawable.star);
+            } else {
+                holder.mYourScore.setText(relic.getYourScore() + "/5");
+                holder.mStarImage.setImageResource(R.drawable.star);
+            }
 
-        if ((relic.getAverageScore() % 1) == 0) {
-            holder.mAverageScore.setText((int) relic.getAverageScore() + "/5");
+            if ((relic.getAverageScore() % 1) == 0) {
+                holder.mAverageScore.setText((int) relic.getAverageScore() + "/5");
+            } else {
+                holder.mAverageScore.setText(relic.getAverageScore() + "/5");
+            }
         } else {
-            holder.mAverageScore.setText(relic.getAverageScore() + "/5");
+            holder.mYourScore.setText("Log In");
+            holder.mStarImage.setImageResource(R.drawable.star_empty);
         }
     }
 
@@ -83,6 +97,7 @@ public class RelicsAdapter extends RecyclerView.Adapter<RelicsAdapter.RelicViewH
         TextView desView;
         TextView nameView;
         ImageView mImage;
+        ImageView mStarImage;
         LinearLayout mStar;
 
         RelicViewHolder(View itemView) {
@@ -92,17 +107,19 @@ public class RelicsAdapter extends RecyclerView.Adapter<RelicsAdapter.RelicViewH
 
             mImage = itemView.findViewById(R.id.relic_grid_item_image);
             mImage.setOnClickListener(this);
+            mStarImage = itemView.findViewById(R.id.your_relic_item_star);
             mYourScore = itemView.findViewById(R.id.your_relic_item_score);
             mAverageScore = itemView.findViewById(R.id.average_relic_item_score);
             mStar = itemView.findViewById(R.id.your_relic_item_score_layout);
 
-            //TODO implement not being able to vote when not logged in
-            mStar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mClickListener.onRatingClick(view, getAdapterPosition());
-                }
-            });
+            if (mUser != null) {
+                mStar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mClickListener.onRatingClick(view, getAdapterPosition());
+                    }
+                });
+            }
         }
 
         @Override

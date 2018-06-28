@@ -11,7 +11,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import e.dante.sts.R;
-
+/*
+    This is the adapter that creates an expendablelist for the Keywords
+ */
 public class KeywordListAdapter extends BaseExpandableListAdapter {
     private Context context;
     private ArrayList<Keyword> dataChild;
@@ -62,6 +64,7 @@ public class KeywordListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
+    // create the group view of the Keyword.
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         Keyword keyword = (Keyword) getGroup(groupPosition);
         if (convertView == null) {
@@ -85,6 +88,7 @@ public class KeywordListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
+    // make the view that is showed when the item is expanded
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         Keyword keyword = (Keyword) getChild(groupPosition, childPosition);
         if (convertView == null) {

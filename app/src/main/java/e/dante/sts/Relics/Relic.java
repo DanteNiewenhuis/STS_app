@@ -13,6 +13,7 @@ public class Relic implements Serializable {
     private String yourNote;
     private float yourScore;
     private float averageScore;
+    private int voteCount;
     private List<String> yourComboCards;
     private List<String> yourComboRelics;
 
@@ -125,5 +126,13 @@ public class Relic implements Serializable {
 
     public void setYourAntiComboRelics(List<String> yourAntiComboRelics) {
         this.yourAntiComboRelics = yourAntiComboRelics;
+    }
+
+    public int getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(int voteCount) {
+        this.voteCount = voteCount;
     }
 }

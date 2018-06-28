@@ -52,7 +52,7 @@
             android:layout_height="match_parent">
 
             <android.support.constraint.ConstraintLayout
-                android:id="@+id/constraintLayout"
+                android:id="@+id/info_score_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +65,7 @@
                     android:layout_height="0dp"
                     android:layout_marginStart="8dp"
                     android:src="@drawable/star"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView18"
+                    app:layout_constraintBottom_toBottomOf="@+id/textview"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/textView17" />
@@ -96,7 +96,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
                 <TextView
-                    android:id="@+id/textView18"
+                    android:id="@+id/textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -118,7 +118,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+                app:layout_constraintTop_toBottomOf="@+id/info_score_layout">
 
                 <ImageView
                     android:id="@+id/info_average_star"
@@ -126,7 +126,7 @@
                     android:layout_height="0dp"
                     android:layout_marginStart="8dp"
                     android:src="@drawable/star"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView18"
+                    app:layout_constraintBottom_toBottomOf="@+id/info_vote_count"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/textView17" />
@@ -154,12 +154,11 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
                 <TextView
-                    android:id="@+id/textView18"
+                    android:id="@+id/info_vote_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_marginStart="8dp"
-                    android:text="10 votes"
                     android:textSize="10sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/info_average_star"

@@ -4,12 +4,12 @@ package e.dante.sts.Detail;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,9 +19,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import e.dante.sts.Combos.ComboListAdapter;
-import e.dante.sts.Combos.Opinion;
-import e.dante.sts.Combos.OpinionHelper;
+import e.dante.sts.MainActivity;
+import e.dante.sts.Opinions.OpinionListAdapter;
+import e.dante.sts.Opinions.Opinion;
+import e.dante.sts.Opinions.OpinionHelper;
 import e.dante.sts.R;
 
 
@@ -30,9 +31,6 @@ import e.dante.sts.R;
  */
 public class DetailComboFragment extends DialogFragment implements OpinionHelper.Callback {
     private String name;
-    private List<String> comboCards;
-    private DatabaseReference mDatabase;
-    private FirebaseUser mUser;
     private String type;
     private View myView;
 
@@ -44,10 +42,6 @@ public class DetailComboFragment extends DialogFragment implements OpinionHelper
     public void setArguments(Bundle args) {
         super.setArguments(args);
         name = args.getString("name");
-//        comboCards = (List<String>) args.getSerializable("comboCards");
-        comboCards = new ArrayList<>();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mUser = FirebaseAuth.getInstance().getCurrentUser();
         type = args.getString("type");
     }
 
@@ -63,10 +57,11 @@ public class DetailComboFragment extends DialogFragment implements OpinionHelper
     }
 
     @Override
+    // create the opinions expendable list from the gotten list of opinions
     public void gotOpinions(ArrayList<Opinion> opinions) {
         ExpandableListView listView = myView.findViewById(R.id.combo_exp_list_view);
 
-        ExpandableListAdapter listAdapter = new ComboListAdapter(getContext(), opinions);
+        ExpandableListAdapter listAdapter = new OpinionListAdapter(getContext(), opinions);
 
         listView.setAdapter(listAdapter);
 
@@ -74,6 +69,6 @@ public class DetailComboFragment extends DialogFragment implements OpinionHelper
 
     @Override
     public void gotOpinionsError(String message) {
-
+        Toast.makeText(this.getContext(), "Error: " + message, Toast.LENGTH_SHORT).show();
     }
 }

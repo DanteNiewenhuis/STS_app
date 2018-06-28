@@ -1,6 +1,7 @@
 package e.dante.sts.Relics;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -26,7 +27,10 @@ import java.util.Comparator;
 import e.dante.sts.Detail.DetailTapped;
 import e.dante.sts.R;
 import e.dante.sts.Global.RatingFragment;
-
+/*
+    class where the gridview of all the relics a showed. also implements the filtering and sorting
+    of the arraylist of relics.
+ */
 public class RelicsFragment extends Fragment implements RelicHelper.Callback, RelicsAdapter.ItemClickListener {
     private View myView;
     private ArrayList<Relic> relics;
@@ -60,22 +64,18 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
 
         new RelicHelper().getRelics(this);
 
+        // set all onclicklisteners
         myView.findViewById(R.id.checkbox_ironclad_relics).setOnClickListener(new CheckBoxlistener("Color"));
         myView.findViewById(R.id.checkbox_silent_relics).setOnClickListener(new CheckBoxlistener("Color"));
         myView.findViewById(R.id.checkbox_defect_relics).setOnClickListener(new CheckBoxlistener("Color"));
         myView.findViewById(R.id.checkbox_neutral_relics).setOnClickListener(new CheckBoxlistener("Color"));
 
-        myView.findViewById(R.id.checkbox_cost_0).setOnClickListener(new CheckBoxlistener("Cost"));
-        myView.findViewById(R.id.checkbox_cost_1).setOnClickListener(new CheckBoxlistener("Cost"));
-        myView.findViewById(R.id.checkbox_cost_2).setOnClickListener(new CheckBoxlistener("Cost"));
-        myView.findViewById(R.id.checkbox_cost_3).setOnClickListener(new CheckBoxlistener("Cost"));
-        myView.findViewById(R.id.checkbox_cost_X).setOnClickListener(new CheckBoxlistener("Cost"));
-
+        // add all colors to the colorList
         colorList = new ArrayList<>();
         colorList.add("Ironclad");
         colorList.add("Silent");
         colorList.add("Defect");
-        colorList.add("Neutral");
+        colorList.add("Any");
         colorList.add("Curse");
         colorList.add("Status");
 
@@ -84,23 +84,26 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
     }
 
     @Override
+    // handle an item from the menu that has been clicked
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getGroupId() == R.id.menu_sort_group) {
             item.setChecked(!item.isChecked());
             sortMethod = item.getTitle().toString();
         }
 
-        makeList();
+        updateLayout();
         return false;
     }
 
     @Override
+    // create the searchmenu with the possibility to search, filter and sort
     public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_search, menu);
         MenuItem item = menu.findItem(R.id.menu_search);
         searchView = (SearchView) item.getActionView();
         MenuItem filterButton = menu.findItem(R.id.menu_filter);
 
+        // change the reverseCheck based on if the item is checked
         MenuItem reverseItem = menu.findItem(R.id.menu_sort_reverse);
         reverseItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -108,11 +111,12 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
                 menuItem.setChecked(!menuItem.isChecked());
                 reverseCheck = menuItem.isChecked();
 
-                makeList();
+                updateLayout();
                 return false;
             }
         });
 
+        // make the filterbutton show and hide the filterlayout
         filterButton.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -131,6 +135,7 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
             }
         });
 
+        // handle the searchinput when it is changed
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -140,7 +145,7 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
             @Override
             public boolean onQueryTextChange(String newText) {
                 searchFilter = newText;
-                makeList();
+                updateLayout();
                 return true;
             }
         });
@@ -162,16 +167,13 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
         Log.d("gotRelics", "length of relics: " + relics.size());
         this.relics = relics;
 
-        makeList();
+        updateLayout();
     }
 
-    //TODO try to cut this into two parts, one for the search and one for the filter
-    private void makeList() {
-        Log.d("makeList", "init");
+    // filter the card data and update the adapter
+    private void updateLayout() {
         filteredRelics = filterArrayList();
-        Log.d("makeList", "filtered data: " + filteredRelics.size());
         adapter.updateList(filteredRelics);
-        Log.d("makeList", "done");
     }
 
     @Override
@@ -217,6 +219,7 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
         return relics;
     }
 
+    @NonNull
     private Boolean filterMatch(Relic item) {
         if (!matchesText(item)) {
             return false;
@@ -285,7 +288,7 @@ public class RelicsFragment extends Fragment implements RelicHelper.Callback, Re
                 }
             }
 
-            makeList();
+            updateLayout();
         }
     }
 }

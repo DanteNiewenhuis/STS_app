@@ -26,6 +26,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.FirebaseDatabase;
 
 import e.dante.sts.Cards.CardsFragment;
 import e.dante.sts.Detail.DetailTapped;
@@ -113,8 +114,14 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.content_frame, new CardsFragment())
                     .addToBackStack(null).commit();
         }
+
+        if (f instanceof RelicsFragment) {
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new RelicsFragment())
+                    .addToBackStack(null).commit();
+        }
+
         if (f instanceof DetailTapped) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new DetailTapped())
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new CardsFragment())
                     .addToBackStack(null).commit();
         }
     }
@@ -194,6 +201,29 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    private void viewChangePass() {
+        //remove the current header view
+        navigationView.removeHeaderView(navigationView.getHeaderView(0));
+
+        //inflate the header view with the login fragment
+        navigationView.inflateHeaderView(R.layout.header_change_pass);
+        hView = navigationView.getHeaderView(0);
+
+        // set onclickListener
+        hView.findViewById(R.id.btn_submit_change_pass).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handleChangePass();
+            }
+        });
+        hView.findViewById(R.id.btn_back_to_account).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewAccountInfo();
+            }
+        });
+    }
+
     private void viewAccountInfo() {
         //remove the current header view
         navigationView.removeHeaderView(navigationView.getHeaderView(0));
@@ -216,6 +246,13 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
                 viewLogIn();
+            }
+        });
+
+        hView.findViewById(R.id.btn_change_pass).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewChangePass();
             }
         });
     }
@@ -249,7 +286,7 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
-        //create user
+        //create user with email and password
         mAuth.createUserWithEmailAndPassword(mail, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -285,6 +322,8 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(MainActivity.this, "Profile made: " + display,
                                 Toast.LENGTH_SHORT).show();
                         viewAccountInfo();
+                        FirebaseDatabase.getInstance().getReference().child("Accounts")
+                                .child(mUser.getUid()).child("Display").setValue(mUser.getDisplayName());
                     }
                 }
             });
@@ -339,9 +378,47 @@ public class MainActivity extends AppCompatActivity
                 });
     }
 
-    //TODO handle pass reset
     private void handleResetPass() {
-        viewLogIn();
+        TextView emailView = hView.findViewById(R.id.mail_reset_pass);
+        String email = emailView.getText().toString().trim();
+
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(getApplication(), "Enter your registered email id", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            viewLogIn();
+                            Toast.makeText(MainActivity.this, "Pass is reset", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
+    private void handleChangePass() {
+        TextView passView = hView.findViewById(R.id.mail_change_pass);
+        String pass = passView.getText().toString().trim();
+
+        if (TextUtils.isEmpty(pass)) {
+            Toast.makeText(getApplication(), "Enter your registered email id", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mUser.updatePassword(pass).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    viewAccountInfo();
+                    Toast.makeText(MainActivity.this, "Pass is changed", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Pass is not changed", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
 
@@ -355,6 +432,11 @@ public class MainActivity extends AppCompatActivity
             Fragment f = fragmentManager.findFragmentById(R.id.content_frame);
             if (f instanceof CardsFragment) {
                 if (((CardsFragment) f).onBackPressed()) {
+                    return;
+                }
+            }
+            if (f instanceof RelicsFragment) {
+                if (((RelicsFragment) f).onBackPressed()) {
                     return;
                 }
             }

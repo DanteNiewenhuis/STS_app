@@ -1,6 +1,5 @@
 package e.dante.sts.Global;
 
-
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -10,6 +9,9 @@ import android.widget.TextView;
 
 import e.dante.sts.R;
 
+/*
+    a dialogfragment that shows the info of an object.
+ */
 public class InfoFragment extends DialogFragment {
     private String name;
     private String type;

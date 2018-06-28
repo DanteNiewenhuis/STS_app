@@ -14,6 +14,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,15 +23,16 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
-import e.dante.sts.Combos.ComboAdapter;
+import e.dante.sts.Opinions.OpinionAdapter;
 import e.dante.sts.Global.GlobalFunctions;
 import e.dante.sts.Global.Globals;
 import e.dante.sts.R;
 import e.dante.sts.Relics.Relic;
 import e.dante.sts.Relics.RelicHelper;
 
-/**
- * A simple {@link Fragment} subclass.
+/*
+    This is the personal opinion page for the relic which is placed as the second page in the
+    detailtapped. In this page u can change your note, your combos and anticombos.
  */
 public class DetailRelicOpinionFragment extends Fragment implements RelicHelper.SingleCallback {
     private View myView;
@@ -64,6 +66,7 @@ public class DetailRelicOpinionFragment extends Fragment implements RelicHelper.
     }
 
     @Override
+    // get the context of the parent activity
     public void onAttach(Context context) {
         super.onAttach(context);
 
@@ -71,10 +74,13 @@ public class DetailRelicOpinionFragment extends Fragment implements RelicHelper.
     }
 
     @Override
+    // create the personal opinion layout
     public void gotSingleRelic(final Relic relic) {
+        // show the note that has been made before
         TextView notesView = myView.findViewById(R.id.opinions_notes_text_view);
         Button notesButton = myView.findViewById(R.id.opinions_notes_button);
 
+        // make the button clickable and make a dialogfragment come up where a note can be placed
         if (!(relic.getYourNote().equals(""))) {
             notesView.setText(gFunctions.makeSpans(relic.getYourNote()));
         }
@@ -85,6 +91,7 @@ public class DetailRelicOpinionFragment extends Fragment implements RelicHelper.
             }
         });
 
+        // create a list of possible combocards that a user can chose from
         final List<String> comboCards = Globals.getInstance().getCards(relic.getHero());
         final List<String> antiComboCards = Globals.getInstance().getCards(relic.getHero());
 
@@ -97,6 +104,7 @@ public class DetailRelicOpinionFragment extends Fragment implements RelicHelper.
             antiComboCards.remove(s);
         }
 
+        // create a list of possible comboRelics that a user can chose from
         final List<String> comboRelics = Globals.getInstance().getRelics(relic.getHero());
         final List<String> antiComboRelics = Globals.getInstance().getRelics(relic.getHero());
         for (String s : relic.getYourComboRelics()) {
@@ -111,6 +119,7 @@ public class DetailRelicOpinionFragment extends Fragment implements RelicHelper.
         comboRelics.remove(relic.getName());
         antiComboRelics.remove(relic.getName());
 
+        // create the rest of the layout
         makeAutoCompleteText(comboCards, comboRelics, antiComboCards, antiComboRelics);
         makeLists(relic);
         makeAddListeners(relic, comboCards, comboRelics, antiComboCards, antiComboRelics);
@@ -118,27 +127,33 @@ public class DetailRelicOpinionFragment extends Fragment implements RelicHelper.
 
     @Override
     public void gotSingleRelicError(String message) {
-
+        Toast.makeText(this.getContext(), "Error: " + message, Toast.LENGTH_SHORT).show();
     }
 
+    // fill the four lists of combos and anti combos
     public void makeLists(final Relic relic) {
         ListView comboCardsView = myView.findViewById(R.id.opinions_combo_cards_list);
-        comboCardsView.setAdapter(new ComboAdapter(context, R.layout.item_combo,
-                relic.getYourComboCards(), name, "Relics", "Cards", "Combos"));
+        comboCardsView.setAdapter(new OpinionAdapter(context, R.layout.item_combo,
+                relic.getYourComboCards(), name, "Relics", "Cards", "Combos",
+                getActivity().getSupportFragmentManager()));
 
         ListView comboRelicsView = myView.findViewById(R.id.opinions_combo_relics_list);
-        comboRelicsView.setAdapter(new ComboAdapter(context, R.layout.item_combo,
-                relic.getYourComboRelics(), name, "Relics", "Relics", "Combos"));
+        comboRelicsView.setAdapter(new OpinionAdapter(context, R.layout.item_combo,
+                relic.getYourComboRelics(), name, "Relics", "Relics", "Combos",
+                getActivity().getSupportFragmentManager()));
 
         ListView antiComboCardsView = myView.findViewById(R.id.opinions_anti_combo_cards_list);
-        antiComboCardsView.setAdapter(new ComboAdapter(context, R.layout.item_combo,
-                relic.getYourAntiComboCards(), name, "Relics", "Cards", "Anti_Combos"));
+        antiComboCardsView.setAdapter(new OpinionAdapter(context, R.layout.item_combo,
+                relic.getYourAntiComboCards(), name, "Relics", "Cards", "Anti_Combos",
+                getActivity().getSupportFragmentManager()));
 
         ListView antiComboRelicsView = myView.findViewById(R.id.opinions_anti_combo_relics_list);
-        antiComboRelicsView.setAdapter(new ComboAdapter(context, R.layout.item_combo,
-                relic.getYourAntiComboRelics(), name, "Relics", "Relics", "Anti_Combos"));
+        antiComboRelicsView.setAdapter(new OpinionAdapter(context, R.layout.item_combo,
+                relic.getYourAntiComboRelics(), name, "Relics", "Relics", "Anti_Combos",
+                getActivity().getSupportFragmentManager()));
     }
 
+    // make adapters for autocompletext and add them to the autocompletetextviews
     public void makeAutoCompleteText(final List<String> comboCards,
                                      final List<String> comboRelics, final List<String> antiComboCards,
                                      final List<String> antiComboRelics) {
@@ -168,6 +183,8 @@ public class DetailRelicOpinionFragment extends Fragment implements RelicHelper.
         relicsAntiAutoView.setAdapter(antiComboRelicAdapter);
     }
 
+    // add listeners to all the buttons that add the cards to the dataset.
+    // make sure the the combo is placed in the database for both cards/relics
     public void makeAddListeners(final Relic relic, final List<String> comboCards,
                                  final List<String> comboRelics, final List<String> antiComboCards,
                                  final List<String> antiComboRelics) {

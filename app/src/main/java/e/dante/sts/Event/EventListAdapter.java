@@ -14,7 +14,9 @@ import java.util.ArrayList;
 
 import e.dante.sts.Global.GlobalFunctions;
 import e.dante.sts.R;
-
+/*
+    This is the adapter that creates an expendablelist for the events
+ */
 public class EventListAdapter extends BaseExpandableListAdapter {
     private Context context;
     private ArrayList<Event> dataChild;
@@ -67,6 +69,7 @@ public class EventListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
+    // create the group view of the event.
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         Event event = (Event) getGroup(groupPosition);
         if (convertView == null) {
@@ -76,12 +79,15 @@ public class EventListAdapter extends BaseExpandableListAdapter {
         TextView name = convertView.findViewById(R.id.event_name_view);
         TextView act = convertView.findViewById(R.id.event_act_view);
 
+        // change the arrow direction based on if the view is expanded or not
         if (isExpanded) {
-            ((ImageView) convertView.findViewById(R.id.events_open_indicator)).setImageResource(R.drawable.ic_arrow_drop_up_black_24dp);
+            ((ImageView) convertView.findViewById(R.id.events_open_indicator)).
+                    setImageResource(R.drawable.ic_arrow_drop_up_black_24dp);
             name.setTextColor(context.getResources().getColor(R.color.colorSecondary));
             act.setTextColor(context.getResources().getColor(R.color.colorSecondary));
         } else {
-            ((ImageView) convertView.findViewById(R.id.events_open_indicator)).setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
+            ((ImageView) convertView.findViewById(R.id.events_open_indicator)).
+                    setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
             name.setTextColor(context.getResources().getColor(R.color.TextOnSecondary));
             act.setTextColor(context.getResources().getColor(R.color.TextOnSecondary));
         }
@@ -98,6 +104,7 @@ public class EventListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
+    // make the view that is showed when the item is expanded
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         Event event = (Event) getChild(groupPosition, childPosition);
         if (convertView == null) {
@@ -105,10 +112,8 @@ public class EventListAdapter extends BaseExpandableListAdapter {
         }
 
         TextView options = convertView.findViewById(R.id.event_options_view);
-//        options.setText(gFunctions.makeBold(event.getOptions()
-//                .replaceAll(" \\[", "\n["), "[", "]"));
 
-        //TODO make clickable
+        // parse text from html, make it clickable and show it
         String text = gFunctions.parseHTML(event.getOptions());
         options.setText(gFunctions.fromHtml(text));
         options.setMovementMethod(LinkMovementMethod.getInstance());

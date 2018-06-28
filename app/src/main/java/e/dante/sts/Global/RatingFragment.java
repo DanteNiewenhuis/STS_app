@@ -1,6 +1,5 @@
 package e.dante.sts.Global;
 
-
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -14,7 +13,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import e.dante.sts.R;
-
+/*
+    A dialogfragment where the rating for a card can be changed
+ */
 public class RatingFragment extends DialogFragment {
     private String name;
     private float score;
@@ -44,6 +45,8 @@ public class RatingFragment extends DialogFragment {
         View myView = inflater.inflate(R.layout.fragment_rating, container, false);
         RatingBar ratingBar = myView.findViewById(R.id.ratingBar);
         ratingBar.setRating(score);
+
+        // change the rating in the database
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {

@@ -1,9 +1,9 @@
-package e.dante.sts.Combos;
+package e.dante.sts.Opinions;
 
+import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +17,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
+import e.dante.sts.Global.GlobalFunctions;
 import e.dante.sts.R;
 
 /*
     create a list of combo cards/relics
  */
 
-public class ComboAdapter extends ArrayAdapter<String> {
+public class OpinionAdapter extends ArrayAdapter<String> {
     private int resource;
     private List<String> combos;
     private String type1;
@@ -32,9 +33,10 @@ public class ComboAdapter extends ArrayAdapter<String> {
     private String name;
     private DatabaseReference mDatabase;
     private FirebaseUser mUser;
+    private GlobalFunctions gFunctions;
 
-    public ComboAdapter(@NonNull Context context, int resource, @NonNull List<String> objects,
-                        String name, String type1, String type2, String action) {
+    public OpinionAdapter(@NonNull Context context, int resource, @NonNull List<String> objects,
+                          String name, String type1, String type2, String action, FragmentManager fragmentManager) {
         super(context, resource, objects);
         this.resource = resource;
         this.combos = objects;
@@ -44,6 +46,7 @@ public class ComboAdapter extends ArrayAdapter<String> {
         this.action = action;
         this.name = name;
         this.mUser = FirebaseAuth.getInstance().getCurrentUser();
+        this.gFunctions = new GlobalFunctions(fragmentManager);
 
     }
 
@@ -59,13 +62,12 @@ public class ComboAdapter extends ArrayAdapter<String> {
         TextView nameView = convertView.findViewById(R.id.combo_name_view);
         nameView.setText(comboName);
 
-        //TODO make this clickable
-//        nameView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                gFunctions.getInfo(comboName, type);
-//            }
-//        });
+        nameView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gFunctions.getInfo(comboName, type2);
+            }
+        });
 
         // delete the combo/anticombo from the database if the button is clicked
         convertView.findViewById(R.id.combo_delete_button).setOnClickListener(new View.OnClickListener() {

@@ -10,7 +10,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-
+/*
+    This the class that interacts with the dataset to get all the potions.
+ */
 public class KeywordHelper {
     private Callback activity;
     private DatabaseReference mDatabase;

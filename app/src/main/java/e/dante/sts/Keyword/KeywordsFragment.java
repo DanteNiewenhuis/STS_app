@@ -33,9 +33,10 @@ public class KeywordsFragment extends Fragment implements KeywordHelper.Callback
     public void gotKeywords(ArrayList<Keyword> dataChild) {
         ExpandableListView expListView = myView.findViewById(R.id.keywords_list_view);
 
+        // make adapter
         ExpandableListAdapter listAdapter = new KeywordListAdapter(getContext(), dataChild);
 
-        // setting list adapter
+        // set adapter
         expListView.setAdapter(listAdapter);
     }
 

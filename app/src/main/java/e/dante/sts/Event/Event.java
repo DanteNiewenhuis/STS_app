@@ -1,5 +1,9 @@
 package e.dante.sts.Event;
 
+/*
+    This the class where the data of a Event is stored.
+ */
+
 public class Event {
     private String name;
     private String options;

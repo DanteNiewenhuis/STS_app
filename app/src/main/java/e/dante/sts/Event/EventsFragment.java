@@ -34,10 +34,11 @@ public class EventsFragment extends Fragment implements EventsHelper.Callback {
     public void gotEvents(ArrayList<Event> events) {
         ExpandableListView expListView = myView.findViewById(R.id.events_list_view);
 
+        // make adapter
         ExpandableListAdapter listAdapter = new EventListAdapter(getContext(),
                 getActivity().getSupportFragmentManager(), events);
 
-        // setting list adapter
+        // setting adapter
         expListView.setAdapter(listAdapter);
     }
 
