@@ -9,7 +9,7 @@ a browser during playing because most people don't have two monitors.
 My app tries to solve these problems by being an easy to use tool where beside getting all the game information
 it also gives the user the ability to make notes, save combos and see the opinion of other users.
 
-![HIER MOET NOG EEN FOTO](doc/app_design_1.jpeg)
+![HIER MOET NOG EEN FOTO](doc/STS_helper.png)
 
 
 ## Technical Design
