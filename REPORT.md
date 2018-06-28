@@ -49,6 +49,10 @@ This is done by calling the KeywordsHelper/EventsHelper class and running getKey
 This funcion gathers a list of all the Keywords/Events in the database and uses a callback to 
 let the Keywordpage/Eventpage fill the list with these Keywords/Events.
 
+Another feature in this app is that pieces are text are clickable when they reference another object.
+This is done by InfoFragment that creates a DialogFragment when the word is pressed. 
+The clickable parts in the text are created by the function makeSpans() that is located in the global functions class. 
+
 ## Challenges and Solutions
 
 One of the initial problems in the process of making this app was the database.
