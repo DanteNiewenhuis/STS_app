@@ -72,15 +72,15 @@ public class RelicsAdapter extends RecyclerView.Adapter<RelicsAdapter.RelicViewH
                 holder.mYourScore.setText(relic.getYourScore() + "/5");
                 holder.mStarImage.setImageResource(R.drawable.star);
             }
-
-            if ((relic.getAverageScore() % 1) == 0) {
-                holder.mAverageScore.setText((int) relic.getAverageScore() + "/5");
-            } else {
-                holder.mAverageScore.setText(relic.getAverageScore() + "/5");
-            }
         } else {
             holder.mYourScore.setText("Log In");
             holder.mStarImage.setImageResource(R.drawable.star_empty);
+        }
+
+        if ((relic.getAverageScore() % 1) == 0) {
+            holder.mAverageScore.setText((int) relic.getAverageScore() + "/5");
+        } else {
+            holder.mAverageScore.setText(relic.getAverageScore() + "/5");
         }
     }
 

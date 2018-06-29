@@ -76,15 +76,15 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
                 holder.mYourScore.setText(card.getYourScore() + "/5");
                 holder.mStarImage.setImageResource(R.drawable.star);
             }
-
-            if ((card.getAverageScore() % 1) == 0) {
-                holder.mAverageScore.setText((int) card.getAverageScore() + "/5");
-            } else {
-                holder.mAverageScore.setText(card.getAverageScore() + "/5");
-            }
         } else {
             holder.mYourScore.setText("Log In");
             holder.mStarImage.setImageResource(R.drawable.star_empty);
+        }
+
+        if ((card.getAverageScore() % 1) == 0) {
+            holder.mAverageScore.setText((int) card.getAverageScore() + "/5");
+        } else {
+            holder.mAverageScore.setText(card.getAverageScore() + "/5");
         }
     }
 
