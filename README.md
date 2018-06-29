@@ -2,6 +2,8 @@
 ###### Dante Niewenhuis
 An tool that can help you with playing Slay the Spire.
 
+Video link: https://www.youtube.com/watch?v=U7Zu8GTQbr4
+
 ## External sources
 Jsoup: https://jsoup.org/
 
